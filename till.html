@@ -758,10 +758,11 @@ button:disabled{cursor:not-allowed}
 .ovc.bad{background:var(--bad-ink);color:#ffffff}
 .ovc.warn{background:#8a5600;color:#ffffff}
 
-/* MOT ti le duy nhat cho moi hang. Truoc day hang bieu do dung 1.35fr con
-   hang danh sach dung 1.1fr — hai duong chia giua khong thang hang nhau,
-   va do moi la cai "lech" nhin thay tu xa, khong phai noi dung ben trong. */
-.ov2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:stretch}
+/* HAI COT BANG NHAU, va moi hang dung dung mot ti le. Truoc day hang bieu
+   do dung 1.35fr con hang danh sach dung 1.1fr — hai duong chia giua khong
+   thang hang nhau. Da thu 1.2fr cho ca hai, van con lech vi the trai rong
+   hon the phai. Chia doi thi khong con gi de lech. */
+.ov2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
 /* Hai the tren cung mot hang cao bang nhau (align-items:stretch), nhung noi
    dung ben trong thi dai ngan khac nhau — the nao ngan hon se de thua mot
    mang trong o DAY, nhin ra la hai the lech nhau. Cho moi the la mot cot
