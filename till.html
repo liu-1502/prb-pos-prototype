@@ -619,7 +619,9 @@ button:disabled{cursor:not-allowed}
 .hact{display:flex;align-items:center;gap:8px;flex:none}
 /* Nut phu: vien mong, khong nen — doc ra ngay la "cho khac", khong phai tab
    thu ba. Ve 32px nhung ::before keo vung cham len 44. */
-.scrim.sheet .hisb{position:relative;flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1.5px solid var(--line-2);border-radius:var(--r-pill);background:transparent;color:var(--muted);font-size:12px;font-weight:600}
+/* Chu va icon mau INK chu khong --muted: day la mot nut bam duoc, mau xam
+   lam no doc ra nhu mot nhan phu bi lam mo. */
+.scrim.sheet .hisb{position:relative;flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1.5px solid var(--line-2);border-radius:var(--r-pill);background:transparent;color:var(--ink);font-size:12px;font-weight:600}
 /* Nut rong 92 nen ngang du roi; chi can noi doc cho du 44. */
 .scrim.sheet .hisb::before{content:"";position:absolute;inset:-4px 0}
 .scrim.sheet .hisb:hover{color:var(--ink);border-color:var(--ink)}
@@ -673,15 +675,19 @@ button:disabled{cursor:not-allowed}
    khong lay mau.
    --chart: vang lam mang lon tren nen sang chi dat ~1.8, nen theme vang doi
    sang nau. Lan thu tu cung mot quy luat. */
-/* Bang mau PHAN LOAI — nam ngoai he token brand, co dinh o ca bon theme.
-   Ly do: day la mau de PHAN BIET cac hang muc voi nhau, khong phai mau thuong
-   hieu. Neu no chay theo --accent thi doi theme la cac hang muc doi y nghia.
-   Moi mau deu >= 3:1 voi nen trang (WCAG 1.4.11 cho mang lon khong phai chu):
-     c1 5.33 · c2 3.72 · c3 4.12 · c4 5.11 · c5 5.27
-   Vang phai dam toi #b8780a: #e8a317 "tuoi" hon nhung chi dat 2.18. */
+/* MOT SAC, dam nhat dan. Truoc day day la nam mau khac nhau (xanh/vang/do/
+   tim) — nhieu mau tren mot man khien no doc ra nhu mot bieu do thong ke,
+   khong phai mot phan cua san pham. Cac muc trong cung mot bieu do da co
+   NHAN va CON SO rieng, nen mau chi can noi "cai nao lon hon", va do dam
+   lam viec do tot hon nam sac khac nhau.
+   Pha voi --surface chu khong voi trang: ban nao nen the cua ban do. */
 :root{
-  --c1:#1f7a4d; --c2:#b8780a; --c3:#d94f2b; --c4:#4b6bbf; --c5:#9a4f9e;
   --chart:var(--accent);
+  --c1:var(--chart);
+  --c2:color-mix(in srgb, var(--chart) 74%, var(--surface));
+  --c3:color-mix(in srgb, var(--chart) 54%, var(--surface));
+  --c4:color-mix(in srgb, var(--chart) 38%, var(--surface));
+  --c5:color-mix(in srgb, var(--chart) 25%, var(--surface));
 }
 :root[data-theme="yellow"]{--chart:var(--accent-ink)}
 /* .chlbl chu KHONG phai .cl: .cl da la nhan cua chip nhom mon (.cat .cl).
@@ -700,7 +706,9 @@ button:disabled{cursor:not-allowed}
 .vb > div:nth-child(4) i{background:var(--c4)}
 .vb > div:nth-child(5) i{background:var(--c5)}
 .vbl{display:flex;gap:8px;margin-top:9px}
-.vbl span{flex:1;min-width:0;text-align:center;font-size:11px;line-height:1.35;color:var(--muted)}
+/* Ten mon dai (Nasi Lemak Ayam Goreng) tung xuong ba dong va day cao ca
+   hang nhan. Chan o HAI dong, phan thua cat bang dau ba cham. */
+.vbl span{flex:1;min-width:0;text-align:center;font-size:11px;line-height:1.35;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 
 /* 2. DONUT — doanh thu theo nhom mon. stroke-dasharray tinh theo chu vi
    (r=45 -> 282.74), tong nam giua, chu thich la o mau + phan tram. */
@@ -718,31 +726,44 @@ button:disabled{cursor:not-allowed}
 
 /* 3. THANH TIEN DO — ton kho so voi nguong thap. Dung kieu "forecast" cua
    template: nen nhat, phan da day mau dac. */
-.pb{margin-top:7px;height:6px;border-radius:3px;background:var(--line)}
-.pb i{display:block;height:100%;border-radius:3px;background:var(--warn-line)}
+.pb{margin-top:7px;height:6px;border-radius:3px;background:color-mix(in srgb, var(--ink) 8%, transparent)}
+.pb i{display:block;height:100%;border-radius:3px;background:var(--chart)}
 .ovi.bad .pb i{background:var(--bad-line)}
 .ovk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.ovc{padding:16px 18px;border-radius:20px;background:var(--surface)}
+/* The so lieu: ICON o tren, nhan, roi con so TO. Truoc day ba the chi co
+   chu — ba khoi chu giong het nhau thi mat phai doc het moi biet cai nao la
+   cai gi. Mot icon o dau the cho biet ngay no noi ve viec gi. */
+/* overflow:hidden de ban icon CHIM bi cat gon theo bo goc the. */
+.ovc{position:relative;overflow:hidden;padding:18px 20px;border-radius:20px;background:var(--surface);display:flex;flex-direction:column}
+/* Ban CHIM, bu, nam goc duoi-phai lam hoa tiet nen. Dat opacity thap va
+   cho no TRAN ra ngoai mep the: mot icon nam gon trong the se doc ra nhu
+   mot icon thu hai, con mot manh tran ra thi doc ra la hoa tiet.
+   pointer-events:none de no khong an mat cu cham nao. */
+.ovc .bgi{position:absolute;right:-18px;bottom:-26px;width:132px;height:132px;opacity:.08;pointer-events:none;color:var(--chart)}
+.ovc .bgi svg{width:100%;height:100%;stroke-width:1.4}
+.ovc.bad .bgi{color:var(--bad-ink);opacity:.12}
+.ovc > .k,.ovc > .v,.ovc > .s,.ovc > .ico{position:relative;z-index:1}
+.ovc .ico{width:38px;height:38px;flex:none;margin-bottom:12px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--chart) 12%, var(--surface));color:var(--chart)}
 .ovc .k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ovc .v{display:block;margin-top:7px;font-size:27px;font-weight:600;line-height:1.05;color:var(--ink)}
-.ovc .s{display:block;margin-top:5px;font-size:12px;line-height:1.35;color:var(--muted)}
-/* Chi to mau khi con so KHAC 0 — mot o do thuong truc thi sau mot ngay mat het
-   suc canh bao. */
+.ovc .v{display:block;margin-top:6px;font-size:32px;font-weight:600;line-height:1.02;color:var(--ink);letter-spacing:-.01em}
+.ovc .s{display:block;margin-top:6px;font-size:12px;line-height:1.4;color:var(--muted)}
+/* Chi MOT the duoc to mau, va chi khi con so KHAC 0: the "can de y". Hai the
+   con lai di theo ban mau. Mot man ba the ba mau thi khong cai nao noi. */
 .ovc.bad{background:var(--bad-soft)}
+.ovc.bad .ico{background:color-mix(in srgb, var(--bad-ink) 12%, var(--bad-soft));color:var(--bad-ink)}
 .ovc.bad .v{color:var(--bad-ink)}
 .ovc.bad .k,.ovc.bad .s{color:var(--bad-ink);opacity:.85}
-.ovc.warn{background:var(--warn-soft)}
-.ovc.warn .v{color:var(--warn-ink)}
-.ovc.warn .k,.ovc.warn .s{color:var(--warn-ink);opacity:.85}
+.ovc.warn{background:color-mix(in srgb, var(--chart) 8%, var(--surface))}
+.ovc.warn .ico{background:color-mix(in srgb, var(--chart) 18%, var(--surface))}
 .ov2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:stretch}
 .ovp{padding:16px 18px 18px;border-radius:20px;border:0;background:var(--surface)}
-.ovp h3{margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ovp h3{margin:0 0 4px;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
 .ovi{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .ovi .n{font-size:14px;font-weight:600;color:var(--ink)}
 .ovi .s{margin-top:2px;font-size:12px;line-height:1.4;color:var(--muted)}
 .ovi svg{flex:none;margin-top:2px}
 .ovi.bad svg{color:var(--bad-line)}
-.ovi.warn svg{color:var(--warn-line)}
+.ovi.warn svg{color:var(--chart)}
 .ovl{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
 .ovl .w{flex:none;width:118px;color:var(--muted);font-size:12px}
 .ovl .l{flex:1;min-width:0;color:var(--ink)}
@@ -2390,7 +2411,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const r2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
 const r3 = n => Math.round((n + Number.EPSILON) * 1000) / 1000;
 const money = n => Math.abs(n).toLocaleString('en-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
-const rm = n => (n < 0 ? '−' : '') + 'RM ' + money(n);
+const rm = n => (n < 0 ? '-' : '') + 'RM ' + money(n);
 const hhmm = () => new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
 
 /* ---------- sample data (illustrative) ---------- */
@@ -2612,7 +2633,7 @@ function reserved(){ const need = {}; S.orders.forEach(o => o.cart.forEach(l => 
 function shortOf(need, res){ res = res || reserved(); for (const k of Object.keys(need)) { if (S.stock[k] - (res[k] || 0) < need[k] - 1e-9) return k; } return null; }
 function unavailable(it){ return shortOf(it.recipe); }
 function fmtQ(id, v){ const u = INGR[id].unit; if (u === 'kg') return (Math.round(v * 100) / 100).toLocaleString('en-MY', {maximumFractionDigits:2}) + ' kg'; return Math.round(v) + ' ' + u; }
-function fmtD(id, d){ return (d > 0 ? '+' : d < 0 ? '−' : '') + fmtQ(id, Math.abs(d)); }
+function fmtD(id, d){ return (d > 0 ? '+' : d < 0 ? '-' : '') + fmtQ(id, Math.abs(d)); }
 function totals(){
   const sub = r2(S.cart.reduce((s,l) => s + l.unit * l.qty, 0));
   const sc = S.type === 'dine' ? r2(sub * 0.10) : 0;
@@ -2703,6 +2724,12 @@ function avatar(n, size){ return `<span class="av gen" style="background:${avCol
    ro hon net mong. Mau icon giu nguyen --warn-line / --bad-line — cung sac voi
    nen dia nhung dam hon. Dau cham/gach ben trong la LO khoet (fill-rule
    evenodd) nen no tu lay dung mau nen dia. */
+/* Hai bo icon CO CHU Y khac nhau:
+   OICO — ban VE NET cua Lucide, dung trong man Tong quan, cung he voi ba
+   icon the so lieu o tren no.
+   NICO — ban TO DAC, dung trong chuong thong bao: o do icon nam trong mot
+   dia mau nho, net ve o co 18px trong dia mau se mat nuoc. */
+const OICO = {warn: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>', bad: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>'};
 const NICO = {
   warn: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M12 2.6a1.3 1.3 0 0 1 1.13.66l8.6 15a1.3 1.3 0 0 1-1.13 1.95H3.4a1.3 1.3 0 0 1-1.13-1.95l8.6-15A1.3 1.3 0 0 1 12 2.6Zm-1.05 6.1h2.1v5.1h-2.1V8.7Zm0 6.5h2.1v2.1h-2.1v-2.1Z"/></svg>',
   bad: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm3.54 12.12-1.42 1.42L12 13.41l-2.12 2.13-1.42-1.42L10.59 12 8.46 9.88l1.42-1.42L12 10.59l2.12-2.13 1.42 1.42L13.41 12l2.13 2.12Z"/></svg>',
@@ -3345,16 +3372,16 @@ function renderOverview(){
   $('#ovSub').textContent = 'Till 1 \u00b7 ' + userName() + ' \u00b7 ' + new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
 
   const kpi =
-    `<div class="ovc ${att.length ? 'bad' : ''}"><span class="k">Needs attention</span><span class="v num">${att.length}</span>` +
+    `<div class="ovc ${att.length ? 'bad' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span><span class="v num">${att.length}</span>` +
     `<span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></div>` +
-    `<div class="ovc"><span class="k">Sales this shift</span><span class="v num">${rm(t.amt)}</span>` +
+    `<div class="ovc"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales this shift</span><span class="v num">${rm(t.amt)}</span>` +
     `<span class="s">${t.n} orders \u00b7 includes the sample morning sales</span></div>` +
-    `<div class="ovc ${wait ? 'warn' : ''}"><span class="k">Paid, not sent to kitchen</span><span class="v num">${wait}</span>` +
+    `<div class="ovc ${wait ? 'warn' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="k">Paid, not sent to kitchen</span><span class="v num">${wait}</span>` +
     `<span class="s">${wait ? 'Send them from Orders' : 'All caught up'}</span></div>`;
 
   const bl = ovBlocked();
   const left = bl.length
-    ? bl.map(b => `<div class="ovi ${b.out ? 'bad' : 'warn'}">${b.out ? NICO.bad : NICO.warn}<div><div class="n">${esc(INGR[b.id].name)}</div>` +
+    ? bl.map(b => `<div class="ovi ${b.out ? 'bad' : 'warn'}">${b.out ? OICO.bad : OICO.warn}<div><div class="n">${esc(INGR[b.id].name)}</div>` +
         `<div class="s">${fmtQ(b.id, S.stock[b.id])} left \u00b7 low mark ${fmtQ(b.id, INGR[b.id].low)}` +
         (b.dishes.length ? ' \u00b7 blocks ' + esc(b.dishes.join(', ')) : ' \u00b7 nothing blocked yet') + '</div>' +
         `<div class="pb"><i style="width:${Math.min(100, Math.round(S.stock[b.id] / INGR[b.id].low * 100))}%"></i></div>` +
@@ -3499,7 +3526,7 @@ function logLabel(e){
 }
 function renderLog(){
   const items = S.log.slice().reverse();
-  $('#logPane').innerHTML = items.length ? items.map(e => `<div class="logi"><div><div class="t">${esc(e.time)} · ${esc(e.user)}</div><div class="l">${esc(logLabel(e))}</div><div class="bs">${e.kind === 'po' ? '<span class="badge pend">Sent to HQ</span>' : e.undone ? '<span class="badge mute">Undone</span>' : '<span class="badge ok">Applied</span>'}${e.synced ? '<span class="badge mute">Synced to HQ</span>' : '<span class="badge pend">Waiting to sync</span>'}${e.reason ? `<span class="badge mute">${esc(e.reason)}</span>` : ''}</div></div>${e.undone || e.kind === 'po' ? '' : `<button type="button" class="btn sm ghost" data-act="undo" data-l="${e.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-15-6.7L3 13"></path></svg> Undo</button>`}</div>`).join('') : '<div class="empty">No changes yet.</div>';
+  $('#logPane').innerHTML = items.length ? items.map(e => `<div class="logi"><div><div class="t">${esc(e.time)} · ${esc(e.user)}</div><div class="l">${esc(logLabel(e))}</div><div class="bs">${e.kind === 'po' ? '<span class="badge pend">Sent to HQ</span>' : e.undone ? '<span class="badge mute">Undone</span>' : '<span class="badge ok">Applied</span>'}${e.synced ? '<span class="badge mute">Synced to HQ</span>' : '<span class="badge pend">Waiting to sync</span>'}${e.reason ? `<span class="badge mute">${esc(e.reason)}</span>` : ''}</div></div>${e.undone || e.kind === 'po' ? '' : `<button type="button" class="btn sm ghost" data-act="undo" data-l="${e.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5 5.5 5.5 0 0 1-5.5 5.5H11"></path></svg> Undo</button>`}</div>`).join('') : '<div class="empty">No changes yet.</div>';
 }
 function bot(html, chips, extra){ S.thread.push(Object.assign({role:'bot', html, chips}, extra || {})); }
 
