@@ -766,15 +766,11 @@ button:disabled{cursor:not-allowed}
 .ovc{position:relative;overflow:hidden;padding:16px 18px;border-radius:20px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
 .ovc .ovh{display:flex;align-items:center;gap:10px}
 .ovc .k{flex:none}
-/* Chip icon nen TRANG tron, icon an mau cua the. Nen mo .22 cu lam icon
-   nhoe vao nen the; nen trang tach han chip ra va icon doi lai chinh la
-   ma mau phan loai cua the do. */
-.ovc .ico{width:32px;height:32px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#ffffff}
+/* Chip icon: nen trang GIAM OPACITY, icon van trang nhu phan con lai cua
+   the. Ban nen trang duc da thu — no bat qua, chip doc ra nhu mot nut bam
+   va keo mat ve phia icon thay vi ve con so. Giu bo tron 999. */
+.ovc .ico{width:32px;height:32px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:inherit}
 .ovc .ico svg{width:17px;height:17px}
-.ovc.c-alert .ico{color:#8f1d1d}
-.ovc.c-sales .ico{color:#1f6b43}
-.ovc.c-orders .ico{color:#2f4d8a}
-.ovc.c-aov .ico{color:#8a5600}
 .ovc .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
 .ovc .v{display:block;font-size:30px;font-weight:600;line-height:1;letter-spacing:-.01em}
 /* KHONG wrap: voi flex-wrap:wrap thi the nao noi dung rong hon mot chut la
