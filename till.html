@@ -763,7 +763,13 @@ button:disabled{cursor:not-allowed}
 .ovc .ico svg{width:17px;height:17px}
 .ovc .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
 .ovc .v{display:block;font-size:30px;font-weight:600;line-height:1;letter-spacing:-.01em}
-.ovc .ovf{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+/* KHONG wrap: voi flex-wrap:wrap thi the nao noi dung rong hon mot chut la
+   chi so tang giam rot xuong dong rieng, the ben canh thi khong — ba the
+   thanh ra cai ngang cai doc. Khong cho xuong dong, va cho dong phu co lai
+   (min-width:0) de no nhuong cho chi so tang giam. */
+.ovc .ovf{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
+.ovc .ovf .s{min-width:0}
+.ovc .ovf .dlt{flex:none}
 .ovc .s{font-size:12px;line-height:1.35;opacity:.85}
 /* BA the BA mau, nen DAM, chu trang. Ba viec khac han nhau: viec can xu ly
    ngay (do), tien da thu (mau thuong hieu), hang doi bep (amber).
@@ -3489,13 +3495,29 @@ function renderOverview(){
      moi don dang to hay nho. The "Paid, not sent" cu da bo: no dem DON con
      the dau dem NHOM canh bao, hai con so khac nhau canh nhau khien nguoi
      doc tuong so lieu sai — ma noi dung thi trung nhau. */
+  /* BA the, ba cau hoi khac nhau: con gi dang chan, ban duoc bao nhieu,
+     moi don dang to hay nho. The "Paid, not sent" cu da bo: no dem DON con
+     the dau dem NHOM canh bao, hai con so khac nhau canh nhau khien nguoi
+     doc tuong so lieu sai — ma noi dung thi trung nhau.
+     Moi the dung CUNG mot khung: .ovh (icon + nhan) / .v (con so) /
+     .ovf (dong phu + chi so tang giam). Giong khung thi ba the moi xep
+     thang hang nhau. */
   const kpi =
-    `<div class="ovc ${att.length ? 'bad' : ''}"><span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span></span><span class="v num">${att.length}</span>` +
-    `<span class="ovf"><span class="ovf"><span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></span></div>` +
-    `<div class="ovc"><span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span></span><span class="v num">${rm(cur.amt)}</span>` +
-    `<span class="s">${cur.n} order${cur.n === 1 ? '' : 's'}</span>${dlt(cur.amt, prv.amt)}</span></div>` +
-    `<div class="ovc warn"><span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span></span><span class="v num">${rm(cur.aov)}</span>` +
-    `<span class="ovf"><span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.aov, prv.aov)}</span></div>`;
+    `<div class="ovc ${att.length ? 'bad' : ''}">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span></span>` +
+      `<span class="v num">${att.length}</span>` +
+      `<span class="ovf"><span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></span>` +
+    `</div>` +
+    `<div class="ovc">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span></span>` +
+      `<span class="v num">${rm(cur.amt)}</span>` +
+      `<span class="ovf"><span class="s">${cur.n} order${cur.n === 1 ? '' : 's'}</span>${dlt(cur.amt, prv.amt)}</span>` +
+    `</div>` +
+    `<div class="ovc warn">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span></span>` +
+      `<span class="v num">${rm(cur.aov)}</span>` +
+      `<span class="ovf"><span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.aov, prv.aov)}</span>` +
+    `</div>`;
 
   /* HAI NHOM, khong phai mot danh sach. "Can't sell right now" cu gom ca
      nguyen lieu DA chan mon lan nguyen lieu moi chi SAP toi nguong — nen
