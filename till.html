@@ -689,7 +689,11 @@ button:disabled{cursor:not-allowed}
   --c4:color-mix(in srgb, var(--chart) 38%, var(--surface));
   --c5:color-mix(in srgb, var(--chart) 25%, var(--surface));
 }
-:root[data-theme="yellow"]{--chart:var(--accent-ink)}
+/* Ban vang: mang mau lon phai dat 3:1 voi nen trang ma --accent (#ffb12a)
+   chi dat 1.81. Lay --accent-fg (#8a5600, 6.16) chu khong lay --accent-ink
+   (#43290a): accent-ink dam toi muc bieu do doc ra la mau DEN, lac han so
+   voi phan con lai cua ban vang. */
+:root[data-theme="yellow"]{--chart:var(--accent-fg)}
 /* .chlbl chu KHONG phai .cl: .cl da la nhan cua chip nhom mon (.cat .cl).
    Dat trung ten khien margin-bottom o day day nhan moi chip len 5px. */
 .chlbl{margin:0 0 10px;font-size:12px;color:var(--muted)}
@@ -743,19 +747,29 @@ button:disabled{cursor:not-allowed}
 .ovc .bgi svg{width:100%;height:100%;stroke-width:1.4}
 .ovc.bad .bgi{color:var(--bad-ink);opacity:.12}
 .ovc > .k,.ovc > .v,.ovc > .s,.ovc > .ico{position:relative;z-index:1}
-.ovc .ico{width:38px;height:38px;flex:none;margin-bottom:12px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--chart) 12%, var(--surface));color:var(--chart)}
-.ovc .k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ovc .v{display:block;margin-top:6px;font-size:32px;font-weight:600;line-height:1.02;color:var(--ink);letter-spacing:-.01em}
-.ovc .s{display:block;margin-top:6px;font-size:12px;line-height:1.4;color:var(--muted)}
-/* Chi MOT the duoc to mau, va chi khi con so KHAC 0: the "can de y". Hai the
-   con lai di theo ban mau. Mot man ba the ba mau thi khong cai nao noi. */
-.ovc.bad{background:var(--bad-soft)}
-.ovc.bad .ico{background:color-mix(in srgb, var(--bad-ink) 12%, var(--bad-soft));color:var(--bad-ink)}
-.ovc.bad .v{color:var(--bad-ink)}
-.ovc.bad .k,.ovc.bad .s{color:var(--bad-ink);opacity:.85}
-.ovc.warn{background:color-mix(in srgb, var(--chart) 8%, var(--surface))}
-.ovc.warn .ico{background:color-mix(in srgb, var(--chart) 18%, var(--surface))}
+.ovc .ico{width:38px;height:38px;flex:none;margin-bottom:12px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:inherit}
+.ovc .k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
+.ovc .v{display:block;margin-top:6px;font-size:32px;font-weight:600;line-height:1.02;letter-spacing:-.01em}
+.ovc .s{display:block;margin-top:6px;font-size:12px;line-height:1.4;opacity:.85}
+/* BA the BA mau, nen DAM, chu trang. Ba viec khac han nhau: viec can xu ly
+   ngay (do), tien da thu (mau thuong hieu), hang doi bep (amber).
+   Mau amber phai dam toi #8a5600: #b8780a "tuoi" hon nhung chu trang tren
+   no chi dat 3.72, khong du cho chu 12px. */
+/* --accent chu KHONG phai --chart: o ban vang --chart la --accent-ink
+   (#43290a), nen the se co nen nau dam VA chu cung mau nau dam — chu bien
+   mat hoan toan. --accent di voi --accent-ink thi ban nao cung doc duoc,
+   do la dinh nghia cua cap token nay. (--chart van dung cho BIEU DO: o do
+   mang mau lon can dat 3:1 voi nen trang, ma vang chi dat 1.81.) */
+.ovc{background:var(--accent);color:var(--accent-ink)}
+.ovc.bad{background:var(--bad-ink);color:#ffffff}
+.ovc.warn{background:#8a5600;color:#ffffff}
+/* Icon chim an theo MAU CHU cua the: nen vang thi chu nau dam nen hoa tiet
+   cung nau; nen do thi chu trang nen hoa tiet trang. Mot lop trang co dinh
+   se mat hut tren the vang. */
+.ovc .bgi{color:currentColor;opacity:.16}
 .ov2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+/* Hang bieu do: cot dung can be ngang hon danh sach chu thich cua donut. */
+.ov2.ov2c{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
 .ovp{padding:16px 18px 18px;border-radius:20px;border:0;background:var(--surface)}
 .ovp h3{margin:0 0 4px;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
 .ovi{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
@@ -3425,12 +3439,18 @@ function renderOverview(){
         `<span class="l">${esc(logLabel(e))}${e.undone ? ' \u00b7 undone' : e.synced ? '' : ' \u00b7 waiting to sync'}</span></div>`).join('')
     : '<p class="ovempty">No price or stock changes today.</p>';
 
+  /* Xep theo VIEC, khong theo loai khoi:
+     hang 1 — ba con so cua ca;
+     hang 2 — hai thu CAN DE Y ngay (mon khong ban duoc, thay doi vua xay ra);
+     hang 3 — hai BIEU DO doc de biet tinh hinh, khong phai de lam gi.
+     Truoc day mot bieu do bi ket chung hang voi mot danh sach viec, nen mat
+     phai nhay qua nhay lai giua hai kieu doc. */
   $('#ovBody').innerHTML =
     `<div class="ovk">${kpi}</div>` +
     `<div class="ov2"><div class="ovp"><h3>Can\u2019t sell right now</h3>${left}</div>` +
-    `<div class="ovp"><h3>Where the money came from</h3><p class="chlbl">Revenue by menu group</p>${donut}</div></div>` +
-    `<div class="ov2"><div class="ovp"><h3>Selling well this shift</h3><p class="chlbl">Portions sold, top 5</p>${bars}</div>` +
-    `<div class="ovp"><h3>Price &amp; stock changes today</h3>${changes}</div></div>`;
+    `<div class="ovp"><h3>Price &amp; stock changes today</h3>${changes}</div></div>` +
+    `<div class="ov2 ov2c"><div class="ovp"><h3>Selling well this shift</h3><p class="chlbl">Portions sold, top 5</p>${bars}</div>` +
+    `<div class="ovp"><h3>Where the money came from</h3><p class="chlbl">Revenue by menu group</p>${donut}</div></div>`;
 }
 
 /* ---------- assistant ---------- */
