@@ -699,7 +699,9 @@ button:disabled{cursor:not-allowed}
 .chlbl{margin:0 0 10px;font-size:12px;color:var(--muted)}
 
 /* 1. COT DUNG — "ban chay ca nay" */
-.vb{display:flex;align-items:flex-end;gap:8px;height:148px;border-bottom:2px solid var(--ink)}
+/* Truc ngang chi la cho de cac cot "dung" len, khong phai mot duong ke
+   mang nghia — 2px mau ink lam no nang hon chinh cac cot. */
+.vb{display:flex;align-items:flex-end;gap:8px;height:148px;border-bottom:1px solid color-mix(in srgb, var(--ink) 14%, transparent)}
 .vb > div{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px}
 .vb .v{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 .vb i{display:block;width:100%;max-width:54px;min-height:4px;border-radius:8px;background:var(--c1)}
@@ -736,6 +738,17 @@ button:disabled{cursor:not-allowed}
 .pb{margin-top:7px;height:6px;border-radius:3px;background:color-mix(in srgb, var(--ink) 8%, transparent)}
 .pb i{display:block;height:100%;border-radius:3px;background:var(--chart)}
 .ovi.bad .pb i{background:var(--bad-line)}
+/* Bo chon ky nam o HEADER, canh tieu de — no doi ca man, khong phai mot bo
+   loc cua rieng mot khoi nao. */
+.ovseg{display:inline-flex;gap:2px;flex:none;margin-left:auto;margin-right:12px;padding:3px;border-radius:var(--r-pill);background:color-mix(in srgb, var(--ink) 6%, transparent)}
+.ovseg button{height:34px;padding:0 14px;border:0;border-radius:var(--r-pill);background:transparent;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap}
+.ovseg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+/* Chi so tang giam: mui ten + phan tram, roi "vs ky truoc" nho hon. Mau
+   KHONG phai do/xanh co dinh — tren the nen dam thi hai mau do deu chim.
+   Lay chinh mau chu cua the, phan biet bang MUI TEN. */
+.dlt{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;font-weight:600}
+.dlt svg{flex:none}
+.dlt .vs{font-weight:500;opacity:.7}
 .ovk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 /* The so lieu: ICON o tren, nhan, roi con so TO. Truoc day ba the chi co
    chu — ba khoi chu giong het nhau thi mat phai doc het moi biet cai nao la
@@ -2266,7 +2279,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 
 <div class="scrim sheet" id="ovDlg" hidden data-scrim="ov">
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
-    <div class="dlg-h"><div><h2 id="ovTitle">Shift at a glance</h2><p id="ovSub"></p></div><button type="button" class="x" data-act="ov-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
+    <div class="dlg-h"><div><h2 id="ovTitle">Shift at a glance</h2><p id="ovSub"></p></div><div class="ovseg" id="ovSeg" role="group" aria-label="Period"></div><button type="button" class="x" data-act="ov-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
     <div class="dlg-b" id="ovBody"></div>
   </div>
 </div>
@@ -2529,7 +2542,7 @@ const CATS = [
 const S = {
   stock:{rice:31.5, chicken_leg:6.8, chicken_breast:0.1, egg:84, sambal:40, noodles:12, prawn:2, dough:60, tea:120, coffee:80, milo:3},
   orders:[{no:142, type:'dine', table:'', note:'', cart:[]}], act:0, nextNo:143, cat:'all', q:'',
-  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisPaid:'all', hisKit:'all', hisBy:'all', hisFrom:'', hisTo:'', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
+  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisPaid:'all', hisKit:'all', hisBy:'all', hisFrom:'', hisTo:'', hisDD:null, ovRange:'today', notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
   offline:false, queue:0, user:'cashier',
   paid:{cash:{n:62, amt:1284.60}, card:{n:41, amt:1936.40}, qr:{n:38, amt:812.30}},
   sold:{nlag:48, nlb:26, ngk:14, hainan:11, mee:21, ckt:17, laksa:9, roti:55, rtelur:19, teh:73, kopi:30, milo:12},
@@ -2608,7 +2621,12 @@ const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
   const METHODS = ['cash', 'card', 'qr'];
   let no = 132;
   for (let d = 1; d <= 29; d++) {
-    const perDay = 1 + ((d * 7) % 3);
+    /* 4-7 don mot ngay, GIO RAI DEU TU 10h DEN 21h. Truoc day moc thoi gian
+       tinh bang "so phut truoc bay gio" (d*1440 + 480...) nen no troi theo
+       gio mo prototype: mo luc rang sang thi don cua "hom qua" roi sang hom
+       kia, va bo loc Hom qua ra bang trong. Dat thang gio trong ngay thi don
+       nam dung ngay cua no, gio nao cung the. */
+    const perDay = 4 + ((d * 7) % 4);
     for (let k = 0; k < perDay; k++) {
       no -= 1;
       const seed = d * 13 + k * 7;
@@ -2618,7 +2636,9 @@ const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
         items.push([id, 1 + ((seed + i) % 3)]);
       }
       const type = (seed % 3 === 0) ? 'take' : 'dine';
-      const mins = d * 1440 + 480 + (k * 95) + (seed % 60);
+      const at = new Date(); at.setDate(at.getDate() - d);
+      at.setHours(10 + Math.floor(k * 11 / perDay), (seed * 7) % 60, 0, 0);
+      const mins = Math.round((Date.now() - at.getTime()) / 60000);
       S.done.push(mk(no, type, type === 'dine' ? String(1 + (seed % 15)) : '',
         items, METHODS[seed % 3], mins, 'sent'));
     }
@@ -3362,6 +3382,55 @@ function renderHis(){
 }
 
 /* ---------- overview (manager) ---------- */
+/* BON KY. Moi ky di kem mot ky TRUOC co cung do dai, lui lai dung mot ky —
+   so sanh hai doan dai bang nhau thi phan tram tang giam moi co nghia.
+   "Tuan" bat dau tu THU HAI (quan mamak nghi/doi ca theo tuan lam viec),
+   "thang" tu ngay 1. */
+const OVR = ['today', 'yesterday', 'week', 'month'];
+const OVR_LBL = {today:'Today', yesterday:'Yesterday', week:'This week', month:'This month'};
+const OVR_PREV = {today:'yesterday', yesterday:'the day before', week:'last week', month:'last month'};
+function ovBounds(key){
+  const d0 = new Date(); d0.setHours(0, 0, 0, 0);
+  const day = 86400000;
+  let from, to;
+  if (key === 'today') { from = d0.getTime(); to = from + day; }
+  else if (key === 'yesterday') { to = d0.getTime(); from = to - day; }
+  else if (key === 'week') {
+    const mon = new Date(d0); const wd = (mon.getDay() + 6) % 7;  // thu hai = 0
+    mon.setDate(mon.getDate() - wd);
+    from = mon.getTime(); to = d0.getTime() + day;
+  } else {
+    const m1 = new Date(d0.getFullYear(), d0.getMonth(), 1);
+    from = m1.getTime(); to = d0.getTime() + day;
+  }
+  const span = to - from;
+  return {from, to, pFrom: from - span, pTo: from};
+}
+/* Moi con so deu suy tu S.done — KHONG dung S.paid: S.paid la mot tong co
+   dinh cua "ca sang mau", khong gan voi ngay nao nen doi ky no khong nhuc
+   nhich. Doi lai: con so o day khac con so cua Close register, vi Close
+   van tinh ca phan ca sang mau do. */
+function ovStats(from, to){
+  const list = S.done.filter(o => o.ts >= from && o.ts < to);
+  const amt = r2(list.reduce((a, o) => a + o.total, 0));
+  const items = {};
+  let dine = 0;
+  const hour = Array(24).fill(0);
+  list.forEach(o => {
+    if (o.type === 'dine') dine++;
+    hour[new Date(o.ts).getHours()] += 1;
+    o.lines.forEach(l => { items[l.id] = (items[l.id] || 0) + l.qty; });
+  });
+  return {n: list.length, amt, aov: list.length ? r2(amt / list.length) : 0, items, hour, dine, list};
+}
+/* Phan tram tang giam. Ky truoc bang 0 thi KHONG in "+100%" — tu khong len
+   mot khong phai la tang mot tram phan tram, no la "truoc do chua co gi". */
+function ovDelta(cur, prev){
+  if (!prev) return cur ? {dir:'up', txt:'new'} : {dir:'flat', txt:'no change'};
+  const p = Math.round((cur - prev) / prev * 100);
+  if (p === 0) return {dir:'flat', txt:'same'};
+  return {dir: p > 0 ? 'up' : 'down', txt: (p > 0 ? '+' : '') + p + '%'};
+}
 function ovTotals(){
   const k = ['cash','card','qr'];
   return {n: k.reduce((a,m) => a + S.paid[m].n, 0), amt: r2(k.reduce((a,m) => a + S.paid[m].amt, 0))};
@@ -3379,18 +3448,29 @@ function ovBlocked(){
     .map(id => ({id, out: S.stock[id] <= 0, dishes: by[id] || []}));
 }
 function renderOverview(){
-  const t = ovTotals();
   const att = notifItems();
   const wait = S.done.filter(o => o.status === 'paid').length;
+  const B = ovBounds(S.ovRange);
+  const cur = ovStats(B.from, B.to), prv = ovStats(B.pFrom, B.pTo);
+  const AUP = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>', ADN = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>';
+  /* Mui ten + phan tram, so voi ky truoc cung do dai. */
+  const dlt = (c, p) => { const d = ovDelta(c, p);
+    return `<span class="dlt ${d.dir}">${d.dir === 'up' ? AUP : d.dir === 'down' ? ADN : ''}${esc(d.txt)}` +
+      `<span class="vs">vs ${esc(OVR_PREV[S.ovRange])}</span></span>`; };
   $('#ovSub').textContent = 'Till 1 \u00b7 ' + userName() + ' \u00b7 ' + new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+  $('#ovSeg').innerHTML = OVR.map(k => `<button type="button" data-act="ov-range" data-v="${k}" aria-pressed="${S.ovRange === k}">${OVR_LBL[k]}</button>`).join('');
 
+  /* BA the, ba cau hoi khac nhau: con gi dang chan, ban duoc bao nhieu,
+     moi don dang to hay nho. The "Paid, not sent" cu da bo: no dem DON con
+     the dau dem NHOM canh bao, hai con so khac nhau canh nhau khien nguoi
+     doc tuong so lieu sai — ma noi dung thi trung nhau. */
   const kpi =
     `<div class="ovc ${att.length ? 'bad' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span><span class="v num">${att.length}</span>` +
     `<span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></div>` +
-    `<div class="ovc"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales this shift</span><span class="v num">${rm(t.amt)}</span>` +
-    `<span class="s">${t.n} orders \u00b7 includes the sample morning sales</span></div>` +
-    `<div class="ovc ${wait ? 'warn' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="k">Paid, not sent to kitchen</span><span class="v num">${wait}</span>` +
-    `<span class="s">${wait ? 'Send them from Orders' : 'All caught up'}</span></div>`;
+    `<div class="ovc"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span><span class="v num">${rm(cur.amt)}</span>` +
+    `<span class="s">${cur.n} order${cur.n === 1 ? '' : 's'}</span>${dlt(cur.amt, prv.amt)}</div>` +
+    `<div class="ovc warn"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span><span class="v num">${rm(cur.aov)}</span>` +
+    `<span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.aov, prv.aov)}</div>`;
 
   const bl = ovBlocked();
   const left = bl.length
@@ -3402,19 +3482,19 @@ function renderOverview(){
     : '<p class="ovempty">Everything on the menu can be made right now.</p>';
 
   /* COT DUNG: top 5 mon. Chieu cao ty le voi cot cao nhat, con so dat tren dau. */
-  const rows = Object.keys(S.sold).map(id => ({id, n:S.sold[id]})).sort((a,b) => b.n - a.n).slice(0, 5);
+  const rows = Object.keys(cur.items).map(id => ({id, n:cur.items[id]})).sort((a,b) => b.n - a.n).slice(0, 5);
   const max = rows.length ? rows[0].n : 1;
   const bars = rows.length
     ? '<div class="vb">' + rows.map((r,i) => `<div class="${i === 0 ? 'top' : ''}"><span class="v num">${r.n}</span>` +
         `<i style="height:${Math.max(4, Math.round(r.n / max * 118))}px"></i></div>`).join('') + '</div>' +
       '<div class="vbl">' + rows.map(r => `<span>${esc(BY[r.id] ? BY[r.id].name : r.id)}</span>`).join('') + '</div>'
-    : '<p class="ovempty">Nothing sold yet this shift.</p>';
+    : '<p class="ovempty">Nothing sold in this period.</p>';
 
   /* DONUT: doanh thu theo nhom mon, suy tu S.sold x gia. Khong trung voi bang
      cash/card/qr cua Close register — day la cat theo MON, khong theo cach tra. */
   const cats = CATS.filter(c => c.id !== 'all').map(c => ({
     id:c.id, label:c.label,
-    amt: r2(MENU.filter(m => m.cat === c.id).reduce((a,m) => a + (S.sold[m.id] || 0) * m.price, 0))
+    amt: r2(MENU.filter(m => m.cat === c.id).reduce((a,m) => a + (cur.items[m.id] || 0) * m.price, 0))
   })).filter(c => c.amt > 0).sort((a,b) => b.amt - a.amt);
   const ctot = r2(cats.reduce((a,c) => a + c.amt, 0));
   const CC = ['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
@@ -3430,10 +3510,10 @@ function renderOverview(){
   }).join('');
   const donut = cats.length
     ? `<div class="dn"><div class="dnw"><svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">${arcs}</svg>` +
-      `<div class="dnc"><b class="num">${rm(ctot)}</b><span>this shift</span></div></div>` +
+      `<div class="dnc"><b class="num">${rm(ctot)}</b><span>${esc(OVR_LBL[S.ovRange].toLowerCase())}</span></div></div>` +
       `<div class="dl">` + cats.map((c,i) => `<div><i style="background:${CC[i] || 'var(--c5)'}"></i>` +
         `<span class="n">${esc(c.label)}</span><span class="p num">${Math.round(c.amt / ctot * 100)}%</span></div>`).join('') + '</div></div>'
-    : '<p class="ovempty">Nothing sold yet this shift.</p>';
+    : '<p class="ovempty">Nothing sold in this period.</p>';
 
   const log = S.log.slice().reverse().slice(0, 4);
   const changes = log.length
@@ -3451,7 +3531,7 @@ function renderOverview(){
     `<div class="ovk">${kpi}</div>` +
     `<div class="ov2"><div class="ovp"><h3>Can\u2019t sell right now</h3>${left}</div>` +
     `<div class="ovp"><h3>Price &amp; stock changes today</h3>${changes}</div></div>` +
-    `<div class="ov2 ov2c"><div class="ovp"><h3>Selling well this shift</h3><p class="chlbl">Portions sold, top 5</p>${bars}</div>` +
+    `<div class="ov2 ov2c"><div class="ovp"><h3>Selling well</h3><p class="chlbl">Portions sold, top 5</p>${bars}</div>` +
     `<div class="ovp"><h3>Where the money came from</h3><p class="chlbl">Revenue by menu group</p>${donut}</div></div>`;
 }
 
@@ -3864,6 +3944,7 @@ document.addEventListener('click', e => {
     case 'his-pick': S[el.dataset.f] = v; S.hisDD = null; S.hisPage = 0; renderHis(); break;
     case 'his-close': closeLayer('#hisDlg'); break;
     case 'ov-open': if (S.user !== 'manager') { toast('Overview is for managers only'); break; } renderOverview(); openLayer('#ovDlg'); break;
+    case 'ov-range': S.ovRange = v; renderOverview(); break;
     case 'ov-close': closeLayer('#ovDlg'); break;
     case 'stock-open': if (S.user !== 'manager') { toast('Stock is for managers only'); break; } renderStock(); openLayer('#stockDlg'); break;
     case 'stock-close': closeLayer('#stockDlg'); break;
