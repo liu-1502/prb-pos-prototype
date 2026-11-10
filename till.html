@@ -759,6 +759,7 @@ button:disabled{cursor:not-allowed}
            cho mat tim no. */
 .ovc{position:relative;overflow:hidden;padding:16px 18px;border-radius:20px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
 .ovc .ovh{display:flex;align-items:center;gap:10px}
+.ovc .k{flex:none}
 .ovc .ico{width:32px;height:32px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:inherit}
 .ovc .ico svg{width:17px;height:17px}
 .ovc .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
@@ -773,7 +774,15 @@ button:disabled{cursor:not-allowed}
 .ovc .s{font-size:12px;line-height:1.35;opacity:.85}
 /* Bon mau PHAN LOAI, co dinh o ca bon ban mau. Mau amber phai dam toi
    #8a5600: #b8780a "tuoi" hon nhung chu trang tren no chi dat 3.72. */
-.ovc{color:#ffffff}
+.ovc{color:#ffffff;border:0;text-align:left;font:inherit;cursor:pointer}
+/* Dau hieu bam duoc: mui ten nho canh nhan, ro hon khi di chuot vao. The
+   nhu la mot nut thi phai noi ra la nut — nen dam mot mau khong du. */
+.ovgo{flex:none;margin-left:auto;opacity:.55;transition:opacity .12s, transform .12s}
+.ovc:hover .ovgo{opacity:1;transform:translateX(2px)}
+.ovc:hover{filter:brightness(1.07)}
+.ova{border:0;text-align:left;font:inherit;width:100%;cursor:pointer}
+.ova:hover{background:color-mix(in srgb, var(--ink) 7%, transparent)}
+.ova.stop:hover{background:color-mix(in srgb, var(--bad-ink) 14%, var(--bad-soft))}
 .ovc.c-alert{background:#8f1d1d}
 .ovc.c-orders{background:#2f4d8a}
 .ovc.c-sales{background:#1f6b43}
@@ -3528,26 +3537,26 @@ function renderOverview(){
        don TB    amber      — tien tren moi don
      Bon mau deu dat >= 6:1 voi chu trang. */
   const kpi =
-    `<div class="ovc c-alert">` +
-      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span></span>` +
+    `<button type="button" class="ovc c-alert" data-act="ov-go" data-v="orders">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span><svg class="ovgo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span>` +
       `<span class="v num">${att.length}</span>` +
       `<span class="ovf"><span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></span>` +
-    `</div>` +
-    `<div class="ovc c-orders">` +
-      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span><span class="k">Orders</span></span>` +
+    `</button>` +
+    `<button type="button" class="ovc c-orders" data-act="ov-go" data-v="orders">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span><span class="k">Orders</span><svg class="ovgo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span>` +
       `<span class="v num">${cur.n}</span>` +
       `<span class="ovf"><span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.n, prv.n)}</span>` +
-    `</div>` +
-    `<div class="ovc c-sales">` +
-      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span></span>` +
+    `</button>` +
+    `<button type="button" class="ovc c-sales" data-act="ov-go" data-v="history">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span><svg class="ovgo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span>` +
       `<span class="v num">${rm(cur.amt)}</span>` +
       `<span class="ovf"><span class="s">paid today</span>${dlt(cur.amt, prv.amt)}</span>` +
-    `</div>` +
-    `<div class="ovc c-aov">` +
-      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span></span>` +
+    `</button>` +
+    `<button type="button" class="ovc c-aov" data-act="ov-go" data-v="history">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span><svg class="ovgo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span>` +
       `<span class="v num">${rm(cur.aov)}</span>` +
       `<span class="ovf"><span class="s">per order</span>${dlt(cur.aov, prv.aov)}</span>` +
-    `</div>`;
+    `</button>`;
 
   /* HAI NHOM, khong phai mot danh sach. "Can't sell right now" cu gom ca
      nguyen lieu DA chan mon lan nguyen lieu moi chi SAP toi nguong — nen
@@ -3571,12 +3580,12 @@ function renderOverview(){
      lieu o tren. */
   const row = b => {
     const stop = b.out || b.dishes.length;
-    return `<div class="ova${stop ? ' stop' : ''}">` +
+    return `<button type="button" class="ova${stop ? ' stop' : ''}" data-act="ov-go" data-v="stock">` +
       `<div class="ova-h"><span class="n">${esc(INGR[b.id].name)}</span>` +
       `<span class="badge ${stop ? 'bad' : 'pend'}">${stop ? 'Blocked' : 'Low'}</span></div>` +
       `<div class="s">${fmtQ(b.id, S.stock[b.id])} left \u00b7 low mark ${fmtQ(b.id, INGR[b.id].low)}` +
       (b.dishes.length ? ' \u00b7 blocks ' + esc(b.dishes.join(', ')) : '') + '</div>' +
-      `<div class="pb"><i style="width:${used(b.id)}%"></i></div></div>`;
+      `<div class="pb"><i style="width:${used(b.id)}%"></i></div></button>`;
   };
   const left = bl.length
     ? `<div class="ovlist">` + blocked.concat(lowOnly).map(row).join('') + `</div>`
@@ -4046,6 +4055,14 @@ document.addEventListener('click', e => {
     case 'his-close': closeLayer('#hisDlg'); break;
     case 'ov-open': if (S.user !== 'manager') { toast('Overview is for managers only'); break; } renderOverview(); openLayer('#ovDlg'); break;
     case 'ov-range': S.ovRange = v; renderOverview(); break;
+    /* Tu Tong quan di THANG vao man chi tiet. Dong Tong quan lai: no la man
+       chinh cua quan ly, khong phai mot lop phu de chong len man khac. */
+    case 'ov-go': {
+      closeLayer('#ovDlg');
+      if (v === 'orders') { S.ordF = S.done.some(o => o.status === 'paid') ? 'wait' : 'sent'; S.ordOpen = null; renderOrds(); openLayer('#ordDlg'); }
+      else if (v === 'history') { S.ordOpen = null; S.hisPage = 0; S.hisDD = null; renderHis(); openLayer('#hisDlg', 'input'); }
+      else if (v === 'stock') { renderStock(); openLayer('#stockDlg'); }
+      break; }
     case 'ov-close': closeLayer('#ovDlg'); break;
     case 'stock-open': if (S.user !== 'manager') { toast('Stock is for managers only'); break; } renderStock(); openLayer('#stockDlg'); break;
     case 'stock-close': closeLayer('#stockDlg'); break;
