@@ -749,7 +749,7 @@ button:disabled{cursor:not-allowed}
 .dlt{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;white-space:nowrap}
 .dlt svg{flex:none}
 .dlt .vs{font-weight:500;opacity:.7}
-.ovk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ovk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 /* BA HANG, khong phai nam khoi xep doc. Ban cu cao 192px vi icon, nhan,
    so, dong phu va chi so tang giam moi thu mot dong rieng.
    hang 1: icon + nhan (icon 32 nam CANH nhan, khong phai tren nhan)
@@ -771,18 +771,13 @@ button:disabled{cursor:not-allowed}
 .ovc .ovf .s{min-width:0}
 .ovc .ovf .dlt{flex:none}
 .ovc .s{font-size:12px;line-height:1.35;opacity:.85}
-/* BA the BA mau, nen DAM, chu trang. Ba viec khac han nhau: viec can xu ly
-   ngay (do), tien da thu (mau thuong hieu), hang doi bep (amber).
-   Mau amber phai dam toi #8a5600: #b8780a "tuoi" hon nhung chu trang tren
-   no chi dat 3.72, khong du cho chu 12px. */
-/* --accent chu KHONG phai --chart: o ban vang --chart la --accent-ink
-   (#43290a), nen the se co nen nau dam VA chu cung mau nau dam — chu bien
-   mat hoan toan. --accent di voi --accent-ink thi ban nao cung doc duoc,
-   do la dinh nghia cua cap token nay. (--chart van dung cho BIEU DO: o do
-   mang mau lon can dat 3:1 voi nen trang, ma vang chi dat 1.81.) */
-.ovc{background:var(--accent);color:var(--accent-ink)}
-.ovc.bad{background:var(--bad-ink);color:#ffffff}
-.ovc.warn{background:#8a5600;color:#ffffff}
+/* Bon mau PHAN LOAI, co dinh o ca bon ban mau. Mau amber phai dam toi
+   #8a5600: #b8780a "tuoi" hon nhung chu trang tren no chi dat 3.72. */
+.ovc{color:#ffffff}
+.ovc.c-alert{background:#8f1d1d}
+.ovc.c-orders{background:#2f4d8a}
+.ovc.c-sales{background:#1f6b43}
+.ovc.c-aov{background:#8a5600}
 
 /* HAI COT BANG NHAU, va moi hang dung dung mot ti le. Truoc day hang bieu
    do dung 1.35fr con hang danh sach dung 1.1fr — hai duong chia giua khong
@@ -797,12 +792,33 @@ button:disabled{cursor:not-allowed}
 .ovp .dn{flex:1}
 .ovp .vb{margin-top:auto}
 .ovp h3{margin:0 0 4px;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
-/* Nhan nhom: chu nho, in hoa, kem so luong. No la mot nhan chia nhom chu
-   khong phai mot muc, nen khong co duong ke tren nhu cac dong muc. */
-.ovgrp{display:flex;align-items:center;gap:7px;margin-top:12px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ovgrp:first-of-type{margin-top:8px}
-.ovgrp span{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:color-mix(in srgb, var(--ink) 8%, transparent);color:var(--ink);font-size:11px;letter-spacing:0}
-.ovgrp + .ovi{border-top:0}
+/* Danh sach the con. Cac muc DA CHAN xep truoc, nen hai nhom tu lien khoi
+   ma khong can mot nhan chia nhom nao. */
+.ovlist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+/* overflow:hidden de vach do o day bi cat theo bo goc the con. */
+.ova{position:relative;overflow:hidden;padding:12px 14px 14px;border-radius:14px;background:color-mix(in srgb, var(--ink) 4%, transparent)}
+.ova-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ova .n{font-size:14px;font-weight:600;color:var(--ink)}
+.ova .s{margin-top:3px;font-size:12px;line-height:1.4;color:var(--muted)}
+/* Muc DA CHAN: them mau nen va mot vach mau o canh trai. Day la thu duy
+   nhat tren man can lam ngay, no dang duoc tach bang MAU chu khong chi
+   bang chu. */
+/* KHONG co vach mau o canh trai: no chi chay het chieu cao the con nen
+   doc ra nhu mot duong vien bi ve thieu ba canh. Nen --bad-soft va badge
+   "Blocked" da du de tach nhom nay ra. */
+.ova.stop{background:var(--bad-soft)}
+/* Thanh do nam SAT DAY the con va keo het be ngang — no la chi bao phu,
+   khong dang chiem mot dong rieng. */
+.ova .pb{position:absolute;left:0;right:0;bottom:0;height:4px;margin:0;border-radius:0;background:color-mix(in srgb, var(--ink) 8%, transparent)}
+.ova .pb i{border-radius:0}
+.ova.stop .pb i{background:var(--bad-ink)}
+/* Badge tren the DA CHAN: .badge.bad lay nen --bad-soft, ma nen the con
+   cung la --bad-soft — badge mat hut. Trong do no lay mot lop --bad-ink
+   dam hon nen the. */
+.ova.stop .badge.bad{background:color-mix(in srgb, var(--bad-ink) 14%, transparent)}
+/* Badge "Low": trung tinh, khong phai vang. Mot man da thong nhat mot sac
+   theo ban mau thi mot badge vang la mau thu ba lac vao. */
+.ova .badge.pend{background:color-mix(in srgb, var(--ink) 9%, transparent);color:var(--ink)}
 .ovi{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .ovi .n{font-size:14px;font-weight:600;color:var(--ink)}
 .ovi .s{margin-top:2px;font-size:12px;line-height:1.4;color:var(--muted)}
@@ -3502,21 +3518,35 @@ function renderOverview(){
      Moi the dung CUNG mot khung: .ovh (icon + nhan) / .v (con so) /
      .ovf (dong phu + chi so tang giam). Giong khung thi ba the moi xep
      thang hang nhau. */
+  /* BON the. Mau di theo PHAN LOAI, co dinh o ca bon ban mau — khong chay
+     theo --accent. Ly do: bon the noi ve bon viec khac nhau (canh bao / so
+     don / tien thu / tien moi don), ma neu ca bon deu to mot sac brand thi
+     mau khong con phan biet duoc gi, chi con la trang tri.
+       canh bao  do    — viec phai lam
+       so don    xanh duong — khoi luong
+       tien thu  xanh la    — tien vao
+       don TB    amber      — tien tren moi don
+     Bon mau deu dat >= 6:1 voi chu trang. */
   const kpi =
-    `<div class="ovc ${att.length ? 'bad' : ''}">` +
+    `<div class="ovc c-alert">` +
       `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span></span>` +
       `<span class="v num">${att.length}</span>` +
       `<span class="ovf"><span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></span>` +
     `</div>` +
-    `<div class="ovc">` +
+    `<div class="ovc c-orders">` +
+      `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span><span class="k">Orders</span></span>` +
+      `<span class="v num">${cur.n}</span>` +
+      `<span class="ovf"><span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.n, prv.n)}</span>` +
+    `</div>` +
+    `<div class="ovc c-sales">` +
       `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales</span></span>` +
       `<span class="v num">${rm(cur.amt)}</span>` +
-      `<span class="ovf"><span class="s">${cur.n} order${cur.n === 1 ? '' : 's'}</span>${dlt(cur.amt, prv.amt)}</span>` +
+      `<span class="ovf"><span class="s">paid today</span>${dlt(cur.amt, prv.amt)}</span>` +
     `</div>` +
-    `<div class="ovc warn">` +
+    `<div class="ovc c-aov">` +
       `<span class="ovh"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></span><span class="k">Average order</span></span>` +
       `<span class="v num">${rm(cur.aov)}</span>` +
-      `<span class="ovf"><span class="s">${cur.dine} dine-in \u00b7 ${cur.n - cur.dine} takeaway</span>${dlt(cur.aov, prv.aov)}</span>` +
+      `<span class="ovf"><span class="s">per order</span>${dlt(cur.aov, prv.aov)}</span>` +
     `</div>`;
 
   /* HAI NHOM, khong phai mot danh sach. "Can't sell right now" cu gom ca
@@ -3531,13 +3561,25 @@ function renderOverview(){
      mon con kha co thanh DAI — nguoc han voi truc giac "thanh dai = van de
      lon". Het hang thi thanh day 100%. */
   const used = id => Math.max(0, Math.min(100, Math.round((1 - S.stock[id] / INGR[id].low) * 100)));
-  const row = b => `<div class="ovi ${b.out ? 'bad' : 'warn'}">${b.out ? OICO.bad : OICO.warn}<div><div class="n">${esc(INGR[b.id].name)}</div>` +
-    `<div class="s">${fmtQ(b.id, S.stock[b.id])} left \u00b7 low mark ${fmtQ(b.id, INGR[b.id].low)}` +
-    (b.dishes.length ? ' \u00b7 blocks ' + esc(b.dishes.join(', ')) : '') + '</div>' +
-    `<div class="pb"><i style="width:${used(b.id)}%"></i></div></div></div>`;
-  const grp = (label, arr) => arr.length ? `<div class="ovgrp">${label} <span>${arr.length}</span></div>` + arr.map(row).join('') : '';
+  /* MOI MUC LA MOT THE CON. Truoc day bon muc nam phang tren cung mot mat,
+     phan biet bang mot nhan chu nho — mat khong thay ranh gioi nen van doc
+     ra la mot danh sach dai. Moi muc mang BADGE rieng (Blocked / Low) nen
+     no tu noi minh la loai gi, khong phu thuoc vao vi tri trong danh sach;
+     nho the ma bo luon hai nhan nhom.
+     Bo icon tam giac o tung dong: no lap lai dung cai ma badge va mau nen
+     da noi, va bon tam giac do xep doc lam khoi nay on hon ca ba the so
+     lieu o tren. */
+  const row = b => {
+    const stop = b.out || b.dishes.length;
+    return `<div class="ova${stop ? ' stop' : ''}">` +
+      `<div class="ova-h"><span class="n">${esc(INGR[b.id].name)}</span>` +
+      `<span class="badge ${stop ? 'bad' : 'pend'}">${stop ? 'Blocked' : 'Low'}</span></div>` +
+      `<div class="s">${fmtQ(b.id, S.stock[b.id])} left \u00b7 low mark ${fmtQ(b.id, INGR[b.id].low)}` +
+      (b.dishes.length ? ' \u00b7 blocks ' + esc(b.dishes.join(', ')) : '') + '</div>' +
+      `<div class="pb"><i style="width:${used(b.id)}%"></i></div></div>`;
+  };
   const left = bl.length
-    ? grp('Blocked', blocked) + grp('Running low', lowOnly)
+    ? `<div class="ovlist">` + blocked.concat(lowOnly).map(row).join('') + `</div>`
     : '<p class="ovempty">Everything on the menu can be made right now.</p>';
 
   /* COT DUNG: top 5 mon. Chieu cao ty le voi cot cao nhat, con so dat tren dau. */
