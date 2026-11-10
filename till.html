@@ -1116,7 +1116,13 @@ button:disabled{cursor:not-allowed}
 /* Hang chua THE de xuat: the can ca be ngang de bang so trong no doc duoc,
    nen hang nay rong hon hang bong chu thuong. */
 .botrow.cardrow{max-width:100%;width:100%}
-.botrow.cardrow .card{flex:1;min-width:0}
+/* The de xuat nam trong CUNG MOT bong chu voi cac tin nhan khac cua tro
+   ly: cung nen --accent 10%, cung goc nhon o tren-trai. */
+.botrow.cardrow .card{flex:1;min-width:0;background:color-mix(in srgb, var(--accent) 10%, var(--surface));border-radius:4px var(--r-lg) var(--r-lg) var(--r-lg)}
+/* Nut phu TRONG bong: nen --surface-2 cua .btn gan trung mau nen bong, nen
+   no phai doi sang trang co vien — cung cach da lam cho chip. */
+.cardrow .card .btn:not(.primary):not(.dark){background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.cardrow .card .btn:not(.primary):not(.dark):hover{background:color-mix(in srgb, var(--ink) 5%, var(--surface))}
 /* Avatar trong chat DUNG YEN. Cu dong la de goi y "bam vao day di" — dung
    cho cai nut tren bar. Trong luong chat no chi la nhan cua nguoi noi, ma
    mot cai nhan cu nhun nhay canh moi tin nhan thi chi lam mat chu.
