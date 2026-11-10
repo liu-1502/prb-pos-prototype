@@ -737,16 +737,7 @@ button:disabled{cursor:not-allowed}
 /* The so lieu: ICON o tren, nhan, roi con so TO. Truoc day ba the chi co
    chu — ba khoi chu giong het nhau thi mat phai doc het moi biet cai nao la
    cai gi. Mot icon o dau the cho biet ngay no noi ve viec gi. */
-/* overflow:hidden de ban icon CHIM bi cat gon theo bo goc the. */
 .ovc{position:relative;overflow:hidden;padding:18px 20px;border-radius:20px;background:var(--surface);display:flex;flex-direction:column}
-/* Ban CHIM, bu, nam goc duoi-phai lam hoa tiet nen. Dat opacity thap va
-   cho no TRAN ra ngoai mep the: mot icon nam gon trong the se doc ra nhu
-   mot icon thu hai, con mot manh tran ra thi doc ra la hoa tiet.
-   pointer-events:none de no khong an mat cu cham nao. */
-.ovc .bgi{position:absolute;right:-18px;bottom:-26px;width:132px;height:132px;opacity:.08;pointer-events:none;color:var(--chart)}
-.ovc .bgi svg{width:100%;height:100%;stroke-width:1.4}
-.ovc.bad .bgi{color:var(--bad-ink);opacity:.12}
-.ovc > .k,.ovc > .v,.ovc > .s,.ovc > .ico{position:relative;z-index:1}
 .ovc .ico{width:38px;height:38px;flex:none;margin-bottom:12px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:inherit}
 .ovc .k{display:block;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;opacity:.82}
 .ovc .v{display:block;margin-top:6px;font-size:32px;font-weight:600;line-height:1.02;letter-spacing:-.01em}
@@ -763,10 +754,7 @@ button:disabled{cursor:not-allowed}
 .ovc{background:var(--accent);color:var(--accent-ink)}
 .ovc.bad{background:var(--bad-ink);color:#ffffff}
 .ovc.warn{background:#8a5600;color:#ffffff}
-/* Icon chim an theo MAU CHU cua the: nen vang thi chu nau dam nen hoa tiet
-   cung nau; nen do thi chu trang nen hoa tiet trang. Mot lop trang co dinh
-   se mat hut tren the vang. */
-.ovc .bgi{color:currentColor;opacity:.16}
+
 .ov2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:stretch}
 /* Hang bieu do: cot dung can be ngang hon danh sach chu thich cua donut. */
 .ov2.ov2c{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
@@ -3386,11 +3374,11 @@ function renderOverview(){
   $('#ovSub').textContent = 'Till 1 \u00b7 ' + userName() + ' \u00b7 ' + new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
 
   const kpi =
-    `<div class="ovc ${att.length ? 'bad' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span><span class="v num">${att.length}</span>` +
+    `<div class="ovc ${att.length ? 'bad' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span><span class="k">Needs attention</span><span class="v num">${att.length}</span>` +
     `<span class="s">${att.length ? esc(att[0].t) + (att.length > 1 ? ' \u00b7 and ' + (att.length - 1) + ' more' : '') : 'Nothing right now'}</span></div>` +
-    `<div class="ovc"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales this shift</span><span class="v num">${rm(t.amt)}</span>` +
+    `<div class="ovc"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg></span><span class="k">Sales this shift</span><span class="v num">${rm(t.amt)}</span>` +
     `<span class="s">${t.n} orders \u00b7 includes the sample morning sales</span></div>` +
-    `<div class="ovc ${wait ? 'warn' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="bgi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="k">Paid, not sent to kitchen</span><span class="v num">${wait}</span>` +
+    `<div class="ovc ${wait ? 'warn' : ''}"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="m4 8 16-4"></path><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"></path></svg></span><span class="k">Paid, not sent to kitchen</span><span class="v num">${wait}</span>` +
     `<span class="s">${wait ? 'Send them from Orders' : 'All caught up'}</span></div>`;
 
   const bl = ovBlocked();
