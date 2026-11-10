@@ -836,6 +836,7 @@ button:disabled{cursor:not-allowed}
 #closeDlg .dlg{max-width:1020px;height:calc(100vh - 160px);max-height:calc(100vh - 160px)}
 #closeDlg .dlg-h{border-bottom:0}
 #closeDlg #closeForm{flex:1;min-height:0;overflow:hidden;padding:0}
+.clwrap{margin:0}
 .clcount{order:1;overflow:auto}
 .clsales{order:2}
 .clsales .tbl-wrap{flex:1;min-height:0;overflow:auto}
@@ -908,7 +909,7 @@ button:disabled{cursor:not-allowed}
 /* Chi phan BANG cuon; thanh loc va phan trang dung yen. */
 .hiswrap{flex:1;min-height:0;overflow:auto}
 .hispag{flex:none;padding-bottom:16px}
-.hisfil{display:flex;align-items:center;gap:8px}
+.hisfil{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
 /* KHONG dung <select>: no mo menu cua he dieu hanh (mang xam dam cua macOS),
    khong dinh gi toi token cua san pham. Dung lai ngon ngu popup da co san o
    menu tai khoan: the trang, bo goc, do bong, hang 40px, hover tint. */
@@ -925,11 +926,18 @@ button:disabled{cursor:not-allowed}
 .ddm button:not([aria-selected="true"]) .tick{visibility:hidden}
 /* O tim: KHONG nen, chi vien — dang "truong nhap" chu khong phai mot vien thuoc
    tren thanh cong cu. Dat duoi header, tren bang. */
-.histool{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.histool{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
 /* Phai khoanh bang #hisDlg: rule .search cua layout/theme co do uu tien cao
    hon .histool .search (0,2,0) nen nen va be rong khong an. */
-#hisDlg .histool .search{flex:none;width:300px;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
-.histool .cnt{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted)}
+#hisDlg .histool .search{flex:none;width:190px;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
+/* O chon ngay deo cung bo vo voi .ddb: cung chieu cao 44, cung vien, cung
+   bo goc. Hai o nam trong MOT vo de nguoi doc thay no la mot khoang, khong
+   phai hai bo loc roi nhau. */
+.hisdate{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;border:1.5px solid var(--line-2);border-radius:var(--r-pill)}
+.hisdate input{width:108px;height:40px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;padding:0}
+.hisdate input:focus{outline:0}
+.hisdate:focus-within{border-color:var(--accent)}
+.hisdate .sep{color:var(--muted)}
 /* Phan trang: dung ngon ngu token cua chinh prototype nay (chua lay tu design
    system 02_Whitelabel Base — he do la brand XANH LAM, dua vao se da mau). */
 .hispag{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
@@ -2247,7 +2255,7 @@ const CATS = [
 const S = {
   stock:{rice:31.5, chicken_leg:6.8, chicken_breast:0.1, egg:84, sambal:40, noodles:12, prawn:2, dough:60, tea:120, coffee:80, milo:3},
   orders:[{no:142, type:'dine', table:'', note:'', cart:[]}], act:0, nextNo:143, cat:'all', q:'',
-  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisType:'all', hisPaid:'all', hisKit:'all', hisBy:'all', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
+  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisType:'all', hisPaid:'all', hisKit:'all', hisBy:'all', hisFrom:'', hisTo:'', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
   offline:false, queue:0, user:'cashier',
   paid:{cash:{n:62, amt:1284.60}, card:{n:41, amt:1936.40}, qr:{n:38, amt:812.30}},
   sold:{nlag:48, nlb:26, ngk:14, hainan:11, mee:21, ckt:17, laksa:9, roti:55, rtelur:19, teh:73, kopi:30, milo:12},
@@ -2939,6 +2947,17 @@ document.addEventListener('input', e => {
 /* ---------- order history (dialog rieng) ---------- */
 const HIS_PER = 10;
 /* Danh sach nhan vien suy tu chinh du lieu don, khong cung hoa. */
+/* Lich su xem duoc toi da 30 ngay. min/max dat thang tren o chon ngay nen
+   khong co cach nao go ra ngoai khoang do — khong can them mot thong bao loi.
+   Tu tinh YYYY-MM-DD thay vi toISOString: toISOString doi sang UTC, o mui gio
+   +8 cua Malaysia thi moi ngay bi lui mot ngay trong suot buoi toi. */
+const HIS_DAYS = 30;
+const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+function hisBounds(){
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const f = new Date(t); f.setDate(f.getDate() - (HIS_DAYS - 1));
+  return {min: ymd(f), max: ymd(t)};
+}
 function staffList(){ return [...new Set(S.done.map(o => o.by).filter(Boolean))].sort(); }
 /* Don hom nay chi can gio; don cu phai co ngay, neu khong 30 ngay du lieu
    doc ra nhu tat ca xay ra trong mot buoi. */
@@ -2957,6 +2976,15 @@ function renderHis(){
   if (S.hisPaid !== 'all') list = list.filter(o => o.method === S.hisPaid);
   if (S.hisKit !== 'all') list = list.filter(o => o.status === S.hisKit);
   if (S.hisBy !== 'all') list = list.filter(o => o.by === S.hisBy);
+  const B = hisBounds();
+  /* dFrom/dTo chu khong phai from/to: `from` da la bien cua phan trang o
+     cuoi ham nay. */
+  const dFrom = S.hisFrom || B.min, dTo = S.hisTo || B.max;
+  {
+    const a = new Date(dFrom + 'T00:00:00').getTime();
+    const b = new Date(dTo + 'T23:59:59.999').getTime();
+    list = list.filter(o => o.ts >= a && o.ts <= b);
+  }
   const CHEV = '<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
   const TICK = '<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
   const sel = (id, label, val, opts) => {
@@ -2968,14 +2996,16 @@ function renderHis(){
       `</div>`;
   };
   const tool = `<div class="histool"><label class="search sm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>` +
-    `<input id="hisQ2" type="search" autocomplete="off" placeholder="Order no., staff or table" aria-label="Search order history" value="${esc(S.hisQ)}"></label>` +
+    `<input id="hisQ2" type="search" autocomplete="off" placeholder="No., staff, table" aria-label="Search order history" value="${esc(S.hisQ)}"></label>` +
     `<span class="hisfil">` +
       sel('hisType', 'Order type', S.hisType, [['all', 'All types'], ['dine', 'Dine-in'], ['take', 'Takeaway']]) +
       sel('hisPaid', 'Paid by', S.hisPaid, [['all', 'All payments'], ['cash', 'Cash'], ['card', 'Card'], ['qr', 'QR']]) +
       sel('hisKit', 'Kitchen', S.hisKit, [['all', 'All kitchen']].concat(OST_SEQ.map(k => [k, OST[k].lbl]))) +
       sel('hisBy', 'Staff', S.hisBy, [['all', 'All staff']].concat(STAFF.map(n => [n, n]))) +
-    `</span>` +
-    `<span class="cnt">${list.length} order${list.length === 1 ? '' : 's'}</span></div>`;
+      `<span class="hisdate"><input type="date" id="hisFrom" data-act-change="his-from" aria-label="From date" value="${esc(dFrom)}" min="${B.min}" max="${B.max}">` +
+      `<span class="sep" aria-hidden="true">\u2013</span>` +
+      `<input type="date" id="hisTo" data-act-change="his-to" aria-label="To date" value="${esc(dTo)}" min="${B.min}" max="${B.max}"></span>` +
+    `</span></div>`;
   if (!list.length){
     $('#hisBody').innerHTML = tool + `<p class="hempty">${q ? `Nothing matches \u201c${esc(S.hisQ)}\u201d.` : 'No orders yet. Every completed sale is kept here.'}</p>`;
     return;
@@ -3515,6 +3545,16 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('change', e => {
   const t = e.target;
+  /* 'change' chu khong phai 'input': o chon ngay ban mot su kien moi lan go
+     mot chu so, ma renderHis ve lai ca thanh cong cu nen o se mat focus giua
+     chung. Day la dung buoc "chon xong". */
+  if (t.dataset.actChange === 'his-from' || t.dataset.actChange === 'his-to') {
+    const B = hisBounds();
+    const v = t.value < B.min ? B.min : t.value > B.max ? B.max : (t.value || (t.dataset.actChange === 'his-from' ? B.min : B.max));
+    if (t.dataset.actChange === 'his-from') { S.hisFrom = v; if (S.hisTo && S.hisTo < v) S.hisTo = v; }
+    else { S.hisTo = v; if (S.hisFrom && S.hisFrom > v) S.hisFrom = v; }
+    S.hisPage = 0; renderHis(); return;
+  }
   if (t.dataset.actChange === 'opt') {
     const it = BY[S.opt.id], g = it.opts[Number(t.dataset.g)];
     let mods = S.opt.mods.filter(id => !g.choices.some(c => c.id === id) || g.type === 'many');
