@@ -948,6 +948,22 @@ button:disabled{cursor:not-allowed}
 .histbl .stf{display:inline-flex;align-items:center;gap:8px}
 .histbl .tot{font-weight:600;font-variant-numeric:tabular-nums}
 .histbl td.det{padding:0 14px 14px;background:var(--surface-2)}
+/* Mui ten xoay = dong nay mo ra duoc. Khong co no thi ca bang trong nhu
+   bang tinh, khong ai doan la bam duoc. */
+.histbl .hno{display:inline-flex;align-items:center;gap:8px}
+/* Bang rong gan 900px: de nguyen thi ten mon va gia cua mot dong nam cach
+   nhau nua man, mat phai di het chieu ngang de ghep lai. */
+.histbl td.det .ord-l,.histbl td.det .ord-note{max-width:620px}
+.hchev{flex:none;color:var(--muted);transition:transform .12s ease}
+.histbl tr.hr.on .hchev{transform:rotate(180deg);color:var(--ink)}
+/* Day MOC TRANG THAI trong phan mo rong. Mau xanh la dat cung nhu .hpill.sent:
+   --ok o theme xanh la mau XANH DUONG, dung vao day se ra mot the lac long. */
+.hsteps{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 0}
+.hstep{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:var(--r-pill);font-size:12px;font-weight:600;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.hstep svg{flex:none}
+.hstep.done{color:#17652f}
+.hstep.wait{color:var(--ink)}
+.hstep .t{font-weight:500;color:var(--muted)}
 .hpill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:var(--r-pill);font-size:12px;font-weight:600;white-space:nowrap}
 .hpill.sent{background:#e4f2e6;color:#17652f}
 .hpill.paid{background:color-mix(in srgb, var(--ink) 8%, var(--surface));color:var(--ink)}
@@ -2917,6 +2933,10 @@ function renderHis(){
   if (S.hisBy !== 'all') list = list.filter(o => o.by === S.hisBy);
   const CHEV = '<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
   const TICK = '<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
+  /* Rieng cho day moc trang thai — khong dung lai TICK o tren vi no mang
+     class .tick cua menu xo xuong, keo theo kich thuoc va vi tri cua menu. */
+  const SOK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
+  const SWAIT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>';
   const sel = (id, label, val, opts) => {
     const cur = (opts.find(o => o[0] === val) || opts[0])[1];
     const open = S.hisDD === id;
@@ -2945,14 +2965,25 @@ function renderHis(){
   const rows = pageList.map(o => {
     const n = o.lines.reduce((a, l) => a + l.qty, 0);
     const open = S.ordOpen === o.no;
-    const det = open ? `<tr><td class="det" colspan="7"><div class="ord-l">` +
+    const meth = o.method === 'qr' ? 'QR' : o.method === 'card' ? 'Card' : 'Cash';
+    /* Mot don di qua HAI moc that trong du lieu: thu tien, roi gui bep. Nhan
+       o cot Kitchen chi noi duoc moc thu hai — mo ra thi phai thay ca hai,
+       kem gio, neu khong nguoi doc van phai tu suy. */
+    const steps = `<div class="hsteps">` +
+      `<span class="hstep done">${SOK}Paid<span class="t">${esc(o.at)} \u00b7 ${esc(meth)}</span></span>` +
+      (o.status === 'sent'
+        ? `<span class="hstep done">${SOK}Sent to kitchen<span class="t">${esc(o.kAt || o.at)}</span></span>`
+        : `<span class="hstep wait">${SWAIT}Not sent to kitchen<span class="t">waiting</span></span>`) +
+      `</div>`;
+    const det = open ? `<tr><td class="det" colspan="7">${steps}<div class="ord-l">` +
       o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}\u00d7</span>` +
         `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}</span>` +
         `<span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>` +
       (o.note ? `<div class="ord-note"><b>Note</b> \u00b7 ${esc(o.note)}</div>` : '') +
       `<div class="btns"><button type="button" class="btn" data-act="ord-print" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>Print receipt</button></div></td></tr>` : '';
-    return `<tr class="hr${open ? ' on' : ''}" data-act="ord-toggle" data-v="${o.no}">` +
-      `<td class="no">${ordNo(o.no)}</td><td class="num">${esc(hisWhenLbl(o))}</td>` +
+    const CHV = '<svg class="hchev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+    return `<tr class="hr${open ? ' on' : ''}" data-act="ord-toggle" data-v="${o.no}" aria-expanded="${open}">` +
+      `<td class="no"><span class="hno">${CHV}${ordNo(o.no)}</span></td><td class="num">${esc(hisWhenLbl(o))}</td>` +
       `<td>${o.type === 'dine' ? 'Dine-in \u00b7 ' + esc(o.table || '\u2014') : 'Takeaway'}</td>` +
       `<td><span class="stf">${avatar(o.by, 24)}${esc(o.by)}</span></td><td class="r num">${n}</td>` +
       `<td>${o.method === 'qr' ? 'QR' : o.method === 'card' ? 'Card' : 'Cash'}</td>` +
@@ -3404,7 +3435,10 @@ document.addEventListener('click', e => {
     case 'ord-filter': S.ordF = v; S.ordOpen = null; renderOrds(); break;
     case 'ord-open': S.ordF = S.done.some(o => o.status === 'paid') ? 'wait' : 'history'; S.ordOpen = null; renderOrds(); openLayer('#ordDlg'); break;
     case 'ord-close': closeLayer('#ordDlg'); break;
-    case 'ord-toggle': S.ordOpen = S.ordOpen === Number(v) ? null : Number(v); renderOrds(); break;
+    /* Cung mot hanh dong dung o HAI hop. Truoc day no luon goi renderOrds,
+       nen bam mot dong trong Order history khong co gi xay ra. */
+    case 'ord-toggle': S.ordOpen = S.ordOpen === Number(v) ? null : Number(v);
+      if (!$('#hisDlg').hidden) renderHis(); else renderOrds(); break;
     case 'ord-kitchen': {
       const o = S.done.find(x => String(x.no) === v); if (!o) break;
       const n = o.lines.reduce((a,l) => a + l.qty, 0), again = o.status === 'sent';
