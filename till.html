@@ -1113,6 +1113,10 @@ button:disabled{cursor:not-allowed}
    align-items:flex-start de avatar bam MEP TREN cua bong chu, khong troi
    xuong giua khi tin nhan dai. */
 .botrow{align-self:flex-start;max-width:92%;display:flex;align-items:flex-start;gap:8px}
+/* Hang chua THE de xuat: the can ca be ngang de bang so trong no doc duoc,
+   nen hang nay rong hon hang bong chu thuong. */
+.botrow.cardrow{max-width:100%;width:100%}
+.botrow.cardrow .card{flex:1;min-width:0}
 /* Avatar trong chat DUNG YEN. Cu dong la de goi y "bam vao day di" — dung
    cho cai nut tren bar. Trong luong chat no chi la nhan cua nguoi noi, ma
    mot cai nhan cu nhun nhay canh moi tin nhan thi chi lam mat chu.
@@ -1127,6 +1131,13 @@ button:disabled{cursor:not-allowed}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chip{min-height:44px;padding:0 14px;border-radius:var(--r-pill);border:0;background:var(--surface-2);font-size:14px;font-weight:600}
 .chip.picked{background:var(--warm);color:var(--warm-ink)}
+/* Chip NAM TRONG bong chu cua tro ly: nen bong chu la --accent 10%, ma nen
+   mac dinh cua chip la --surface-2 — hai mang sat nhau den muc chip khong
+   con ranh gioi. Trong do chip lay nen TRANG va mot duong vien. */
+.bot .chip{background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.bot .chip:hover{background:color-mix(in srgb, var(--ink) 5%, var(--surface))}
+.bot .chip.picked{background:var(--warm);color:var(--warm-ink);box-shadow:none}
+.bot .chip:disabled{opacity:.55}
 .card{border:0;background:var(--surface-2);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-h b{font-size:16px;font-weight:600}
@@ -3386,14 +3397,17 @@ function renderThread(){
     if (m.role === 'me') return `<div class="me">${esc(m.text)}</div>`;
     if (m.role === 'bot') return `<div class="botrow"><span class="aiimg botav" aria-hidden="true"><i class="ai-lid"></i><i class="ai-s"></i></span><div class="bot">${m.html}${m.chips ? `<div class="chips">${m.chips.map(c => `<button type="button" class="chip${m.used === c.v ? ' picked' : ''}" data-act="chip" data-m="${i}" data-v="${esc(c.v)}" ${m.used ? 'disabled' : ''}>${esc(c.label)}</button>`).join('')}</div>` : ''}</div></div>`;
     const p = S.props[m.pid];
-    if (p.kind === 'po') return poCard(m.pid, p);
+    /* The de xuat CUNG LA mot tin nhan cua tro ly, nen no cung di kem avatar
+       va cung thang hang voi cac bong chu khac. Khong boc trong bong mau:
+       ben trong no la mot bang so, mot lop nen mau nua chi lam bang kho doc. */
+    if (p.kind === 'po') return `<div class="botrow cardrow"><span class="aiimg botav" aria-hidden="true"><i class="ai-lid"></i><i class="ai-s"></i></span>${poCard(m.pid, p)}</div>`;
     const n = p.kind === 'price' ? 1 : p.changes.length;
     const title = KIND[p.kind === 'price' ? 'price' : p.intent] + (p.kind === 'price' ? '' : ` · ${n} change${n > 1 ? 's' : ''}`);
     const badge = {pending:'<span class="badge pend">Not applied yet</span>', applied:`<span class="badge ok">Applied ${esc(p.at)} · logged for HQ</span>`, cancelled:'<span class="badge mute">Cancelled</span>', undone:'<span class="badge mute">Undone</span>'}[p.status];
     let foot = '';
     if (p.status === 'pending') foot = `<div class="btns"><button type="button" class="btn primary grow" data-act="prop-ok" data-p="${m.pid}">Confirm ${n} change${n > 1 ? 's' : ''}</button><button type="button" class="btn" data-act="prop-no" data-p="${m.pid}">Cancel</button></div>`;
     if (p.status === 'applied') foot = `<div class="btns" style="align-items:center"><span class="note" style="flex:1">${p.kind === 'price' ? 'New price applies to items added from now on.' : 'Dish availability updates straight away.'}</span><button type="button" class="btn" data-act="undo" data-l="${p.logId}">Undo</button></div>`;
-    return `<div class="card"><div class="card-h"><b>${title}</b>${badge}</div>${propTable(p)}${p.reason ? `<div class="note">Reason: ${esc(p.reason)}</div>` : ''}${p.warn ? `<div class="note" style="color:var(--bad-ink);font-weight:600">${esc(p.warn)}</div>` : ''}${foot}</div>`;
+    return `<div class="botrow cardrow"><span class="aiimg botav" aria-hidden="true"><i class="ai-lid"></i><i class="ai-s"></i></span><div class="card"><div class="card-h"><b>${title}</b>${badge}</div>${propTable(p)}${p.reason ? `<div class="note">Reason: ${esc(p.reason)}</div>` : ''}${p.warn ? `<div class="note" style="color:var(--bad-ink);font-weight:600">${esc(p.warn)}</div>` : ''}${foot}</div></div>`;
   }).join('');
   const th = $('#thread'); th.scrollTop = th.scrollHeight;
 }
