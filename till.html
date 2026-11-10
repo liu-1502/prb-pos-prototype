@@ -316,7 +316,7 @@ button:disabled{cursor:not-allowed}
    co 57-74% khung la hinh that, phan con lai la khoang trong trong suot —
    nen o cung mot con so px no doc ra nho hon han icon ve net. Cat sat roi
    chuan hoa ve khung vuong thi nam icon moi deu co nhau. */
-.cimg{flex:none;width:30px;height:30px;object-fit:contain}
+.cimg{flex:none;width:26px;height:26px;object-fit:contain}
 /* Moi chip mang SAN ca hai icon: anh 3D va ban ve net. Ban net an di, chi
    bat len o dung cho anh khong doc duoc — xem khoi duoi. Giu ca hai trong
    DOM thay vi ve lai khi doi theme: khong co trang thai nao phai dong bo. */
@@ -459,10 +459,11 @@ button:disabled{cursor:not-allowed}
    — auto la thu day no sang tan mep du hang tab con ngan.
    position:sticky;right:0 chi co tac dung KHI hang tab tran: luc do no dinh
    lai o mep phai de van bam duoc. Hang ngan thi sticky khong lam gi ca.
-   Nen la --bg (dung mau nen cua hang tab) chu khong phai mot the TRANG: khi
-   hang tran, tab chay o duoi no va phai bi che, nhung che bang chinh mau nen
-   thi khong ai thay o day co mot mang mau la. */
-.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px;padding:0;border:0;border-radius:var(--r-pill);background:var(--bg);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px var(--bg)}
+   KHONG nen, KHONG vong bong: vong box-shadow 6px tung dung de che tab khi
+   hang tran, nhung no lan xuong duoi hang tab va de len dau khoi gio mau
+   kem — ra mot mang sang vuong canh nut. Doi lai: khi hang tab tran, tab
+   chay o duoi nut nay se lo ra sau no. */
+.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px;padding:0;border:0;border-radius:var(--r-pill);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:none}
 .onew::before{content:"";position:absolute;inset:-4px}
 .onew:hover{background:var(--accent);color:var(--accent-ink)}
 /* Hang 1: ten don (trai) + chon Dine-in/Takeaway (phai). Hang 2: so the.
@@ -1466,7 +1467,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    huong, vien o day bien moi muc thanh mot cai hop roi rac. Can selector nay
    vi :root[data-layout="modern"] .ib (0,3,0) thang .rail .ib (0,2,0). */
 :root[data-layout="modern"] .rail .ib{border:0;background:transparent}
-:root[data-layout="modern"] .onew{background:var(--bg);box-shadow:0 0 0 6px var(--bg)}
+:root[data-layout="modern"] .onew{background:transparent;box-shadow:none}
 :root[data-layout="modern"] .onew:hover{background:var(--accent);color:var(--accent-ink)}
 :root[data-layout="modern"] .cat{position:relative;overflow:hidden;background:var(--surface);border:0;border-radius:var(--r-pill);color:var(--ink);box-shadow:var(--card-shadow)}
 :root[data-layout="modern"] .cat[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
