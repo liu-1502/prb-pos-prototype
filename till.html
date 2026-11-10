@@ -3066,7 +3066,23 @@ function renderBar(){
 function render(){ renderBar(); renderCats(); renderGrid(); renderCart(); if (!$('#asstDlg').hidden) renderAsst(); if (!$('#stockDlg').hidden) renderStock(); if (!$('#ovDlg').hidden) renderOverview(); }
 
 /* ---------- overlays ---------- */
-function openLayer(id, focusSel){ S.opener = document.activeElement; const el = $(id); el.hidden = false; const f = el.querySelector(focusSel || 'button, input, textarea'); if (f) f.focus(); syncRail(); }
+/* Rail la bo CHUYEN MAN, khong phai chong lop. Mo mot man rail khac thi
+   dong Overview truoc.
+   Khong lam the thi ra dung cai loi "bam khong an lien": #ordDlg va
+   #stockDlg nam TRUOC #ovDlg trong file ma cung z-index 40, nen chung ve
+   CHIM duoi Overview. Bam Orders trong Overview thi sheet Orders mo that
+   nhung khong thay gi — den luc dong Overview no moi lo ra, nen cam giac
+   la "mot luc sau moi hien" va "con chong len nhau".
+   Khong chua bang cach doi z-index: hai man nay la hai DICH DEN ngang hang,
+   chong chung len nhau thi dong cai tren lai roi ve cai duoi chu khong ve
+   man Order — khong phai thu nguoi dung cho doi. */
+/* Bon muc rail co man rieng. #hisDlg KHONG nam trong day: no la man con cua
+   Orders, mo chong len Orders va dong lai thi ve Orders — dung nhu cu. */
+const RAIL_DEST = ['#ovDlg', '#ordDlg', '#stockDlg', '#poDlg'];
+function openLayer(id, focusSel){
+  if (RAIL_DEST.indexOf(id) >= 0) RAIL_DEST.forEach(o => { if (o !== id) $(o).hidden = true; });
+  S.opener = document.activeElement; const el = $(id); el.hidden = false;
+  const f = el.querySelector(focusSel || 'button, input, textarea'); if (f) f.focus(); syncRail(); }
 function closeLayer(id){ $(id).hidden = true; if (id === '#payDlg') resetPay(); if (S.opener && document.body.contains(S.opener)) S.opener.focus(); syncRail(); }
 /* Rail co HAI muc la "man hinh": Tong quan (tren) va Don (duoi). Tong quan la
    mot lop phu nam tren man don, nen o dang sang phai chay theo viec lop do
