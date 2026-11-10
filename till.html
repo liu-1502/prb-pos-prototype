@@ -3684,18 +3684,23 @@ function renderOverview(){
         `<span class="l">${esc(logLabel(e))}${e.undone ? ' \u00b7 undone' : e.synced ? '' : ' \u00b7 waiting to sync'}</span></div>`).join('')
     : '<p class="ovempty">No price or stock changes today.</p>';
 
-  /* Xep theo VIEC, khong theo loai khoi:
-     hang 1 — ba con so cua ca;
-     hang 2 — hai thu CAN DE Y ngay (mon khong ban duoc, thay doi vua xay ra);
-     hang 3 — hai BIEU DO doc de biet tinh hinh, khong phai de lam gi.
+  /* BON KHOI xep thanh MOT day uu tien, doc trai -> phai roi tren -> duoi,
+     cung mot luat voi hang the KPI (viec phai lam -> tien -> khoi luong):
+       1 Stock alerts        — dang CHAN BAN, moi phut troi qua la mat tien
+       2 Price & stock       — ai vua doi gi khi minh khong co mat, phai biet
+       3 Where the money     — TIEN theo nhom mon
+       4 Selling well        — SO PHAN ban ra, giai thich con so tien o tren
+     Hai khoi dau la VIEC (doc xong phai lam gi do), hai khoi sau la TINH
+     HINH (doc de biet). Khoi tien dung truoc khoi so phan vi cung ly do the
+     Sales dung truoc the Orders: so phan chi la cach giai thich so tien.
      Truoc day mot bieu do bi ket chung hang voi mot danh sach viec, nen mat
      phai nhay qua nhay lai giua hai kieu doc. */
   $('#ovBody').innerHTML =
     `<div class="ovk">${kpi}</div>` +
     `<div class="ov2 ovrow"><div class="ovp"><div class="ovph"><h3>Stock alerts</h3>${bl.length ? `<span class="ovn num">${bl.length}</span>` : ''}<button type="button" class="ovmore" data-act="ov-go" data-v="stock" aria-label="Open stock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><div class="ovsc">${left}</div></div>` +
     `<div class="ovp"><div class="ovph"><h3>Price &amp; stock changes today</h3>${log.length ? `<span class="ovn num">${log.length}</span>` : ''}<button type="button" class="ovmore" data-act="ov-go" data-v="log" aria-label="Open activity log"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><div class="ovsc">${changes}</div></div></div>` +
-    `<div class="ov2 ov2c"><div class="ovp"><div class="ovph"><h3>Selling well</h3><button type="button" class="ovmore" data-act="ov-go" data-v="soon" aria-label="Open sales report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><p class="chlbl">Portions sold, top 5</p>${bars}</div>` +
-    `<div class="ovp"><div class="ovph"><h3>Where the money came from</h3><button type="button" class="ovmore" data-act="ov-go" data-v="soon" aria-label="Open revenue report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><p class="chlbl">Revenue by menu group</p>${donut}</div></div>`;
+    `<div class="ov2 ov2c"><div class="ovp"><div class="ovph"><h3>Where the money came from</h3><button type="button" class="ovmore" data-act="ov-go" data-v="soon" aria-label="Open revenue report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><p class="chlbl">Revenue by menu group</p>${donut}</div>` +
+    `<div class="ovp"><div class="ovph"><h3>Selling well</h3><button type="button" class="ovmore" data-act="ov-go" data-v="soon" aria-label="Open sales report"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button></div><p class="chlbl">Portions sold, top 5</p>${bars}</div></div>`;
 }
 
 /* ---------- assistant ---------- */
