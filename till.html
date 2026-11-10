@@ -1119,6 +1119,23 @@ button:disabled{cursor:not-allowed}
 /* The de xuat nam trong CUNG MOT bong chu voi cac tin nhan khac cua tro
    ly: cung nen --accent 10%, cung goc nhon o tren-trai. */
 .botrow.cardrow .card{flex:1;min-width:0;background:color-mix(in srgb, var(--accent) 10%, var(--surface));border-radius:4px var(--r-lg) var(--r-lg) var(--r-lg)}
+/* Duong ke bang trong bong: --line la mau ke tren nen TRANG. Dat len nen
+   bong (--accent 10%) thi no gan nhu mat hut — bang mat het hang loi.
+   Thay bang mot lop --ink trong suot: no dam hon nen dung mot ty le, nen
+   nen co doi mau the nao duong ke cung con thay duoc. */
+.cardrow .card th,.cardrow .card td{border-bottom-color:color-mix(in srgb, var(--ink) 26%, transparent)}
+/* Hang cuoi khong ke: duoi no la mep the, khong con hang nao de ngan cach. */
+.cardrow .card tbody tr:last-child td{border-bottom:0}
+/* Badge TRONG bong: ".mute" lay nen --surface-2, ma nen bong la mot tint
+   sang — hai mau gan trung, badge mat hut. Trong do no lay mot lop --ink
+   trong suot: dam hon nen dung mot ty le du nen co mau gi.
+   ".pend" va ".ok" giu nguyen MAU TRANG THAI (amber / xanh la) vi do la
+   nghia cua chung, chi them vien de ranh gioi khong phu thuoc vao viec
+   nen bong sang hay toi. */
+.cardrow .card .badge.mute{background:color-mix(in srgb, var(--ink) 9%, transparent);color:var(--ink);box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent)}
+.cardrow .card .badge.pend{box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--warn-line) 35%, transparent)}
+.cardrow .card .badge.ok{box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--ok-ink) 28%, transparent)}
+.cardrow .card .badge.bad{box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--bad-ink) 28%, transparent)}
 /* Nut phu TRONG bong: nen --surface-2 cua .btn gan trung mau nen bong, nen
    no phai doi sang trang co vien — cung cach da lam cho chip. */
 .cardrow .card .btn:not(.primary):not(.dark){background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line-2)}
@@ -1181,8 +1198,11 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 .stk-out .r b{font-size:15px;font-weight:600}
 .composer{border-top:1px solid var(--line);padding:12px 20px 16px;display:flex;flex-direction:column;gap:10px}
 /* Duong ke tach HAI VIEC khac nhau: hang tren la cau co san bam la gui
-   luon, hang duoi la tu go. Khong co no thi hai hang doc ra nhu mot cum. */
-.sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;border-bottom:1px solid var(--line)}
+   luon, hang duoi la tu go. Khong co no thi hai hang doc ra nhu mot cum.
+   Margin am 20 de duong ke chay HET be ngang hop — mot duong ke thut vao
+   hai dau doc ra nhu gach chan cua rieng hang chip, khong phai ranh gioi
+   giua hai vung. Padding ngang bu lai dung 20 nen chip khong xe dich. */
+.sugg{display:flex;gap:8px;overflow-x:auto;margin:0 -20px;padding:0 20px 12px;border-bottom:1px solid var(--line)}
 /* Goi y la nut BAM DUOC, nen no mang duong vien chu khong phai mot mang
    nen: trong khung chat, mot mang nen kem nam ngay duoi bong chu cua tro
    ly (cung mau --surface-2) doc ra nhu mot tin nhan nua, khong phai nut. */
@@ -2262,7 +2282,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 <!-- assistant drawer -->
 <div class="drawer-wrap" id="asstDlg" hidden data-scrim="asst">
   <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="asstTitle">
-    <div class="dlg-h"><div><h2 id="asstTitle">Operations assistant</h2><p>Stock counts, write-offs, restocks and price changes · every change is logged for HQ.</p></div><button type="button" class="x" data-act="asst-close" aria-label="Close assistant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
+    <div class="dlg-h"><div><h2 id="asstTitle">Operations assistant</h2></div><button type="button" class="x" data-act="asst-close" aria-label="Close assistant"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
     <div id="asstLock" class="pane" hidden>
       <div class="lock">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.12" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -2411,7 +2431,19 @@ const RICE = [
     {id:'nocuc', label:'No cucumber'},
     {id:'nopea', label:'No peanuts'},
     {id:'sideSambal', label:'Sambal on the side'},
-    {id:'lessrice', label:'Less rice'}]}
+    {id:'lessrice', label:'Less rice'}]},
+  /* Hai nhom nay lam hop chon mon DAI hon chieu cao man — do la truong hop
+     can xem: header va thanh day co dung yen khi than cuon khong. Mon com
+     la mon nhieu tuy chon nhat nen dat o day la that nhat. */
+  {group:'Side', type:'many', choices:[
+    {id:'kerabu', label:'Kerabu mangga', price:4},
+    {id:'tauhu', label:'Tauhu sumbat', price:3.5},
+    {id:'acar', label:'Acar timun', price:2},
+    {id:'keropok', label:'Keropok lekor', price:3}]},
+  {group:'Packaging', type:'one', choices:[
+    {id:'plate', label:'On a plate', def:true},
+    {id:'bungkus', label:'Bungkus', price:0.3},
+    {id:'bungkus2', label:'Bungkus, extra bag', price:0.6}]}
 ];
 const WOK = [
   {group:'Spice', type:'one', choices:[{id:'normal', label:'Normal spice', def:true}, {id:'mild', label:'Less spicy'}, {id:'hot', label:'Extra spicy'}]},
