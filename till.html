@@ -582,8 +582,15 @@ button:disabled{cursor:not-allowed}
    duoc) bi am di ma khong them thong tin gi. */
 :root{--rail-w:76px}
 :root[data-theme="red"]{--rail-w:72px}
-.scrim.sheet{align-items:stretch;justify-content:flex-start;padding:var(--shell-pad);background:transparent}
-.scrim.sheet .dlg{width:min(320px, 100%);max-width:none;height:100%;max-height:none;margin-left:var(--rail-w);border-radius:0;box-shadow:0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent), 12px 0 32px rgba(0,0,0,.14)}
+/* LOP PHU BAT DAU SAU COT CHROME, khong phu len no roi chua cho bang
+   margin. Lop .scrim trong suot nhung VAN AN cham: phu len cot rail thi bam
+   avatar / chuong / nut Order la trung lop phu, ma lop phu thi dong sheet —
+   nguoi dung thay man nhay di dau mat. Cat han phan do ra khoi lop phu thi
+   cot chrome bam duoc that, va phan nen con lai ben phai van dong sheet
+   duoc nhu cu. Vi tri cua .dlg khong doi: truoc la 0 + padding + margin,
+   gio la left + 0 + 0, cung ra mot so. */
+.scrim.sheet{align-items:stretch;justify-content:flex-start;left:calc(var(--shell-pad) + var(--rail-w));padding:var(--shell-pad);padding-left:0;background:transparent}
+.scrim.sheet .dlg{width:min(320px, 100%);max-width:none;height:100%;max-height:none;margin-left:0;border-radius:0;box-shadow:0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent), 12px 0 32px rgba(0,0,0,.14)}
 /* MOI SHEET MOT BE NGANG — khong ep chung mot so.
    Orders la danh sach the doc theo chieu doc: do duoc, cho rong nhat la HANG
    TAB, khong phai the don (255) hay dong mon trong chi tiet (293).
@@ -602,7 +609,7 @@ button:disabled{cursor:not-allowed}
    man nhay ve Order. Cat han phan do ra khoi lop phu thi rail bam duoc that.
    Doi lai Overview khong con dong bang cach bam ra ngoai — dung, vi no la
    mot MAN chu khong phai popover; van con nut X va phim Esc. */
-#ovDlg.sheet{padding:0;left:calc(var(--shell-pad) + var(--rail-w))}
+#ovDlg.sheet{padding:0}
 #ovDlg.sheet .dlg{width:auto;flex:1;margin-left:0;border-radius:0}
 /* Cung ngon ngu voi man Payment confirm: than mau XAM, moi khoi la mot the
    TRANG bo 20 — thay cho vien mo quanh tung o. Hai man deu la "nhieu khoi doc
@@ -1439,6 +1446,16 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    xam o day se lan voi .nrow.info. */
 .nrow.unread{background:color-mix(in srgb, var(--accent) 7%, var(--surface))}
 .nempty{margin:0;padding:4px 16px 16px;font-size:13px;color:var(--muted)}
+/* MENU LUON NAM TREN CUNG. .wmenu da co z-index 50 nhung no nam trong
+   .bar, ma .bar tu tao stacking context (ban do: z-index 6) — 50 chi co
+   nghia BEN TRONG .bar, nen ca cum van chim duoi .scrim z=40 va menu mo ra
+   thi khong thay gi. Phai nang chinh .bar len.
+   Chi nang TRONG LUC menu dang mo: o ban nau / xanh la / vang thanh lenh la
+   mot header nam trong vung lam viec, de no cao thuong xuyen thi no noi de
+   len dau de cua sheet. Viet rieng selector cho ban do vi
+   :root[data-theme="red"] .bar la (0,2,1), thang .bar.menu-on (0,2,0). */
+.bar.menu-on{position:relative;z-index:45}
+:root[data-theme="red"] .bar.menu-on{position:absolute;z-index:45}
 .wmenu{position:absolute;top:calc(100% + 6px);right:0;z-index:50;min-width:258px;padding:6px;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--shadow)}
 /* Dieu khien cua ban DEMO (gia lap mat mang, doi theme) da chuyen tu thanh tren
    vao day: chung khong phai thong tin thu ngan can thay khi dang ban. Rieng
@@ -2882,17 +2899,21 @@ function renderNotif(){
     `<span class="nt">${n.t}<span class="nm">${esc(n.m)}</span></span></div>`).join('')
     : '<p class="nempty">Nothing unread.</p>';
 }
+/* Thanh lenh chi duoc nang len khi CO menu dang mo — xem ghi chu .bar.menu-on. */
+function syncBarZ(){ const b = document.querySelector('.bar'); if (b) b.classList.toggle('menu-on', !$('#whoMenu').hidden || !$('#notifMenu').hidden); }
 function toggleNotif(force){
   const b = $('#notifBtn'), m = $('#notifMenu');
   const open = force === undefined ? m.hidden : force;
   if (open) renderNotif();
   m.hidden = !open; b.setAttribute('aria-expanded', String(open));
+  syncBarZ();
   if (open) m.focus();
 }
 function toggleWho(force){
   const b = $('#whoBtn'), m = $('#whoMenu');
   const open = force === undefined ? m.hidden : force;
   m.hidden = !open; b.setAttribute('aria-expanded', String(open));
+  syncBarZ();
   if (open) m.querySelector('button').focus();
 }
 function signOut(){
