@@ -720,7 +720,10 @@ button:disabled{cursor:not-allowed}
 .dn svg{flex:none;transform:rotate(-90deg)}
 .dnw{position:relative;flex:none}
 .dnc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.dnc b{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+/* Chu o tam phai nam gon trong LO cua vanh (rong 100px). 15px voi mot so
+   nhu "RM 2,304.20" la ~95px — sat qua, va khi tong len sau chu so la de
+   len vanh. 14px cho ~88px, con cho tho. */
+.dnc b{font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dnc span{font-size:10px;color:var(--muted)}
 .dl{flex:1;min-width:0;display:flex;flex-direction:column;gap:9px}
 .dl > div{display:flex;align-items:center;gap:9px;font-size:12px}
@@ -3407,15 +3410,18 @@ function renderOverview(){
   })).filter(c => c.amt > 0).sort((a,b) => b.amt - a.amt);
   const ctot = r2(cats.reduce((a,c) => a + c.amt, 0));
   const CC = ['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
-  const C = 282.74;
+  /* r=60 -> chu vi 376.99. Vong to hon va DAY hon ban cu (r=45, net 18):
+     lo giua rong 100px nen con so RM nam tron trong do, khong con de len
+     vanh. Vanh day 20 thi mieng nho nhat (9%) van con doc ra la mot mieng. */
+  const C = 376.99;
   let off = 0;
   const arcs = cats.map((c,i) => {
     const len = ctot ? c.amt / ctot * C : 0;
-    const el = `<circle cx="60" cy="60" r="45" fill="none" stroke="${CC[i] || 'var(--c5)'}" stroke-width="18" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"></circle>`;
+    const el = `<circle cx="80" cy="80" r="60" fill="none" stroke="${CC[i] || 'var(--c5)'}" stroke-width="20" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"></circle>`;
     off += len; return el;
   }).join('');
   const donut = cats.length
-    ? `<div class="dn"><div class="dnw"><svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">${arcs}</svg>` +
+    ? `<div class="dn"><div class="dnw"><svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">${arcs}</svg>` +
       `<div class="dnc"><b class="num">${rm(ctot)}</b><span>this shift</span></div></div>` +
       `<div class="dl">` + cats.map((c,i) => `<div><i style="background:${CC[i] || 'var(--c5)'}"></i>` +
         `<span class="n">${esc(c.label)}</span><span class="p num">${Math.round(c.amt / ctot * 100)}%</span></div>`).join('') + '</div></div>'
