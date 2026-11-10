@@ -2224,7 +2224,7 @@ const CATS = [
 const S = {
   stock:{rice:31.5, chicken_leg:6.8, chicken_breast:0.1, egg:84, sambal:40, noodles:12, prawn:2, dough:60, tea:120, coffee:80, milo:3},
   orders:[{no:142, type:'dine', table:'', note:'', cart:[]}], act:0, nextNo:143, cat:'all', q:'',
-  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisType:'all', hisPaid:'all', hisKit:'all', hisBy:'all', hisWhen:'30', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
+  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisType:'all', hisPaid:'all', hisKit:'all', hisBy:'all', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
   offline:false, queue:0, user:'cashier',
   paid:{cash:{n:62, amt:1284.60}, card:{n:41, amt:1936.40}, qr:{n:38, amt:812.30}},
   sold:{nlag:48, nlb:26, ngk:14, hainan:11, mee:21, ckt:17, laksa:9, roti:55, rtelur:19, teh:73, kopi:30, milo:12},
@@ -2915,12 +2915,6 @@ function renderHis(){
   if (S.hisPaid !== 'all') list = list.filter(o => o.method === S.hisPaid);
   if (S.hisKit !== 'all') list = list.filter(o => o.status === S.hisKit);
   if (S.hisBy !== 'all') list = list.filter(o => o.by === S.hisBy);
-  if (S.hisWhen !== 'all') {
-    const days = Number(S.hisWhen);
-    const edge = new Date(); edge.setHours(0, 0, 0, 0);
-    edge.setDate(edge.getDate() - (days - 1));
-    list = list.filter(o => o.ts >= edge.getTime());
-  }
   const CHEV = '<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
   const TICK = '<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
   const sel = (id, label, val, opts) => {
@@ -2938,7 +2932,6 @@ function renderHis(){
       sel('hisPaid', 'Paid by', S.hisPaid, [['all', 'All payments'], ['cash', 'Cash'], ['card', 'Card'], ['qr', 'QR']]) +
       sel('hisKit', 'Kitchen', S.hisKit, [['all', 'All kitchen'], ['sent', 'In kitchen'], ['paid', 'Not sent']]) +
       sel('hisBy', 'Staff', S.hisBy, [['all', 'All staff']].concat(STAFF.map(n => [n, n]))) +
-      sel('hisWhen', 'Period', S.hisWhen, [['1', 'Today'], ['7', 'Last 7 days'], ['30', 'Last 30 days'], ['all', 'All time']]) +
     `</span>` +
     `<span class="cnt">${list.length} order${list.length === 1 ? '' : 's'}</span></div>`;
   if (!list.length){
