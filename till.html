@@ -929,7 +929,9 @@ button:disabled{cursor:not-allowed}
 .histool{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
 /* Phai khoanh bang #hisDlg: rule .search cua layout/theme co do uu tien cao
    hon .histool .search (0,2,0) nen nen va be rong khong an. */
-#hisDlg .histool .search{flex:none;width:190px;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
+/* 220 chu khong phai 240: o 240 thi ca thanh dung 920/940, du dung 20px —
+   chon mot nhan vien co ten dai hon "All staff" la no rot dong. */
+#hisDlg .histool .search{flex:none;width:220px;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
 /* O chon ngay deo cung bo vo voi .ddb: cung chieu cao 44, cung vien, cung
    bo goc. Hai o nam trong MOT vo de nguoi doc thay no la mot khoang, khong
    phai hai bo loc roi nhau. */
@@ -2259,7 +2261,7 @@ const CATS = [
 const S = {
   stock:{rice:31.5, chicken_leg:6.8, chicken_breast:0.1, egg:84, sambal:40, noodles:12, prawn:2, dough:60, tea:120, coffee:80, milo:3},
   orders:[{no:142, type:'dine', table:'', note:'', cart:[]}], act:0, nextNo:143, cat:'all', q:'',
-  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisType:'all', hisPaid:'all', hisKit:'all', hisBy:'all', hisFrom:'', hisTo:'', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
+  done:[], pin:'', locked:true, ordF:'wait', ordOpen:null, hisQ:'', hisPage:0, hisPaid:'all', hisKit:'all', hisBy:'all', hisFrom:'', hisTo:'', hisDD:null, notifTab:'all', notifRead:false, stkF:'all', standTouched:false, chargeTried:false,
   offline:false, queue:0, user:'cashier',
   paid:{cash:{n:62, amt:1284.60}, card:{n:41, amt:1936.40}, qr:{n:38, amt:812.30}},
   sold:{nlag:48, nlb:26, ngk:14, hainan:11, mee:21, ckt:17, laksa:9, roti:55, rtelur:19, teh:73, kopi:30, milo:12},
@@ -2976,7 +2978,6 @@ function renderHis(){
   let list = S.done.slice();
   if (q) list = list.filter(o => ordNo(o.no).toLowerCase().includes(q)
     || (o.by || '').toLowerCase().includes(q) || (o.table || '').toLowerCase().includes(q));
-  if (S.hisType !== 'all') list = list.filter(o => o.type === S.hisType);
   if (S.hisPaid !== 'all') list = list.filter(o => o.method === S.hisPaid);
   if (S.hisKit !== 'all') list = list.filter(o => o.status === S.hisKit);
   if (S.hisBy !== 'all') list = list.filter(o => o.by === S.hisBy);
@@ -3000,9 +3001,8 @@ function renderHis(){
       `</div>`;
   };
   const tool = `<div class="histool"><label class="search sm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>` +
-    `<input id="hisQ2" type="search" autocomplete="off" placeholder="No., staff, table" aria-label="Search order history" value="${esc(S.hisQ)}"></label>` +
+    `<input id="hisQ2" type="search" autocomplete="off" placeholder="Order no., staff or table" aria-label="Search order history" value="${esc(S.hisQ)}"></label>` +
     `<span class="hisfil">` +
-      sel('hisType', 'Order type', S.hisType, [['all', 'All types'], ['dine', 'Dine-in'], ['take', 'Takeaway']]) +
       sel('hisPaid', 'Paid by', S.hisPaid, [['all', 'All payments'], ['cash', 'Cash'], ['card', 'Card'], ['qr', 'QR']]) +
       sel('hisKit', 'Kitchen', S.hisKit, [['all', 'All kitchen']].concat(OST_SEQ.map(k => [k, OST[k].lbl]))) +
       sel('hisBy', 'Staff', S.hisBy, [['all', 'All staff']].concat(STAFF.map(n => [n, n]))) +
