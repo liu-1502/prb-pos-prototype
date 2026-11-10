@@ -463,9 +463,16 @@ button:disabled{cursor:not-allowed}
    hang tran, nhung no lan xuong duoi hang tab va de len dau khoi gio mau
    kem — ra mot mang sang vuong canh nut. Doi lai: khi hang tab tran, tab
    chay o duoi nut nay se lo ra sau no. */
-.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px;padding:0;border:0;border-radius:var(--r-pill);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:none}
+/* Bo goc 12 chu khong phai pill: pill lam no doc ra nhu mot nut hanh dong
+   ngang hang voi Charge, trong khi no chi la "them mot tab nua". */
+.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px;padding:0;border:0;border-radius:12px;background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:none}
 .onew::before{content:"";position:absolute;inset:-4px}
-.onew:hover{background:var(--accent);color:var(--accent-ink)}
+/* Hover: nut PHU, nen xam, khong phai mau brand. Mau brand o day noi "day
+   la hanh dong chinh cua man", ma hanh dong chinh cua cot don la Charge.
+   KHONG dung --surface-2: nen hang tab o ban do la #fff2eb, ma --surface-2
+   la #f4f0ea — hai mau sat nhau den muc hover nhin nhu khong co gi xay ra.
+   Mot lop --ink 8% thi theme nao cung dam hon nen dung 8%, luon thay duoc. */
+.onew:hover{background:color-mix(in srgb, var(--ink) 8%, transparent);color:var(--ink)}
 /* Hang 1: ten don (trai) + chon Dine-in/Takeaway (phai). Hang 2: so the.
    display:contents de h2, .seg va #tableWrap — von nam long trong hai lop boc —
    tro thanh o cua chinh luoi nay. Font/mau cua .meta van di xuong con vi
@@ -1476,7 +1483,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    vi :root[data-layout="modern"] .ib (0,3,0) thang .rail .ib (0,2,0). */
 :root[data-layout="modern"] .rail .ib{border:0;background:transparent}
 :root[data-layout="modern"] .onew{background:transparent;box-shadow:none}
-:root[data-layout="modern"] .onew:hover{background:var(--accent);color:var(--accent-ink)}
+:root[data-layout="modern"] .onew:hover{background:color-mix(in srgb, var(--ink) 8%, transparent);color:var(--ink)}
 :root[data-layout="modern"] .cat{position:relative;overflow:hidden;background:var(--surface);border:0;border-radius:var(--r-pill);color:var(--ink);box-shadow:var(--card-shadow)}
 :root[data-layout="modern"] .cat[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 
