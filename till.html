@@ -1409,6 +1409,14 @@ table.tbl tr.his-d .ord-l{font-size:14px}
      nhau thi ba o doc ra nhu mot khoi lien. */
   .rail{grid-area:rail;flex-direction:column;align-items:stretch;gap:16px;background:var(--rail-bg);border-radius:0;box-shadow:none;margin-block:-16px;padding:24px 14px;padding-left:calc(14px + env(safe-area-inset-left, 0px))}
   .ri,.rail .ib{width:auto;height:52px}
+  /* Icon rail 24 chu khong 20: o rail doc, moi o cao 52 va chi co MOT icon —
+     20px de lai qua nhieu khoang trong quanh no. */
+  .ri svg,.rail .ib svg{width:24px;height:24px}
+  /* Badge ra HAN goc tren-phai cua o, khong nam trong long o nua: o trong
+     thi no de len dung giua icon. Vien 2px an theo mau NEN RAIL (--rail-bg)
+     chu khong phai --surface: rail la mang mau dam, vien trang se ra mot
+     vong sang lac long quanh badge. */
+  .rail .ib .count{top:-6px;right:-6px;box-shadow:0 0 0 2px var(--rail-bg)}
   .bar{grid-area:bar}
   .cats{grid-area:cats}
   .menu{grid-area:menu}
