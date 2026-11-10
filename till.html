@@ -1999,7 +1999,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 <!-- payment -->
 <div class="scrim sheet" id="ordDlg" hidden data-scrim="ord">
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ordTitle" >
-    <div class="dlg-h"><div><h2 id="ordTitle">Orders</h2><p id="ordSub">Paid orders.</p></div><div class="hact"><button type="button" class="hisb" id="hisTog" data-act="his-open" title="Order history"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>History</button><button type="button" class="x" data-act="ord-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div></div>
+    <div class="dlg-h"><div><h2 id="ordTitle">Today’s orders</h2><p id="ordSub">Paid orders.</p></div><div class="hact"><button type="button" class="hisb" id="hisTog" data-act="his-open" title="Order history"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>History</button><button type="button" class="x" data-act="ord-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div></div>
     <div class="dlg-b" id="ordBody"></div>
   </div>
 </div>
@@ -2810,12 +2810,15 @@ const AUTO_KITCHEN = false;
    "don nao chua xuong bep", nen do la bo loc mac dinh. */
 function waited(ts){ if (!ts) return ''; const m = Math.round((Date.now() - ts) / 60000); return m < 1 ? 'just now' : `waiting ${m} min`; }
 function renderOrds(){
-  const wait = S.done.filter(o => o.status === 'paid');
-  /* Tab Sent la "da xuong bep", khong phai "dang o bep": don da Ready hay
-     Served ma roi khoi ca hai tab thi chung bien mat khoi man Orders. */
-  const sent = S.done.filter(o => o.status !== 'paid');
+  /* Man nay la HANG DOI VIEC CUA HOM NAY, khong phai kho don. Don cua nhung
+     ngay truoc da nam o Order history (xem duoc 30 ngay) — de lan vao day thi
+     tab Sent phinh ra bay muoi don ma khong con cai nao la viec dang lam. */
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const today = S.done.filter(o => o.ts >= t0.getTime());
+  const wait = today.filter(o => o.status === 'paid');
+  const sent = today.filter(o => o.status !== 'paid');
   const his = S.ordF === 'history', q = S.hisQ.trim().toLowerCase();
-  let list = his ? S.done : (S.ordF === 'sent' ? sent : wait);
+  let list = his ? today : (S.ordF === 'sent' ? sent : wait);
   if (his && q) list = list.filter(o => ordNo(o.no).toLowerCase().includes(q) || (o.by || '').toLowerCase().includes(q) || (o.table || '').toLowerCase().includes(q) || o.lines.some(l => BY[l.id].name.toLowerCase().includes(q)));
   /* Phu de ngan mot dong. Sheet rong 320 ma header 111px thi qua nhieu cho cho
      mot cau giai thich — hai tab Waiting/Sent da noi ro man nay lam gi roi. */
@@ -2836,7 +2839,7 @@ function renderOrds(){
   const search = his ? `<label class="search sm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span class="sr">Search orders</span><input id="hq" type="search" value="${esc(S.hisQ)}" placeholder="Order no., staff, table or dish" autocomplete="off"></label>` : '';
   if (!list.length) {
     const msg = his ? (q ? `Nothing matches \u201c${esc(S.hisQ)}\u201d.` : 'No orders yet. Every completed sale is kept here.')
-      : (S.ordF === 'sent' ? 'Nothing has gone to the kitchen yet.' : (S.done.length ? 'Every paid order is already in the kitchen.' : 'No paid orders yet. An order lands here the moment its payment is complete.'));
+      : (S.ordF === 'sent' ? 'Nothing has gone to the kitchen today.' : (today.length ? 'Every paid order is already in the kitchen.' : 'No paid orders today. An order lands here the moment its payment is complete.'));
     $('#ordBody').innerHTML = tabs + search + `<div class="empty">${msg}</div>`; return;
   }
   $('#ordBody').innerHTML = tabs + search + `<div class="ords">` + list.map(o => ordCard(o)).join('') + `</div>`;
