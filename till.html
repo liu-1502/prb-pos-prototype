@@ -1548,7 +1548,15 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    Nut + tren the thi GIU mau do: doi 10 cham do thanh 10 cham den khong giam
    on, chi doi mau on. Giu do o day va de nut + cua the DANG chon mau den —
    nho vay goi y (chua chon) va dieu khien that (dang chon) khac nhau ro. */
+/* GIA mang mau brand khi mon CHUA vao gio — do la luc con so nay con la
+   mot loi moi. Vao gio roi thi the da doi nen, gia tro ve mau chu thuong:
+   luc do no la so lieu de doi chieu, khong con la cai de moi cham vao.
+   --price chu khong phai --accent thang: o ban vang, --accent tren the
+   trang chi dat 1.81 nen bien nay tro ve --accent-fg (ban DAM cua brand). */
+:root{--price:var(--accent)}
+:root[data-theme="yellow"]{--price:var(--accent-fg)}
 :root[data-layout="modern"] .dish .pr{color:var(--ink)}
+:root[data-layout="modern"] .dish:not(.in) .pr{color:var(--price)}
 :root[data-layout="modern"] .unav{font-weight:500}
 /* Avatar do dat ngay canh logo do thanh hai dom do canh nhau tren thanh tren. */
 :root[data-layout="modern"] .who .av{background:var(--surface-2);color:var(--ink)}
