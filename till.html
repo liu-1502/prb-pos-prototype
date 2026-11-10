@@ -758,9 +758,10 @@ button:disabled{cursor:not-allowed}
 .ovc.bad{background:var(--bad-ink);color:#ffffff}
 .ovc.warn{background:#8a5600;color:#ffffff}
 
-.ov2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:stretch}
-/* Hang bieu do: cot dung can be ngang hon danh sach chu thich cua donut. */
-.ov2.ov2c{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+/* MOT ti le duy nhat cho moi hang. Truoc day hang bieu do dung 1.35fr con
+   hang danh sach dung 1.1fr — hai duong chia giua khong thang hang nhau,
+   va do moi la cai "lech" nhin thay tu xa, khong phai noi dung ben trong. */
+.ov2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:stretch}
 /* Hai the tren cung mot hang cao bang nhau (align-items:stretch), nhung noi
    dung ben trong thi dai ngan khac nhau — the nao ngan hon se de thua mot
    mang trong o DAY, nhin ra la hai the lech nhau. Cho moi the la mot cot
