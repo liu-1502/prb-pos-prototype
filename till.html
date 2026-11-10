@@ -1207,7 +1207,17 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    nen: trong khung chat, mot mang nen kem nam ngay duoi bong chu cua tro
    ly (cung mau --surface-2) doc ra nhu mot tin nhan nua, khong phai nut. */
 .sugg button{flex:none;min-height:36px;padding:0 12px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:transparent;font-size:13px;font-weight:600;color:var(--ink)}
-.sugg button:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
+/* MOI goi y mot mau, deu rat nhat. Lay tu bang mau PHAN LOAI --c1..--c5
+   (bang nam ngoai he token brand, co dinh o ca bon ban) chu khong pha tu
+   --accent: pha tu accent thi nam cai ra nam sac cua CUNG mot mau, nhin
+   nhu mot cai bi mo dan chu khong phai nam thu khac nhau.
+   10% cho nen, 30% cho vien — du de phan biet, chua du de chen chu. */
+.sugg button:nth-child(5n+1){background:color-mix(in srgb, var(--c1) 10%, var(--surface));border-color:color-mix(in srgb, var(--c1) 30%, transparent)}
+.sugg button:nth-child(5n+2){background:color-mix(in srgb, var(--c2) 10%, var(--surface));border-color:color-mix(in srgb, var(--c2) 30%, transparent)}
+.sugg button:nth-child(5n+3){background:color-mix(in srgb, var(--c3) 10%, var(--surface));border-color:color-mix(in srgb, var(--c3) 30%, transparent)}
+.sugg button:nth-child(5n+4){background:color-mix(in srgb, var(--c4) 10%, var(--surface));border-color:color-mix(in srgb, var(--c4) 30%, transparent)}
+.sugg button:nth-child(5n+5){background:color-mix(in srgb, var(--c5) 10%, var(--surface));border-color:color-mix(in srgb, var(--c5) 30%, transparent)}
+.sugg button:hover{filter:brightness(.96)}
 /* O nhap cao DUNG BANG nut gui (48px, cung .btn): hai thu dung canh nhau
    tren mot hang thi lech chieu cao doc ra nhu mot cai bi keo gian. rows=1
    cong chieu cao co dinh — khong de textarea tu tinh theo so dong. */
