@@ -922,9 +922,13 @@ button:disabled{cursor:not-allowed}
 .clsales .tbl-wrap{flex:1;min-height:0;overflow:auto}
 #counted{font-size:20px;font-weight:600}
 /* Over / short la con so QUYET DINH cua man nay — no thuoc ve thanh day,
-   dung cho "Amount" cua man thanh toan, chu khong phai mot o giua cot nhap. */
-#closeDlg #diffBox.good .v{color:var(--ok-ink)}
-#closeDlg #diffBox.bad .v{color:var(--bad-ink)}
+   dung cho "Amount" cua man thanh toan, chu khong phai mot o giua cot nhap.
+   KHONG nen: class .bad dung chung trong file co san mot mang nen hong
+   (--bad-soft), dinh vao day thi thanh mot mang mau giua thanh day trang.
+   So tien lay mau BRAND (--price: ban vang la nau dam) — con over hay short
+   thi doc o NHAN ngay tren no. */
+#closeDlg #diffBox,#closeDlg #diffBox.good,#closeDlg #diffBox.bad{background:transparent;border-color:transparent}
+#closeDlg #diffBox .v{color:var(--price)}
 /* CHIEU CAO CO DINH: bang mon dai ngan tuy don, de hop tu co gian thi moi don
    mot chieu cao khac nhau va hop nhay khi doi tab. Cao = man hinh tru 80px
    tren + 80px duoi, chi phan BANG MON cuon. */
@@ -2390,7 +2394,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
         <section class="paypay clsales" aria-label="Today’s sales">
           <h3 class="psec">Today’s sales by payment method</h3>
           <div class="tbl-wrap"><table id="methTbl"></table></div>
-          <p class="note" style="margin:0">Includes sample morning sales plus orders you take here. After you submit, HQ sees the close, including any over/short and its reason.</p>
+          <p class="note" style="margin:0">Counts every order paid today, including the ones you take here. After you submit, HQ sees the close, including any over/short and its reason.</p>
           <div class="dlg-f payfoot" id="closeFoot">
             <span class="payamt" id="diffBox"><span class="k" id="diffK">Over / short</span><span class="v num" id="diffV">—</span></span>
             <div class="payacts"><button type="button" class="btn primary charge" data-act="close-submit">Submit close to HQ</button></div>
@@ -3210,7 +3214,17 @@ function showPayDone(rec, change){
 function resetPay(){ $('#payBody').hidden = false; $('#payFoot').hidden = false; $('#payDoneBox').hidden = true; }
 
 /* close register */
-function closeNums(){ const exp = r2(200 + S.paid.cash.amt); return {exp}; }
+/* CUNG MOT NGUON voi man Tong quan: don that trong S.done cua HOM NAY,
+   khong phai S.paid. S.paid la mot tong co dinh cua "ca sang mau" — de hai
+   man tinh tu hai nguon thi so tien mat du kien trong ngan keo khong khop
+   voi doanh thu ca, ma do la hai con so quan ly se doi chieu voi nhau. */
+function payMix(){
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const m = {cash:{n:0, amt:0}, card:{n:0, amt:0}, qr:{n:0, amt:0}};
+  S.done.forEach(o => { if (o.ts >= t0.getTime() && m[o.method]) { m[o.method].n += 1; m[o.method].amt = r2(m[o.method].amt + o.total); } });
+  return m;
+}
+function closeNums(){ const exp = r2(200 + payMix().cash.amt); return {exp}; }
 function openClose(){
   S.closed = null;
   $('#closeForm').hidden = false; $('#closeDone').hidden = true;
@@ -3219,11 +3233,12 @@ function openClose(){
 }
 function renderClose(){
   const {exp} = closeNums();
+  const mix = payMix();
   $('#closeSub').textContent = 'Till 1 · ' + new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'}) + ' · ' + userName();
-  $('#drawerRows').innerHTML = `<div class="row num" style="padding:4px 0"><span>Opening float</span><span>${rm(200)}</span></div><div class="row num" style="padding:4px 0"><span>Cash sales</span><span>${rm(S.paid.cash.amt)}</span></div><div class="row num" style="padding:4px 0"><span>Cash refunds</span><span>${rm(0)}</span></div><div class="row num" style="padding:8px 0 0;border-top:1px solid var(--line);color:var(--ink);font-weight:600;font-size:16px"><span>Expected in drawer</span><span>${rm(exp)}</span></div>`;
+  $('#drawerRows').innerHTML = `<div class="row num" style="padding:4px 0"><span>Opening float</span><span>${rm(200)}</span></div><div class="row num" style="padding:4px 0"><span>Cash sales</span><span>${rm(mix.cash.amt)}</span></div><div class="row num" style="padding:4px 0"><span>Cash refunds</span><span>${rm(0)}</span></div><div class="row num" style="padding:8px 0 0;border-top:1px solid var(--line);color:var(--ink);font-weight:600;font-size:16px"><span>Expected in drawer</span><span>${rm(exp)}</span></div>`;
   const tot = {n:0, amt:0};
   $('#methTbl').innerHTML = `<thead><tr><th>Method</th><th class="r">Orders</th><th class="r">Amount</th></tr></thead><tbody>` +
-    [['Cash','cash'],['Card','card'],['QR','qr']].map(([l,k]) => { tot.n += S.paid[k].n; tot.amt = r2(tot.amt + S.paid[k].amt); return `<tr><td>${l}</td><td class="r">${S.paid[k].n}</td><td class="r">${rm(S.paid[k].amt)}</td></tr>`; }).join('') +
+    [['Cash','cash'],['Card','card'],['QR','qr']].map(([l,k]) => { tot.n += mix[k].n; tot.amt = r2(tot.amt + mix[k].amt); return `<tr><td>${l}</td><td class="r">${mix[k].n}</td><td class="r">${rm(mix[k].amt)}</td></tr>`; }).join('') +
     `<tr><td><b>Total</b></td><td class="r"><b>${tot.n}</b></td><td class="r"><b>${rm(tot.amt)}</b></td></tr></tbody>`;
   updateDiff();
 }
@@ -3431,10 +3446,7 @@ function ovDelta(cur, prev){
   if (p === 0) return {dir:'flat', txt:'same'};
   return {dir: p > 0 ? 'up' : 'down', txt: (p > 0 ? '+' : '') + p + '%'};
 }
-function ovTotals(){
-  const k = ['cash','card','qr'];
-  return {n: k.reduce((a,m) => a + S.paid[m].n, 0), amt: r2(k.reduce((a,m) => a + S.paid[m].amt, 0))};
-}
+
 /* Mon nao dang KHONG LAM DUOC, va nguyen lieu nao chan no. unavailable() da tru
    phan giu lai cho cac don dang mo, nen day la tinh trang THUC TE chu khong
    phai con so ton kho tho. */
