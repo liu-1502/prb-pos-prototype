@@ -1,0 +1,1213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>PRB HQ Console</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: HQ back office — dark command bar, left nav, content column of cards and tables; side detail panel on approvals; one shared dialog */
+:root{
+  --bg:#F3F1EC; --surface:#FFFFFF; --surface-2:#FAF9F6; --line:#E3E0D8; --line-2:#CFCBC1;
+  --ink:#17201C; --muted:#56605B;
+  --bar:#17201C; --bar-2:#26312C; --bar-ink:#FFFFFF; --bar-muted:#B9C2BD;
+  --accent:#0B6B4F; --accent-ink:#FFFFFF; --accent-soft:#E3F1EB; --accent-soft-ink:#0A4F3B;
+  --warn-soft:#FFF1D6; --warn-ink:#5C3B00; --bad-soft:#FDE7D3; --bad-ink:#7A2608;
+  --info-soft:#E4EEFA; --info-ink:#1D4F7A;
+  --scrim:rgba(23,32,28,.5); --shadow:0 18px 48px rgba(23,32,28,.18);
+  --font:'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111714; --surface:#1A221E; --surface-2:#151C19; --line:#2B3631; --line-2:#3B4842;
+    --ink:#EDF2EF; --muted:#A4B0AA;
+    --bar:#0A0F0D; --bar-2:#1D2723; --bar-ink:#FFFFFF; --bar-muted:#9DA9A3;
+    --accent:#3DBB8C; --accent-ink:#06140E; --accent-soft:#173A2D; --accent-soft-ink:#BDEBD4;
+    --warn-soft:#3A2C0E; --warn-ink:#FFD99A; --bad-soft:#3E2014; --bad-ink:#FFC4A6;
+    --info-soft:#16283A; --info-ink:#B8D6F5;
+    --scrim:rgba(0,0,0,.6); --shadow:0 18px 48px rgba(0,0,0,.5); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111714; --surface:#1A221E; --surface-2:#151C19; --line:#2B3631; --line-2:#3B4842;
+  --ink:#EDF2EF; --muted:#A4B0AA;
+  --bar:#0A0F0D; --bar-2:#1D2723; --bar-ink:#FFFFFF; --bar-muted:#9DA9A3;
+  --accent:#3DBB8C; --accent-ink:#06140E; --accent-soft:#173A2D; --accent-soft-ink:#BDEBD4;
+  --warn-soft:#3A2C0E; --warn-ink:#FFD99A; --bad-soft:#3E2014; --bad-ink:#FFC4A6;
+  --info-soft:#16283A; --info-ink:#B8D6F5;
+  --scrim:rgba(0,0,0,.6); --shadow:0 18px 48px rgba(0,0,0,.5); color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.5}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+.bar{background:var(--bar);color:var(--bar-ink)}
+.bar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:10px}
+.logo{width:36px;height:36px;border-radius:9px;background:#0B6B4F;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.04em}
+.brand{display:flex;align-items:center;gap:10px}
+.brand b{font-size:15px;display:block}.brand small{font-size:12px;color:var(--bar-muted);display:block}
+.spacer{flex:1}
+.bar select{height:40px;border-radius:10px;border:0;background:var(--bar-2);color:var(--bar-ink);padding:0 10px;font-size:13px;font-weight:700}
+.bar label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bar-muted)}
+
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding-block:20px;align-items:start}
+.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px}
+.nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px}
+.nav a:hover{background:var(--surface)}
+.nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
+.nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:11px;background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+.nav .sep{height:1px;background:var(--line);margin:8px 4px}
+main{min-width:0;display:flex;flex-direction:column;gap:16px}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ph h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card h2{margin:0 0 12px;font-size:15px;font-weight:800}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font-size:24px;font-weight:800;margin-top:4px}
+.kpi .d{font-size:12px;font-weight:700;margin-top:2px}
+.up{color:var(--accent)}.down{color:var(--bad-ink)}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.seg button{min-height:36px;padding:0 14px;border-radius:8px;border:0;background:transparent;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{background:var(--bad-soft);border-color:transparent;color:var(--bad-ink)}
+.btn.sm{min-height:34px;padding:0 10px;font-size:13px}
+.link{border:0;background:none;padding:0;color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+th.r,td.r{text-align:right}
+tr.sel td{background:var(--accent-soft)}
+.rowbtn{border:0;background:none;padding:0;font-weight:800;color:var(--ink);text-align:left}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;border-radius:6px;padding:3px 7px;white-space:nowrap}
+.b-ok{background:var(--accent-soft);color:var(--accent-soft-ink)}
+.b-warn{background:var(--warn-soft);color:var(--warn-ink)}
+.b-bad{background:var(--bad-soft);color:var(--bad-ink)}
+.b-info{background:var(--info-soft);color:var(--info-ink)}
+.b-mute{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:36px;padding:0 12px;border-radius:18px;border:1px solid var(--line-2);background:var(--surface);font-weight:700;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700}
+.field input,.field select,.field textarea{min-height:40px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);padding:8px 12px;font-weight:500}
+.field textarea{resize:vertical}
+.frow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.note{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:700;text-align:right}
+.math{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;font-size:13px}
+.math .r{display:flex;justify-content:space-between;gap:12px}
+.math .t{border-top:1px solid var(--line);padding-top:6px;font-weight:800}
+.lock{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:10px;background:var(--info-soft);color:var(--info-ink);font-size:13px;font-weight:600}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+.panel{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px}
+.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line-2);border-radius:14px}
+.hbar{display:grid;grid-template-columns:110px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.hbar .track{height:12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.hbar .fill{height:100%;background:var(--accent);border-radius:6px}
+.hbar.mute .fill{background:var(--line-2)}
+.heat{display:grid;grid-template-columns:44px repeat(16,minmax(0,1fr));gap:3px;font-size:11px;color:var(--muted)}
+.heat .c{height:22px;border-radius:4px}
+.heat .lbl{display:flex;align-items:center}
+.heat .hh{text-align:center}
+svg .bar{fill:var(--accent)}
+svg .bar.cur{fill:var(--ink)}
+svg .grid{stroke:var(--line)}
+svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
+.dig{display:flex;flex-direction:column;gap:10px}
+.dig li{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:13px}
+.dig ul{margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.dot{width:10px;height:10px;border-radius:5px;margin-top:5px}
+.d-bad{background:#D9534F}.d-warn{background:#E0A21B}.d-ok{background:#1DB15A}.d-info{background:#3C82D6}
+.switch{position:relative;width:44px;height:26px;border-radius:13px;border:0;background:var(--line-2);flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:10px;background:#FFFFFF;transition:left .15s}
+.switch[aria-checked="true"]{background:var(--accent)}
+.switch[aria-checked="true"]::after{left:21px}
+.promo{display:flex;flex-direction:column;gap:10px}
+.promo-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.promo-h b{font-size:15px}
+.meter{height:12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent)}
+.qrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.qrow:last-child{border-bottom:0}
+.qrow input[type=radio]{width:20px;height:20px;accent-color:var(--accent)}
+
+.thread{flex:1;min-height:300px;max-height:560px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px 2px}
+.me{align-self:flex-end;max-width:82%;background:var(--ink);color:var(--bg);border-radius:16px 16px 4px 16px;padding:9px 13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.bot{align-self:flex-start;max-width:92%;background:var(--surface-2);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 13px}
+.bot ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.bot .chips{margin-top:8px}
+.dcard{align-self:stretch;border:1px solid var(--line-2);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.sugg button{flex:none;min-height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--line);background:var(--surface-2);font-size:12px;font-weight:700}
+.comp{display:flex;gap:10px;align-items:flex-end}
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.dlg{background:var(--surface);color:var(--ink);border-radius:18px;box-shadow:var(--shadow);width:100%;max-width:720px;max-height:100%;overflow:auto;display:flex;flex-direction:column}
+.dlg-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.dlg-h h2{margin:0;font-size:19px;font-weight:800}
+.dlg-h p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.dlg-b{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.dlg-f{padding:14px 20px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.x{width:40px;height:40px;flex:none;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center}
+.toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom, 0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);max-width:min(560px, calc(100% - 32px))}
+
+@media (max-width: 1100px){ .kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .panel{position:static} .g2,.g3{grid-template-columns:minmax(0,1fr)} }
+@media (max-width: 860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .nav{flex-direction:row;overflow-x:auto;position:static;padding-bottom:4px}
+  .nav a{flex:none}
+  .nav .sep{display:none}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .frow{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in gut">
+    <div class="brand"><span class="logo">PRB</span><span><b>HQ Console</b><small id="today"></small></span></div>
+    <div class="spacer"></div>
+    <label>Outlet<select id="outletSel" aria-label="Outlet"><option>[Pilot outlet]</option><option disabled>More outlets — out of scope for this delivery</option></select></label>
+    <label>Signed in as<select id="userSel" aria-label="Signed in as"></select></label>
+  </div>
+</header>
+
+<div class="shell gut">
+  <nav class="nav" id="nav" aria-label="Sections"></nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+
+<div class="scrim" id="dlg" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" id="dlgBox"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const r2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
+const r3 = n => Math.round((n + Number.EPSILON) * 1000) / 1000;
+const rm = n => (n < 0 ? '−' : '') + 'RM ' + Math.abs(n).toLocaleString('en-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
+const rm0 = n => 'RM ' + Math.round(n).toLocaleString('en-MY');
+const pct = n => (Math.round(n * 1000) / 10).toFixed(1) + '%';
+const NOW = new Date();
+const ago = m => new Date(NOW.getTime() - m * 60000);
+const tm = d => d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+const dt = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ', ' + tm(d);
+const age = d => { const m = Math.max(0, Math.round((Date.now() - d.getTime()) / 60000)); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; };
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 3600); }
+
+/* ---------------- sample data (illustrative) ---------------- */
+const ROLES = {cashier:'Cashier', supervisor:'Supervisor', outlet_manager:'Outlet manager', branch_operator:'Branch operator', hq_admin:'HQ admin', hq_approver:'HQ approver', auditor:'Auditor', coo:'COO'};
+const USERS = [
+  {id:'nadia', name:'Nadia', role:'hq_approver', outlet:'HQ', active:true},
+  {id:'hafiz', name:'Hafiz', role:'hq_admin', outlet:'HQ', active:true},
+  {id:'mei', name:'Mei', role:'auditor', outlet:'HQ', active:true},
+  {id:'daniel', name:'Daniel', role:'coo', outlet:'HQ', active:true},
+  {id:'farid', name:'Farid', role:'outlet_manager', outlet:'[Pilot outlet]', active:true},
+  {id:'siti', name:'Siti', role:'branch_operator', outlet:'[Pilot outlet]', active:true},
+  {id:'aina', name:'Aina', role:'cashier', outlet:'[Pilot outlet]', active:true},
+  {id:'ravi', name:'Ravi', role:'supervisor', outlet:'[Pilot outlet]', active:true}
+];
+const PERMS = [
+  ['Take orders & payments', ['cashier','supervisor','outlet_manager']],
+  ['Refund / void after payment', ['supervisor','outlet_manager']],
+  ['Submit stock requests', ['branch_operator','outlet_manager']],
+  ['Approve stock requests', ['hq_approver']],
+  ['Approve supplier orders', ['hq_approver','hq_admin']],
+  ['Edit menu, recipes & prices', ['hq_admin']],
+  ['Edit ingredient catalogue', ['hq_admin']],
+  ['Suppliers & promotions', ['hq_admin']],
+  ['Manage users & roles', ['hq_admin']],
+  ['Review register closes', ['hq_approver','hq_admin','coo']],
+  ['View HQ dashboard', ['hq_admin','hq_approver','coo','auditor']],
+  ['Copy audit log', ['auditor','hq_admin']]
+];
+const S = {user:'nadia', period:'7', reqTab:'pending', reqFlags:[], reqSel:null, poTab:'pending', poSel:null, poRoute:null, suppFilter:'all', menuQ:'', auditType:'all', auditQ:'', closeOnly:false, seq:2000, chat:[], cprops:{}, cdraft:null};
+const me = () => USERS.find(u => u.id === S.user);
+const can = p => PERMS.find(x => x[0] === p)[1].includes(me().role);
+const whoCan = p => PERMS.find(x => x[0] === p)[1];
+function lockNote(p){
+  if (can(p)) return '';
+  const role = whoCan(p).find(r => USERS.some(u => u.role === r && ['hq_admin','hq_approver','auditor','coo'].includes(u.role)));
+  const u = USERS.find(x => x.role === role);
+  return `<div class="lock"><span>${esc(p)} needs the ${esc(ROLES[role] || role)} role. You’re signed in as ${esc(me().name)} (${esc(ROLES[me().role])}).</span>${u ? `<button type="button" class="btn sm" data-act="switch" data-v="${u.id}">Switch to ${esc(u.name)}</button>` : ''}</div>`;
+}
+
+const ING = [
+  {id:'rice', name:'Rice', unit:'kg', low:5, onHand:31.5, manual:null},
+  {id:'chicken_leg', name:'Chicken leg', unit:'kg', low:2, onHand:6.2, manual:null},
+  {id:'chicken_breast', name:'Chicken breast', unit:'kg', low:1, onHand:0.1, manual:null},
+  {id:'egg', name:'Eggs', unit:'pcs', low:20, onHand:79, manual:null},
+  {id:'sambal', name:'Sambal', unit:'portions', low:10, onHand:36, manual:0.60, note:'Made in-house'},
+  {id:'noodles', name:'Yellow noodles', unit:'kg', low:2, onHand:11.4, manual:null},
+  {id:'prawn', name:'Prawns', unit:'kg', low:0.5, onHand:1.9, manual:null},
+  {id:'dough', name:'Roti dough', unit:'pcs', low:15, onHand:57, manual:0.55, note:'Made in-house'},
+  {id:'tea', name:'Tea base', unit:'portions', low:20, onHand:116, manual:null},
+  {id:'coffee', name:'Coffee base', unit:'portions', low:20, onHand:78, manual:null},
+  {id:'milo', name:'Milo powder', unit:'portions', low:5, onHand:3, manual:null}
+];
+const IB = id => ING.find(i => i.id === id);
+const SUPP = {sa:'Supplier A · Poultry & eggs', sb:'Supplier B · Dry goods', sc:'Supplier C · Seafood', sd:'Supplier D · Beverages', se:'Supplier E · Seafood', sf:'Supplier F · Wholesale market', sg:'Supplier G · Poultry'};
+/* lead time in days, delivery weekdays (1 = Mon … 7 = Sun), minimum order RM, how orders are sent */
+const SUPINFO = {
+  sa:{lead:1, days:[1,2,3,4,5,6], min:100, via:'Email', active:true},
+  sb:{lead:2, days:[1,3,5], min:150, via:'Email', active:true},
+  sc:{lead:1, days:[1,2,3,4,5,6,7], min:80, via:'WhatsApp', active:true},
+  sd:{lead:2, days:[2,4], min:100, via:'Email', active:true},
+  se:{lead:1, days:[1,2,3,4,5,6,7], min:50, via:'WhatsApp', active:true},
+  sf:{lead:1, days:[1,2,3,4,5,6], min:0, via:'Phone call', active:true},
+  sg:{lead:2, days:[1,2,3,4,5], min:200, via:'Email', active:true}
+};
+/* tag = cost basis used by recipes; route = default supplier for outlet orders */
+const QUOTES = [
+  {id:'q1', sup:'sa', ing:'chicken_leg', pack:10, price:115, tag:true, route:true},
+  {id:'q12', sup:'sg', ing:'chicken_leg', pack:10, price:109},
+  {id:'q13', sup:'sf', ing:'chicken_leg', pack:5, price:60},
+  {id:'q2', sup:'sa', ing:'chicken_breast', pack:5, price:65, tag:true, route:true},
+  {id:'q14', sup:'sg', ing:'chicken_breast', pack:5, price:62},
+  {id:'q3', sup:'sa', ing:'egg', pack:30, price:13.5, tag:true, route:true},
+  {id:'q15', sup:'sf', ing:'egg', pack:30, price:12.9},
+  {id:'q4', sup:'sb', ing:'rice', pack:10, price:32, tag:true, route:true},
+  {id:'q5', sup:'sb', ing:'rice', pack:5, price:17},
+  {id:'q16', sup:'sf', ing:'rice', pack:10, price:30.5},
+  {id:'q6', sup:'sb', ing:'noodles', pack:5, price:20, tag:true, route:true},
+  {id:'q17', sup:'sf', ing:'noodles', pack:5, price:19},
+  {id:'q7', sup:'sc', ing:'prawn', pack:2, price:56, tag:true, route:true},
+  {id:'q8', sup:'se', ing:'prawn', pack:2, price:53},
+  {id:'q18', sup:'sf', ing:'prawn', pack:1, price:29},
+  {id:'q9', sup:'sd', ing:'tea', pack:100, price:35, tag:true, route:true},
+  {id:'q19', sup:'sf', ing:'tea', pack:100, price:37},
+  {id:'q10', sup:'sd', ing:'coffee', pack:100, price:40, tag:true, route:true},
+  {id:'q11', sup:'sd', ing:'milo', pack:30, price:27, tag:true, route:true},
+  {id:'q20', sup:'sf', ing:'milo', pack:30, price:25.5}
+];
+function nextDelivery(sup){
+  const s = SUPINFO[sup], d = new Date(NOW); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + s.lead);
+  for (let k = 0; k < 8; k++) { const wd = (d.getDay() + 6) % 7 + 1; if (s.days.includes(wd)) return d; d.setDate(d.getDate() + 1); }
+  return d;
+}
+function unitCost(id){ const q = QUOTES.find(x => x.ing === id && x.tag); if (q) return q.price / q.pack; const i = IB(id); return i && i.manual != null ? i.manual : 0; }
+function costSource(id){ const q = QUOTES.find(x => x.ing === id && x.tag); if (q) return SUPP[q.sup].split(' · ')[0]; const i = IB(id); return i && i.note ? i.note : (i && i.manual != null ? 'Manual' : 'No cost'); }
+
+const CAT = {rice:'Rice', noodles:'Noodles', roti:'Roti', drinks:'Drinks'};
+const MENU = [
+  {id:'nlag', name:'Nasi Lemak Ayam Goreng', cat:'rice', price:13.90, recipe:[['rice',0.15],['chicken_leg',0.2],['sambal',1]], grab:null, fp:null},
+  {id:'nlb', name:'Nasi Lemak Biasa', cat:'rice', price:6.50, recipe:[['rice',0.15],['egg',1],['sambal',1]], grab:null, fp:null},
+  {id:'ngk', name:'Nasi Goreng Kampung', cat:'rice', price:11.90, recipe:[['rice',0.2],['egg',1],['prawn',0.05]], grab:null, fp:null},
+  {id:'hainan', name:'Nasi Ayam Hainan', cat:'rice', price:12.50, recipe:[['rice',0.15],['chicken_breast',0.2]], grab:null, fp:null},
+  {id:'mee', name:'Mee Goreng Mamak', cat:'noodles', price:10.90, recipe:[['noodles',0.2],['egg',1]], grab:null, fp:null},
+  {id:'ckt', name:'Char Kuey Teow', cat:'noodles', price:12.90, recipe:[['noodles',0.2],['prawn',0.06],['egg',1]], grab:null, fp:null},
+  {id:'laksa', name:'Laksa Penang', cat:'noodles', price:12.50, recipe:[['noodles',0.2]], grab:null, fp:null},
+  {id:'roti', name:'Roti Canai', cat:'roti', price:2.50, recipe:[['dough',1]], grab:null, fp:null},
+  {id:'rtelur', name:'Roti Telur', cat:'roti', price:3.80, recipe:[['dough',1],['egg',1]], grab:null, fp:null},
+  {id:'teh', name:'Teh Tarik', cat:'drinks', price:3.50, recipe:[['tea',1]], grab:null, fp:null},
+  {id:'kopi', name:'Kopi O', cat:'drinks', price:2.80, recipe:[['coffee',1]], grab:null, fp:null},
+  {id:'milo', name:'Milo Ais', cat:'drinks', price:4.50, recipe:[['milo',1]], grab:null, fp:null}
+];
+const plate = m => r2(m.recipe.reduce((s, [id, q]) => s + q * unitCost(id), 0));
+const unavailableBy = m => { const l = m.recipe.find(([id, q]) => IB(id).onHand < q); return l ? IB(l[0]) : null; };
+
+const REQ = [
+  {id:'R-1047', type:'count', ing:'chicken_leg', counted:4.2, snap:6.8, by:'farid', at:ago(312), reason:'Opening count', ev:null, status:'pending'},
+  {id:'R-1048', type:'receipt', ing:'chicken_leg', qty:10, by:'farid', at:ago(96), reason:'Delivery, Supplier A invoice 88213', ev:'Invoice photo', status:'pending'},
+  {id:'R-1049', type:'count', ing:'egg', counted:60, snap:84, by:'farid', at:ago(74), reason:'Morning count', ev:null, status:'pending'},
+  {id:'R-1050', type:'writeoff', ing:'prawn', qty:0.5, by:'siti', at:ago(52), reason:'Spoiled — chiller door left open overnight', ev:'Photo', status:'pending'},
+  {id:'R-1051', type:'adjust', ing:'rice', qty:-1.5, by:'siti', at:ago(41), reason:'Correction: receipt entered twice', ev:null, status:'pending', repeat:true},
+  {id:'R-1052', type:'writeoff', ing:'chicken_breast', qty:0.3, by:'siti', at:ago(28), reason:'Dropped tray', ev:null, status:'pending'},
+  {id:'R-1053', type:'receipt', ing:'milo', qty:30, by:'nadia', at:ago(15), reason:'Entered on behalf of outlet, Supplier D DO 5521', ev:'Delivery order', status:'pending'},
+  {id:'R-1044', type:'adjust', ing:'rice', qty:2, by:'siti', at:ago(1500), reason:'Correction: missed bag in count', ev:null, status:'approved', dBy:'nadia', dAt:ago(1440), note:''},
+  {id:'R-1045', type:'adjust', ing:'rice', qty:-1, by:'siti', at:ago(1300), reason:'Correction: wrong unit', ev:null, status:'approved', dBy:'nadia', dAt:ago(1250), note:''},
+  {id:'R-1046', type:'receipt', ing:'prawn', qty:3, by:'farid', at:ago(1700), reason:'Delivery, no invoice', ev:null, status:'rejected', dBy:'nadia', dAt:ago(1650), note:'No invoice attached. Resubmit with the delivery order.'}
+];
+const TYPE = {receipt:'Receipt', count:'Count', adjust:'Adjustment', writeoff:'Write-off'};
+const uName = id => (USERS.find(u => u.id === id) || {name:id}).name;
+function reqDelta(r){ const i = IB(r.ing); if (r.type === 'receipt') return r.qty; if (r.type === 'writeoff') return -r.qty; if (r.type === 'adjust') return r.qty; return r3(r.counted - r.snap); }
+function reqFlags(r){
+  const i = IB(r.ing), d = reqDelta(r), res = r3(i.onHand + d), f = [];
+  if (r.status === 'pending' && (Date.now() - r.at.getTime()) > 240 * 60000) f.push('stale');
+  if (res < 0) f.push('negative');
+  if (r.repeat) f.push('repeat');
+  if (i.onHand > 0 && Math.abs(d) / i.onHand > 0.3 && r.type !== 'receipt') f.push('large');
+  if (r.by === S.user) f.push('self');
+  return f;
+}
+const FLAG = {stale:['b-bad','Older than 4 h'], negative:['b-bad','Would go negative'], repeat:['b-warn','Repeated corrections'], large:['b-warn','Large change'], self:['b-info','Your request']};
+const fq = (id, v) => { const u = IB(id).unit; return u === 'kg' ? (Math.round(v * 100) / 100).toLocaleString('en-MY', {maximumFractionDigits:2}) + ' kg' : Math.round(v) + ' ' + u; };
+const fd = (id, v) => (v > 0 ? '+' : v < 0 ? '−' : '') + fq(id, Math.abs(v));
+
+/* supplier orders raised by outlets through the assistant (same sample orders as the till prototype) */
+const TOM = new Date(NOW); TOM.setDate(TOM.getDate() + 1);
+const supName = k => SUPP[k].split(' · ')[0];
+const dshort = d => d.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+const USE = {chicken_leg:4.4, chicken_breast:1.1, egg:38, rice:7.5, noodles:3.2, prawn:0.6, tea:24, coffee:12, milo:2.5, sambal:30, dough:40};
+const PO = [];
+function mkPO(no, sup, lines, ex){
+  const L = lines.map(([ing, packs]) => { const q = QUOTES.find(x => x.ing === ing && x.sup === sup && x.route) || QUOTES.find(x => x.ing === ing && x.route); return {ing, packs, pack:q.pack, packPrice:q.price, qid:q.id, sup:q.sup, req:packs * q.pack}; });
+  return Object.assign({id:'PO-' + String(no).padStart(4, '0'), sup, lines:L, total:r2(L.reduce((s, l) => s + l.packs * l.packPrice, 0)), via:'Assistant'}, ex);
+}
+PO.push(mkPO(311, 'sa', [['chicken_leg', 2]], {by:'farid', at:ago(330), cmd:'order 20kg chicken leg for tomorrow', needed:TOM, status:'ordered', dBy:'nadia', dAt:ago(290), method:'Email', note:'', eta:TOM}));
+PO.push(mkPO(312, 'sb', [['rice', 2]], {by:'farid', at:ago(300), cmd:'order 20kg rice for tomorrow', needed:TOM, status:'rejected', dBy:'nadia', dAt:ago(250), note:'Rice on hand covers the week. Order again on Friday.'}));
+PO.push(mkPO(313, 'sc', [['prawn', 2]], {by:'farid', at:ago(120), cmd:'order 4kg prawns for tomorrow', needed:TOM, status:'pending'}));
+PO.push(mkPO(314, 'sd', [['milo', 2], ['tea', 1]], {by:'farid', at:ago(25), cmd:'order 2 packs milo and a pack of tea for tomorrow', needed:TOM, status:'pending'}));
+const PO_ST = {pending:['b-warn','Waiting for HQ'], ordered:['b-ok','Sent to supplier'], rejected:['b-bad','Rejected'], received:['b-ok','Delivered']};
+
+const CLOSES = [];
+(function(){
+  const rows = [[0,1484.60,1479.60,'Gave wrong change to table 4'],[1,1612.30,1612.30,''],[2,1398.10,1401.10,'Customer left change'],[3,1702.40,1702.40,''],[4,1555.00,1545.00,'Short — under review with Farid'],[5,1820.90,1820.90,''],[6,1690.20,1690.20,'']];
+  rows.forEach(([d, e, c, reason]) => { const day = new Date(NOW); day.setDate(day.getDate() - d); CLOSES.push({day, till:'Till 1', by:d % 2 ? 'Ravi' : 'Farid', exp:e, cnt:c, reason, reviewed:d > 1 && c === e}); });
+})();
+
+const PROMOS = [
+  {id:'p1', name:'Lunch set', type:'set', value:16.90, items:['nlag','teh'], days:[1,2,3,4,5], start:'11:00', end:'14:00', ch:['dine','take'], on:true},
+  {id:'p2', name:'Afternoon drinks', type:'pct', value:20, items:['teh','kopi','milo'], days:[1,2,3,4,5], start:'15:00', end:'17:00', ch:['dine'], on:true},
+  {id:'p3', name:'Roti Canai weekend price', type:'price', value:2.00, items:['roti'], days:[6,7], start:'07:00', end:'11:00', ch:['dine','take'], on:false}
+];
+const DAYN = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function promoRule(p){ const names = p.items.map(id => MENU.find(m => m.id === id).name).join(' + '); return p.type === 'pct' ? `${p.value}% off ${names}` : p.type === 'price' ? `${names} at ${rm(p.value)}` : `${names} for ${rm(p.value)}`; }
+function promoNow(p){ if (!p.on) return false; const d = (NOW.getDay() + 6) % 7 + 1; const hm = tm(NOW); return p.days.includes(d) && hm >= p.start && hm < p.end; }
+
+const AI = {spend:41.20, cap:150, callsToday:63,
+  act:[
+    {at:ago(25), user:'Farid', cmd:'order 2 packs milo and a pack of tea for tomorrow', out:'Sent to HQ · PO-0314'},
+    {at:ago(18), user:'Farid', cmd:'stock count: chicken 4.2kg, eggs 60, rice 25kg', out:'Clarified → applied'},
+    {at:ago(120), user:'Farid', cmd:'order 4kg prawns for tomorrow', out:'Sent to HQ · PO-0313'},
+    {at:ago(62), user:'Farid', cmd:'teh tarik price 3.50', out:'Applied'},
+    {at:ago(95), user:'Farid', cmd:'write off 2kg prawns', out:'Undone'},
+    {at:ago(130), user:'Farid', cmd:'less sweet for table 7', out:'Declined (till option)'},
+    {at:ago(210), user:'Ravi', cmd:'what’s selling today?', out:'Answered'},
+    {at:ago(300), user:'Farid', cmd:'restock 10 kg rice', out:'Cancelled'}
+  ],
+  syn:[['ayam','Chicken leg / breast (asks)'],['telur','Eggs'],['beras','Rice'],['udang','Prawns'],['teh','Tea base'],['ckt','Char Kuey Teow'],['nasi lemak','Nasi Lemak Biasa']]
+};
+
+const AUDIT = [
+  {at:ago(1650), user:'Nadia', type:'Stock', text:'Rejected R-1046 · Prawns +3 kg · No invoice attached'},
+  {at:ago(1440), user:'Nadia', type:'Stock', text:'Approved R-1044 · Rice +2 kg'},
+  {at:ago(1250), user:'Nadia', type:'Stock', text:'Approved R-1045 · Rice −1 kg'},
+  {at:ago(900), user:'Hafiz', type:'Menu', text:'Recipe updated · Char Kuey Teow · prawns 0.05 → 0.06 kg'},
+  {at:ago(400), user:'Hafiz', type:'Supplier', text:'Quote added · Supplier E · Prawns 2 kg RM 53.00'},
+  {at:ago(290), user:'Nadia', type:'Supplier order', text:'Approved PO-0311 · Supplier A · RM 230.00 · sent by email'},
+  {at:ago(250), user:'Nadia', type:'Supplier order', text:'Rejected PO-0312 · Supplier B · RM 64.00 · Rice on hand covers the week. Order again on Friday.'},
+  {at:ago(62), user:'Farid', type:'Assistant', text:'Price change · Teh Tarik RM 3.20 → RM 3.50'},
+  {at:ago(18), user:'Farid', type:'Assistant', text:'Stock count applied at outlet (Phase A rule)'}
+];
+function audit(type, text){ AUDIT.push({at:new Date(), user:me().name, type, text}); }
+
+/* dashboard sample series, seeded so it is stable */
+function mulberry(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rnd = mulberry(42);
+const HOURS = Array.from({length:16}, (_, i) => i + 7);
+const PROFILE = [3,6,7,5,6,11,12,8,5,5,6,7,9,10,7,4];
+const DAYS = [];
+for (let d = 59; d >= 0; d--) {
+  const day = new Date(NOW); day.setHours(0,0,0,0); day.setDate(day.getDate() - d);
+  const wd = (day.getDay() + 6) % 7;
+  const orders = Math.round((wd >= 5 ? 160 : 132) * (0.88 + rnd() * 0.24));
+  const aov = 27.5 + rnd() * 4;
+  const cogs = 0.27 + rnd() * 0.04;
+  const tot = PROFILE.reduce((a,b) => a + b, 0);
+  const hourly = PROFILE.map(w => w / tot * (0.85 + rnd() * 0.3));
+  const hs = hourly.reduce((a,b) => a + b, 0);
+  const rev = orders * aov;
+  const cats = {rice:0.36 + rnd() * 0.05, noodles:0.22 + rnd() * 0.04, roti:0.13 + rnd() * 0.03, drinks:0.22 + rnd() * 0.04};
+  const cs = Object.values(cats).reduce((a,b) => a + b, 0);
+  DAYS.push({day, orders, rev, gp:rev * (1 - cogs), hourly:hourly.map(h => h / hs * rev), cats:Object.fromEntries(Object.entries(cats).map(([k,v]) => [k, v / cs * rev])), dine:0.66 + rnd() * 0.08});
+}
+function periodDays(n){ return DAYS.slice(DAYS.length - n); }
+function prevDays(n){ return DAYS.slice(DAYS.length - 2 * n, DAYS.length - n); }
+
+/* ---------------- views ---------------- */
+const NAV = [
+  ['dashboard','Dashboard'],['approvals','Stock approvals'],['purchases','Supplier orders'],['menu','Menu & recipes'],['ingredients','Ingredients'],['suppliers','Suppliers & costs'],['promotions','Promotions'],'-',
+  ['closes','Register closes'],['users','Users & roles'],['assistant','AI assistant'],['audit','Audit log']
+];
+const ICON = {
+  dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect>',
+  approvals:'<path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"></path>',
+  purchases:'<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h10"></path>',
+  ingredients:'<path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10z"></path>',
+  suppliers:'<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle>',
+  promotions:'<path d="M20 12l-8 8-9-9V3h8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle>',
+  closes:'<rect x="3" y="6" width="18" height="13" rx="2"></rect><path d="M3 10h18M7 15h3"></path>',
+  users:'<circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .6 3.5 2.6 3.5 6"></path>',
+  assistant:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path>',
+  audit:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6M8 13h8M8 17h5"></path>'
+};
+const ROUTES = ['dashboard','approvals','purchases','menu','ingredients','suppliers','promotions','closes','users','assistant','audit'];
+const route = () => { const h = location.hash.replace('#',''); return ROUTES.includes(h) ? h : 'dashboard'; };
+function renderNav(){
+  const r = route(), pend = REQ.filter(x => x.status === 'pending').length, closes = CLOSES.filter(c => !c.reviewed && c.cnt !== c.exp).length, poPend = PO.filter(o => o.status === 'pending').length;
+  $('#nav').innerHTML = NAV.map(n => n === '-' ? '<div class="sep" role="separator"></div>' :
+    `<a href="#${n[0]}" ${r === n[0] ? 'aria-current="page"' : ''}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n[0]]}</svg>${n[1]}${n[0] === 'approvals' && pend ? `<span class="cnt" aria-label="${pend} pending">${pend}</span>` : ''}${n[0] === 'purchases' && poPend ? `<span class="cnt" aria-label="${poPend} waiting">${poPend}</span>` : ''}${n[0] === 'closes' && closes ? `<span class="cnt" aria-label="${closes} to review">${closes}</span>` : ''}</a>`).join('');
+}
+function render(){
+  renderNav();
+  $('#userSel').value = S.user;
+  const v = route();
+  const html = ({dashboard:vDash, approvals:vApprovals, purchases:vPurchases, menu:vMenu, ingredients:vIng, suppliers:vSupp, promotions:vPromos, closes:vCloses, users:vUsers, assistant:vAI, audit:vAudit})[v]();
+  $('#view').innerHTML = html;
+  const th = $('#hqThread'); if (th) th.scrollTop = th.scrollHeight;
+}
+
+/* dashboard */
+function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); const n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
+function barChart(vals, labels, every, cur){
+  const W = 720, H = 230, L = 52, B = 26, T = 10, max = niceMax(Math.max(...vals) || 1), n = vals.length;
+  const bw = (W - L - 8) / n, ticks = [0, .25, .5, .75, 1].map(f => f * max);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Revenue chart">`;
+  ticks.forEach(t => { const y = T + (H - T - B) * (1 - t / max); s += `<line class="grid" x1="${L}" x2="${W - 4}" y1="${y}" y2="${y}"></line><text x="${L - 8}" y="${y + 4}" text-anchor="end">${t >= 1000 ? (t / 1000).toLocaleString('en-MY', {maximumFractionDigits:1}) + 'k' : Math.round(t)}</text>`; });
+  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="2"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
+  return s + '</svg>';
+}
+function vDash(){
+  const n = S.period === 'today' ? 1 : Number(S.period);
+  let cur = periodDays(n), prev = prevDays(n);
+  const hourNow = NOW.getHours();
+  const frac = d => S.period === 'today' ? d.hourly.reduce((s, v, i) => s + (HOURS[i] <= hourNow ? v : 0), 0) / d.rev : 1;
+  const sum = (arr, f) => arr.reduce((s, d) => s + f(d) * frac(d), 0);
+  const rev = sum(cur, d => d.rev), gp = sum(cur, d => d.gp), ord = Math.round(sum(cur, d => d.orders));
+  const prevF = d => S.period === 'today' ? frac(cur[0]) : 1;
+  const prev_rev = prev.reduce((s, d) => s + d.rev * prevF(d), 0), prev_gp = prev.reduce((s, d) => s + d.gp * prevF(d), 0), prev_ord = prev.reduce((s, d) => s + d.orders * prevF(d), 0);
+  const dl = (a, b) => { const c = b ? (a - b) / b : 0; return `<div class="d ${c >= 0 ? 'up' : 'down'}">${c >= 0 ? '▲' : '▼'} ${pct(Math.abs(c))} vs previous ${S.period === 'today' ? 'day' : n + ' days'}</div>`; };
+  const kpi = (k, v, d) => `<div class="kpi"><div class="k">${k}</div><div class="v num">${v}</div>${d}</div>`;
+  let chart, chartTitle;
+  if (S.period === 'today') {
+    const d = cur[0]; const vals = d.hourly.map((v, i) => HOURS[i] <= hourNow ? v : 0);
+    chart = barChart(vals, HOURS.map(h => String(h).padStart(2, '0') + ':00'), 2, HOURS.indexOf(hourNow)); chartTitle = 'Revenue by hour, today so far';
+  } else {
+    chart = barChart(cur.map(d => d.rev), cur.map(d => d.day.toLocaleDateString('en-GB', {day:'numeric', month:'short'})), n > 7 ? 5 : 1, n - 1); chartTitle = `Revenue by day, last ${n} days`;
+  }
+  const cats = {rice:0, noodles:0, roti:0, drinks:0}; cur.forEach(d => Object.keys(cats).forEach(k => cats[k] += d.cats[k] * frac(d)));
+  const catTot = Object.values(cats).reduce((a,b) => a + b, 0) || 1;
+  const dine = cur.reduce((s, d) => s + d.rev * d.dine * frac(d), 0);
+  const heatDays = periodDays(7), heatMax = Math.max(...heatDays.flatMap(d => d.hourly));
+  const pend = REQ.filter(x => x.status === 'pending'), stale = pend.filter(r => reqFlags(r).includes('stale')).length;
+  const poP = PO.filter(o => o.status === 'pending'), poSum = r2(poP.reduce((s, o) => s + o.total, 0));
+  const short = CLOSES.filter(c => c.cnt !== c.exp && !c.reviewed);
+  const lowIng = ING.filter(i => i.onHand <= i.low);
+  return `<div class="ph"><div><h1>Dashboard</h1><p>[Pilot outlet] · computed from sales, recipes and stock. Sample data for the prototype.</p></div>
+  <div class="seg" role="group" aria-label="Period">${[['today','Today'],['7','7 days'],['30','30 days']].map(([v,l]) => `<button type="button" data-act="period" data-v="${v}" aria-pressed="${S.period === v}">${l}</button>`).join('')}</div></div>
+  <div class="kpis">${kpi('Revenue', rm0(rev), dl(rev, prev_rev))}${kpi('Gross profit', rm0(gp), dl(gp, prev_gp))}${kpi('Gross margin', pct(gp / rev), `<div class="d note">Food cost ${pct(1 - gp / rev)}</div>`)}${kpi('Orders', ord.toLocaleString('en-MY'), dl(ord, prev_ord))}${kpi('Avg order', rm(rev / Math.max(1, ord)), '<div class="d note">incl. SST & service</div>')}</div>
+  <div class="grid g2">
+    <section class="card"><h2>${chartTitle}</h2>${chart}</section>
+    <section class="card dig"><h2>Today’s digest</h2><ul>
+      <li><span class="dot ${pend.length ? 'd-warn' : 'd-ok'}"></span><span><b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a></span></li>
+      <li><span class="dot ${poP.length ? 'd-warn' : 'd-ok'}"></span><span><b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a></span></li>
+      <li><span class="dot d-bad"></span><span><b>Chicken leg drawdown 18% above recorded sales</b> on Sunday. Check portioning or unrecorded waste.</span></li>
+      <li><span class="dot d-warn"></span><span><b>Waste spike: prawns</b> 1.2 kg written off this week vs 0.3 kg weekly average.</span></li>
+      <li><span class="dot ${short.length ? 'd-warn' : 'd-ok'}"></span><span><b>${short.length} register close${short.length === 1 ? '' : 's'} with over/short</b> to review. <a href="#closes">Open</a></span></li>
+      <li><span class="dot ${lowIng.length ? 'd-warn' : 'd-ok'}"></span><span><b>Low stock:</b> ${lowIng.length ? lowIng.map(i => esc(i.name)).join(', ') : 'none'}.</span></li>
+      <li><span class="dot d-info"></span><span><b>Assistant:</b> ${AI.act.length} commands today, 1 undone, 1 declined. <a href="#assistant">Details</a></span></li>
+    </ul></section>
+  </div>
+  <div class="grid g3">
+    <section class="card"><h2>Sales by category</h2>${Object.keys(cats).map(k => `<div class="hbar"><span>${CAT[k]}</span><span class="track"><span class="fill" style="display:block;width:${(cats[k] / catTot * 100).toFixed(1)}%"></span></span><span class="r num">${pct(cats[k] / catTot)}</span></div>`).join('')}</section>
+    <section class="card"><h2>Sales by channel</h2>
+      <div class="hbar"><span>Dine-in</span><span class="track"><span class="fill" style="display:block;width:${(dine / rev * 100).toFixed(1)}%"></span></span><span class="r num">${pct(dine / rev)}</span></div>
+      <div class="hbar"><span>Takeaway</span><span class="track"><span class="fill" style="display:block;width:${((rev - dine) / rev * 100).toFixed(1)}%"></span></span><span class="r num">${pct((rev - dine) / rev)}</span></div>
+      <div class="hbar mute"><span>GrabFood</span><span class="track"></span><span class="r note">Phase B</span></div>
+      <div class="hbar mute"><span>Foodpanda</span><span class="track"></span><span class="r note">Phase B</span></div>
+    </section>
+    <section class="card"><h2>Busy hours, last 7 days</h2><div class="heat" role="img" aria-label="Revenue heatmap by day and hour">
+      <span></span>${HOURS.map((h, i) => `<span class="hh">${i % 3 === 0 ? h : ''}</span>`).join('')}
+      ${heatDays.map(d => `<span class="lbl">${d.day.toLocaleDateString('en-GB', {weekday:'short'})}</span>` + d.hourly.map((v, i) => `<span class="c" title="${HOURS[i]}:00 ${rm0(v)}" style="background:color-mix(in srgb, var(--accent) ${Math.round(8 + v / heatMax * 92)}%, var(--surface))"></span>`).join('')).join('')}
+    </div><p class="note" style="margin:10px 0 0">Darker = more revenue in that hour.</p></section>
+  </div>`;
+}
+
+/* approvals */
+function vApprovals(){
+  const counts = {pending:0, approved:0, rejected:0}; REQ.forEach(r => counts[r.status]++);
+  let list = REQ.filter(r => S.reqTab === 'all' || r.status === S.reqTab);
+  if (S.reqFlags.length) list = list.filter(r => S.reqFlags.every(f => reqFlags(r).includes(f)));
+  list.sort((a, b) => a.status === 'pending' && b.status === 'pending' ? a.at - b.at : b.at - a.at);
+  if (S.reqSel && !REQ.find(r => r.id === S.reqSel)) S.reqSel = null;
+  if (!S.reqSel && list.length) S.reqSel = list[0].id;
+  const rows = list.map(r => {
+    const i = IB(r.ing), d = reqDelta(r), fl = reqFlags(r);
+    const st = r.status === 'pending' ? `<span class="badge ${fl.includes('stale') ? 'b-bad' : (Date.now() - r.at) > 120 * 60000 ? 'b-warn' : 'b-mute'}">${age(r.at)}</span>` : r.status === 'approved' ? '<span class="badge b-ok">Approved</span>' : '<span class="badge b-bad">Rejected</span>';
+    return `<tr class="${S.reqSel === r.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="req" data-v="${r.id}">${r.id}</button></td><td>${TYPE[r.type]}</td><td>${esc(i.name)}</td><td class="r ${d < 0 ? 'down' : 'up'}"><b>${fd(r.ing, d)}</b></td><td class="r">${fq(r.ing, r3(i.onHand + d))}</td><td>${esc(uName(r.by))}</td><td>${st}</td><td><div class="chips" style="gap:4px">${fl.filter(f => f !== 'stale').map(f => `<span class="badge ${FLAG[f][0]}">${FLAG[f][1]}</span>`).join('')}</div></td></tr>`;
+  }).join('');
+  return `<div class="ph"><div><h1>Stock approvals</h1><p>Branch receipts, counts, adjustments and write-offs post to the stock ledger only when HQ approves. Sales deduct automatically and never come here.</p></div></div>
+  ${lockNote('Approve stock requests')}
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+    <div class="seg" role="group" aria-label="Status">${[['pending','Pending'],['approved','Approved'],['rejected','Rejected'],['all','All']].map(([v,l]) => `<button type="button" data-act="reqtab" data-v="${v}" aria-pressed="${S.reqTab === v}">${l}${v !== 'all' ? ` · ${counts[v]}` : ''}</button>`).join('')}</div>
+    <div class="chips" role="group" aria-label="Exception filters">${['stale','negative','repeat','large'].map(f => `<button type="button" class="chip" data-act="reqflag" data-v="${f}" aria-pressed="${S.reqFlags.includes(f)}">${FLAG[f][1]}</button>`).join('')}</div>
+  </div>
+  <div class="split">
+    <div class="tbl">${list.length ? `<table><thead><tr><th>Request</th><th>Type</th><th>Ingredient</th><th class="r">Change</th><th class="r">Result</th><th>By</th><th>Waiting / status</th><th>Flags</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No requests match these filters.</div>'}</div>
+    <div class="panel">${reqDetail()}</div>
+  </div>`;
+}
+function reqDetail(){
+  const r = REQ.find(x => x.id === S.reqSel);
+  if (!r) return '<div class="card empty">Select a request to review it.</div>';
+  const i = IB(r.ing), d = reqDelta(r), res = r3(i.onHand + d), fl = reqFlags(r);
+  let math = '';
+  if (r.type === 'count') {
+    const since = r3(r.snap - i.onHand);
+    math = `<div class="math"><div class="r"><span>System qty when counted (${tm(r.at)})</span><b>${fq(r.ing, r.snap)}</b></div><div class="r"><span>Counted</span><b>${fq(r.ing, r.counted)}</b></div><div class="r"><span>Variance to post</span><b class="${d < 0 ? 'down' : 'up'}">${fd(r.ing, d)}</b></div><div class="r note"><span>Sold since the count</span><span>${fd(r.ing, -since)}</span></div><div class="r"><span>On hand now</span><b>${fq(r.ing, i.onHand)}</b></div><div class="r t"><span>After approval</span><span>${fq(r.ing, res)}</span></div></div><p class="note" style="margin:0">Counts post as a variance, so sales between the count and approval are kept.</p>`;
+  } else {
+    math = `<div class="math"><div class="r"><span>On hand now</span><b>${fq(r.ing, i.onHand)}</b></div><div class="r"><span>${TYPE[r.type]}</span><b class="${d < 0 ? 'down' : 'up'}">${fd(r.ing, d)}</b></div><div class="r t"><span>After approval</span><span class="${res < 0 ? 'down' : ''}">${fq(r.ing, res)}</span></div></div>`;
+  }
+  const hist = REQ.filter(x => x.ing === r.ing && x.id !== r.id && x.status !== 'pending').slice(0, 3);
+  let act = '';
+  if (r.status === 'pending') {
+    if (!can('Approve stock requests')) act = '<p class="note">Only an HQ approver can decide this request.</p>';
+    else if (r.by === S.user) act = '<div class="lock">You submitted this request, so another HQ approver has to decide it.</div>';
+    else act = `<label class="field">Reason (required to reject)<textarea id="decNote" rows="2" placeholder="e.g. Attach the delivery order and resubmit"></textarea></label>
+      <div style="display:flex;gap:8px"><button type="button" class="btn primary" style="flex:1" data-act="approve" data-v="${r.id}" ${res < 0 ? 'disabled title="Would make stock negative"' : ''}>Approve & post</button><button type="button" class="btn danger" data-act="reject" data-v="${r.id}">Reject</button></div>
+      ${res < 0 ? '<p class="note down" style="margin:0">Can’t approve: stock would go below zero. Reject, or approve a count first.</p>' : ''}`;
+  } else {
+    act = `<div class="math"><div class="r"><span>${r.status === 'approved' ? 'Approved' : 'Rejected'} by</span><b>${esc(uName(r.dBy))}</b></div><div class="r"><span>When</span><b>${dt(r.dAt)}</b></div>${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}</div>`;
+  }
+  return `<section class="card" style="display:flex;flex-direction:column;gap:12px" aria-label="Request ${r.id}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">${r.id} · ${TYPE[r.type]}</h2>${r.status === 'pending' ? '<span class="badge b-warn">Pending</span>' : r.status === 'approved' ? '<span class="badge b-ok">Approved</span>' : '<span class="badge b-bad">Rejected</span>'}</div>
+    ${fl.length ? `<div class="chips" style="gap:4px">${fl.map(f => `<span class="badge ${FLAG[f][0]}">${FLAG[f][1]}</span>`).join('')}</div>` : ''}
+    <dl class="kv"><dt>Ingredient</dt><dd>${esc(i.name)}</dd><dt>Outlet</dt><dd>[Pilot outlet]</dd><dt>Requested by</dt><dd>${esc(uName(r.by))} · ${esc(ROLES[(USERS.find(u => u.id === r.by) || {}).role] || '')}</dd><dt>Submitted</dt><dd>${dt(r.at)}</dd><dt>Reason</dt><dd style="font-weight:600">${esc(r.reason)}</dd><dt>Evidence</dt><dd>${r.ev ? `<span class="badge b-info">${esc(r.ev)}</span>` : '<span class="note">None</span>'}</dd></dl>
+    ${math}${act}
+    ${hist.length ? `<div><b style="font-size:13px">Recent decisions on ${esc(i.name)}</b>${hist.map(h => `<div class="note" style="margin-top:4px">${h.id} · ${TYPE[h.type]} ${fd(h.ing, reqDelta(h))} · ${h.status} by ${esc(uName(h.dBy))}</div>`).join('')}</div>` : ''}
+  </section>`;
+}
+
+/* decisions shared by the screens and the chat */
+function checkReq(id, approve){
+  const r = REQ.find(x => x.id === id);
+  if (!r) return `I can’t find ${id}.`;
+  if (r.status !== 'pending') return `${id} was already ${r.status}.`;
+  if (!can('Approve stock requests')) return `Deciding ${id} needs the HQ approver role. You’re signed in as ${me().name} (${ROLES[me().role]}).`;
+  if (r.by === S.user) return `${id} is your own request, so another HQ approver has to decide it.`;
+  if (approve && r3(IB(r.ing).onHand + reqDelta(r)) < 0) return `${id} would take ${IB(r.ing).name} below zero, so it can’t be approved.`;
+  return null;
+}
+function decideReq(id, approve, note){
+  const err = checkReq(id, approve); if (err) return {ok:false, msg:err};
+  if (!approve && !note) return {ok:false, msg:'Add a reason so the outlet knows what to fix.'};
+  const r = REQ.find(x => x.id === id), i = IB(r.ing), d = reqDelta(r), before = i.onHand;
+  if (approve) { i.onHand = r3(i.onHand + d); audit('Stock', `Approved ${r.id} · ${TYPE[r.type]} · ${i.name} ${fd(r.ing, d)} · ${fq(r.ing, before)} → ${fq(r.ing, i.onHand)}${note ? ' · ' + note : ''}`); }
+  else audit('Stock', `Rejected ${r.id} · ${TYPE[r.type]} · ${i.name} ${fd(r.ing, d)} · ${note}`);
+  r.status = approve ? 'approved' : 'rejected'; r.dBy = S.user; r.dAt = new Date(); r.note = note || '';
+  return {ok:true, msg:approve ? `${r.id} approved · ${i.name} now ${fq(r.ing, i.onHand)}` : `${r.id} rejected · outlet notified`};
+}
+function checkPO(id){
+  const o = PO.find(x => x.id === id);
+  if (!o) return `I can’t find ${id}.`;
+  if (o.status !== 'pending') return `${id} is already ${PO_ST[o.status][1].toLowerCase()}.`;
+  if (!can('Approve supplier orders')) return `Deciding ${id} needs the HQ approver or HQ admin role. You’re signed in as ${me().name} (${ROLES[me().role]}).`;
+  if (o.by === S.user) return `${id} is your own order, so someone else has to approve it.`;
+  return null;
+}
+function decidePO(id, approve, note, routeQ){
+  const err = checkPO(id); if (err) return {ok:false, msg:err};
+  if (!approve && !note) return {ok:false, msg:'Add a reason so the outlet knows why.'};
+  const o = PO.find(x => x.id === id);
+  if (!approve) {
+    o.status = 'rejected'; o.dBy = S.user; o.dAt = new Date(); o.note = note;
+    audit('Supplier order', `Rejected ${o.id} · ${supName(o.sup)} · ${rm(o.total)} · ${note}`);
+    return {ok:true, msg:`${o.id} rejected · outlet sees your reason`};
+  }
+  const plan = planFor(o, routeQ || o.lines.map(l => l.qid));
+  const off = plan.find(p => !SUPINFO[p.sup].active);
+  if (off) return {ok:false, msg:`${supName(off.sup)} is inactive. Pick another supplier for ${IB(off.ing).name}.`};
+  const orig = o.sup, groups = groupPlan(plan, o.needed).sort((a, b) => (a.sup === orig ? -1 : b.sup === orig ? 1 : 0));
+  const made = groups.map((g, k) => {
+    const L = g.lines.map(p => ({ing:p.ing, req:p.req, packs:p.packs, pack:p.pack, packPrice:p.packPrice, qid:p.qid, sup:p.sup}));
+    let t = o;
+    if (k > 0) { t = Object.assign({}, o, {id:nextPOId(), splitFrom:o.id}); PO.push(t); }
+    Object.assign(t, {sup:g.sup, lines:L, total:g.total, status:'ordered', dBy:S.user, dAt:new Date(), note:note || '', method:SUPINFO[g.sup].via, eta:g.next, rerouted:g.sup !== orig ? orig : null});
+    audit('Supplier order', `Approved ${t.id}${t.splitFrom ? ' (split from ' + t.splitFrom + ')' : ''} · ${supName(g.sup)}${t.rerouted ? ' (rerouted from ' + supName(orig) + ')' : ''} · ${rm(g.total)} · sent by ${t.method.toLowerCase()} · arrives ${dshort(g.next)}${note ? ' · ' + note : ''}`);
+    return t;
+  });
+  return {ok:true, msg:made.length > 1 ? `${o.id} approved and split: ${made.map(t => `${t.id} → ${supName(t.sup)}`).join(', ')}` : `${made[0].id} approved · sent to ${supName(made[0].sup)} by ${made[0].method.toLowerCase()}${made[0].rerouted ? ' (rerouted)' : ''}`};
+}
+function nextPOId(){ const n = Math.max(...PO.map(o => Number(o.id.slice(3)))) + 1; return 'PO-' + String(n).padStart(4, '0'); }
+const endOfDay = d => { const x = new Date(d); x.setHours(23, 59, 59, 999); return x; };
+function planFor(o, routeQ){
+  return o.lines.map((l, k) => {
+    const q = QUOTES.find(x => x.id === routeQ[k]) || QUOTES.find(x => x.id === l.qid);
+    const req = l.req || l.packs * l.pack;
+    const packs = q.id === l.qid ? l.packs : Math.max(1, Math.ceil(r3(req / q.pack)));
+    return {ing:l.ing, req, packs, pack:q.pack, packPrice:q.price, qid:q.id, sup:q.sup, cost:r2(packs * q.price)};
+  });
+}
+function groupPlan(plan, needed){
+  const g = {}; plan.forEach(p => (g[p.sup] = g[p.sup] || []).push(p));
+  return Object.keys(g).map(sup => { const total = r2(g[sup].reduce((s, p) => s + p.cost, 0)), next = nextDelivery(sup); return {sup, lines:g[sup], total, next, onTime:next <= endOfDay(needed), belowMin:total < SUPINFO[sup].min}; });
+}
+function getRoute(o){ if (!S.poRoute || S.poRoute.id !== o.id) S.poRoute = {id:o.id, q:o.lines.map(l => l.qid)}; return S.poRoute.q; }
+const lineCost = (l, q) => Math.max(1, Math.ceil(r3((l.req || l.packs * l.pack) / q.pack))) * q.price;
+function routesVia(o, sup){
+  const q = [];
+  for (const l of o.lines) {
+    const opts = QUOTES.filter(x => x.ing === l.ing && x.sup === sup).sort((a, b) => lineCost(l, a) - lineCost(l, b));
+    if (!opts.length) return {err:`${supName(sup)} has no quote for ${IB(l.ing).name}.`};
+    q.push(opts[0].id);
+  }
+  if (!SUPINFO[sup].active) return {err:`${supName(sup)} is inactive.`};
+  return {q};
+}
+function cheapestOnTime(o){
+  return o.lines.map(l => {
+    const opts = QUOTES.filter(x => x.ing === l.ing && SUPINFO[x.sup].active);
+    const onTime = opts.filter(x => nextDelivery(x.sup) <= endOfDay(o.needed));
+    const pool = onTime.length ? onTime : opts;
+    return pool.sort((a, b) => lineCost(l, a) - lineCost(l, b))[0].id;
+  });
+}
+function altRoutes(o){
+  return Object.keys(SUPP).filter(k => k !== o.sup && SUPINFO[k].active).map(k => { const r = routesVia(o, k); if (r.err) return null; const g = groupPlan(planFor(o, r.q), o.needed)[0]; return {sup:k, total:g.total, next:g.next, onTime:g.onTime}; }).filter(Boolean).sort((a, b) => a.total - b.total);
+}
+
+/* supplier orders */
+function vPurchases(){
+  const counts = {pending:0, ordered:0, rejected:0}; PO.forEach(o => { if (counts[o.status] != null) counts[o.status]++; });
+  const list = PO.filter(o => S.poTab === 'all' || o.status === S.poTab).sort((a, b) => a.status === 'pending' && b.status === 'pending' ? a.at - b.at : b.at - a.at);
+  if (S.poSel && !list.find(o => o.id === S.poSel)) S.poSel = null;
+  if (!S.poSel && list.length) S.poSel = list[0].id;
+  const rows = list.map(o => `<tr class="${S.poSel === o.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="po" data-v="${o.id}">${o.id}</button></td><td>${esc(supName(o.sup))}${o.rerouted ? ' <span class="badge b-info">rerouted</span>' : ''}${o.splitFrom ? ' <span class="badge b-mute">split</span>' : ''}</td><td>${o.lines.map(l => esc(IB(l.ing).name)).join(', ')}</td><td class="r"><b>${rm(o.total)}</b></td><td>${dshort(o.needed)}</td><td>${esc(uName(o.by))}</td><td>${o.status === 'pending' ? `<span class="badge ${(Date.now() - o.at) > 120 * 60000 ? 'b-warn' : 'b-mute'}">${age(o.at)}</span>` : `<span class="badge ${PO_ST[o.status][0]}">${PO_ST[o.status][1]}</span>`}</td></tr>`).join('');
+  return `<div class="ph"><div><h1>Supplier orders</h1><p>Orders outlets raise through the assistant. Nothing goes to a supplier until HQ approves it; stock goes up only when the delivery is received.</p></div></div>
+  <div class="lock" style="background:var(--warn-soft);color:var(--warn-ink)">New scope: purchase orders are outside Delivery Brief v12, which excludes procurement and POs. This screen supports a change request.</div>
+  ${lockNote('Approve supplier orders')}
+  <div><div class="seg" role="group" aria-label="Status">${[['pending','Waiting'],['ordered','Sent to supplier'],['rejected','Rejected'],['all','All']].map(([v, l]) => `<button type="button" data-act="potab" data-v="${v}" aria-pressed="${S.poTab === v}">${l}${v !== 'all' ? ' · ' + counts[v] : ''}</button>`).join('')}</div></div>
+  <div class="split"><div class="tbl">${list.length ? `<table><thead><tr><th>Order</th><th>Supplier</th><th>Items</th><th class="r">Total</th><th>Needed by</th><th>By</th><th>Waiting / status</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No supplier orders here.</div>'}</div><div class="panel">${poDetail()}</div></div>`;
+}
+function poDetail(){
+  const o = PO.find(x => x.id === S.poSel);
+  if (!o) return '<div class="card empty">Select an order to review it.</div>';
+  const pending = o.status === 'pending', err = pending ? checkPO(o.id) : null, edit = pending && !err;
+  const rq = pending ? getRoute(o) : o.lines.map(l => l.qid);
+  const plan = planFor(o, rq), groups = groupPlan(plan, o.needed);
+  const total = r2(plan.reduce((s, p) => s + p.cost, 0));
+  const changed = pending && plan.some((p, k) => p.qid !== o.lines[k].qid);
+  const allSup = Object.keys(SUPP).filter(k => SUPINFO[k].active && o.lines.every(l => QUOTES.some(q => q.sup === k && q.ing === l.ing)));
+  const lineRows = plan.map((p, k) => {
+    const opts = QUOTES.filter(q => q.ing === p.ing && (SUPINFO[q.sup].active || q.id === p.qid)).sort((a, b) => a.price / a.pack - b.price / b.pack);
+    const cell = edit ? `<select aria-label="Supplier for ${esc(IB(p.ing).name)}" data-chg="poline" data-k="${k}" style="min-height:36px;max-width:100%;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${opts.map(q => `<option value="${q.id}" ${q.id === p.qid ? 'selected' : ''}>${esc(supName(q.sup))} · ${rm(q.price / q.pack)}/${unitLabel(p.ing)} · ${fq(p.ing, q.pack)} pack · ${dshort(nextDelivery(q.sup))}</option>`).join('')}</select>` : `<b>${esc(supName(p.sup))}</b>`;
+    return `<tr><td>${esc(IB(p.ing).name)}<br><span class="note">asked ${fq(p.ing, p.req)}</span></td><td>${cell}</td><td class="r">${p.packs} × ${fq(p.ing, p.pack)}</td><td class="r">${rm(p.cost)}</td></tr>`;
+  }).join('');
+  const groupRows = groups.map(g => `<div class="r" style="flex-wrap:wrap"><span><b>${esc(supName(g.sup))}</b> · ${g.lines.length} line${g.lines.length > 1 ? 's' : ''} · sends by ${esc(SUPINFO[g.sup].via.toLowerCase())}</span><b class="num">${rm(g.total)}</b></div><div style="display:flex;gap:6px;flex-wrap:wrap">${pending ? (g.onTime ? `<span class="badge b-ok">Arrives ${dshort(g.next)} · on time</span>` : `<span class="badge b-bad">Arrives ${dshort(g.next)} · after ${dshort(o.needed)}</span>`) : `<span class="badge b-mute">ETA ${o.eta ? dshort(o.eta) : '—'}</span>`}${pending && SUPINFO[g.sup].min ? (g.belowMin ? `<span class="badge b-warn">Below ${rm(SUPINFO[g.sup].min)} minimum</span>` : `<span class="badge b-mute">Min ${rm(SUPINFO[g.sup].min)} met</span>`) : ''}</div>`).join('');
+  const diff = r2(total - o.total);
+  const summary = `<div class="math">${groupRows}<div class="r t"><span>Total${groups.length > 1 ? ` · splits into ${groups.length} orders` : ''}</span><span class="num">${rm(total)}</span></div>${pending && diff !== 0 ? `<div class="note">Requested route ${esc(supName(o.sup))}: ${rm(o.total)} · ${diff < 0 ? 'saves ' + rm(-diff) : 'costs ' + rm(diff) + ' more'}</div>` : ''}</div>`;
+  const routeCtl = edit ? `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label class="field" style="flex:1;min-width:180px">Route whole order to<select data-chg="poall"><option value="">Choose a supplier…</option>${allSup.map(k => `<option value="${k}">${esc(supName(k))}</option>`).join('')}</select></label><button type="button" class="btn sm" data-act="pocheap">Cheapest on time</button><button type="button" class="btn sm" data-act="poreset" ${changed ? '' : 'disabled'}>Reset route</button></div>` : '';
+  let act;
+  if (pending) {
+    act = err ? `<div class="lock">${esc(err)}</div>` : `${groups.some(g => !g.onTime) ? '<p class="note down" style="margin:0">One delivery arrives after the needed date. Pick a faster supplier or confirm the outlet can wait.</p>' : ''}<label class="field">Note (required to reject)<textarea id="poNote" rows="2" placeholder="e.g. Prawns on hand cover two more days"></textarea></label>
+      <div style="display:flex;gap:8px"><button type="button" class="btn primary" style="flex:1" data-act="po-ok" data-v="${o.id}">Approve & send to ${groups.length > 1 ? groups.length + ' suppliers' : esc(supName(groups[0].sup))}</button><button type="button" class="btn danger" data-act="po-no" data-v="${o.id}">Reject</button></div>`;
+  } else {
+    act = `<div class="math"><div class="r"><span>${o.status === 'rejected' ? 'Rejected' : 'Approved'} by</span><b>${esc(uName(o.dBy))}</b></div><div class="r"><span>When</span><b>${dt(o.dAt)}</b></div>${o.status !== 'rejected' ? `<div class="r"><span>Sent by</span><b>${esc(o.method || 'Email')}</b></div>` : ''}${o.rerouted ? `<div class="r"><span>Rerouted from</span><b>${esc(supName(o.rerouted))}</b></div>` : ''}${o.splitFrom ? `<div class="r"><span>Split from</span><b>${esc(o.splitFrom)}</b></div>` : ''}${o.note ? `<div class="note">${esc(o.note)}</div>` : ''}</div>`;
+  }
+  const L = o.lines.map(l => { const i = IB(l.ing), qty = l.packs * l.pack; return {l, i, cover:USE[l.ing] ? i.onHand / USE[l.ing] : null, after:r3(i.onHand + qty)}; });
+  return `<section class="card" style="display:flex;flex-direction:column;gap:12px" aria-label="${o.id}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h2 style="margin:0">${o.id} · ${esc(supName(o.sup))}</h2><span class="badge ${PO_ST[o.status][0]}">${PO_ST[o.status][1]}</span></div>
+    ${changed ? `<div class="chips"><span class="badge b-info">Rerouted from ${esc(supName(o.sup))} — not saved until you approve</span></div>` : ''}
+    <dl class="kv"><dt>Outlet</dt><dd>[Pilot outlet]</dd><dt>Raised by</dt><dd>${esc(uName(o.by))} · via assistant</dd><dt>Created</dt><dd>${dt(o.at)}</dd><dt>Needed by</dt><dd>${dshort(o.needed)}</dd></dl>
+    <div class="bot" style="max-width:100%"><span class="note">Instruction to the assistant</span><br>“${esc(o.cmd)}”</div>
+    ${routeCtl}
+    <div class="tbl"><table><thead><tr><th>Ingredient</th><th>Supplier</th><th class="r">Packs</th><th class="r">Line</th></tr></thead><tbody>${lineRows}</tbody></table></div>
+    ${summary}
+    <div><b style="font-size:13px">Stock check</b><div class="tbl" style="margin-top:6px"><table><thead><tr><th>Ingredient</th><th class="r">On hand</th><th class="r">Cover</th><th class="r">After delivery</th></tr></thead><tbody>${L.map(x => `<tr><td>${esc(x.i.name)}</td><td class="r">${fq(x.l.ing, x.i.onHand)}</td><td class="r">${x.cover == null ? '—' : `<span class="badge ${x.cover < 1 ? 'b-bad' : x.cover < 3 ? 'b-warn' : 'b-ok'}">${x.cover.toFixed(1)} days</span>`}</td><td class="r">${fq(x.l.ing, x.after)}</td></tr>`).join('')}</tbody></table></div><p class="note" style="margin:6px 0 0">Cover = on hand ÷ average daily use over the last 4 weeks (sample).</p></div>
+    ${act}
+  </section>`;
+}
+
+/* menu */
+function fcBadge(f){ return f <= 0.30 ? `<span class="badge b-ok">${pct(f)}</span>` : f <= 0.35 ? `<span class="badge b-warn">${pct(f)}</span>` : `<span class="badge b-bad">${pct(f)}</span>`; }
+function vMenu(){
+  const q = S.menuQ.toLowerCase();
+  const list = MENU.filter(m => !q || m.name.toLowerCase().includes(q));
+  return `<div class="ph"><div><h1>Menu & recipes</h1><p>Plate cost comes from each recipe and the tagged supplier quote of every ingredient. Prices here sync to the tills.</p></div>
+    <label class="field" style="min-width:240px"><span class="sr">Search dishes</span><input id="menuQ" type="search" placeholder="Search dishes" value="${esc(S.menuQ)}" data-inp="menuQ"></label></div>
+  ${lockNote('Edit menu, recipes & prices')}
+  <div class="tbl"><table><thead><tr><th>Dish</th><th>Category</th><th class="r">Price</th><th class="r">Plate cost</th><th class="r">Margin</th><th class="r">Food cost</th><th>Channel prices</th><th>Till status</th><th></th></tr></thead><tbody id="menuBody">${menuRows(list)}</tbody></table></div>
+  <p class="note">Food cost: green up to 30%, amber up to 35%, red above. Channel prices for GrabFood and Foodpanda go live in Phase B.</p>`;
+}
+function menuRows(list){
+  return list.map(m => { const c = plate(m), u = unavailableBy(m); return `<tr><td><b>${esc(m.name)}</b></td><td>${CAT[m.cat]}</td><td class="r">${rm(m.price)}</td><td class="r">${rm(c)}</td><td class="r">${rm(m.price - c)}</td><td class="r">${fcBadge(c / m.price)}</td><td>${m.grab || m.fp ? `<span class="note">Grab ${m.grab ? rm(m.grab) : '—'} · FP ${m.fp ? rm(m.fp) : '—'}</span>` : '<span class="note">Same as dine-in</span>'}</td><td>${u ? `<span class="badge b-bad">Off · ${esc(u.name.toLowerCase())}</span>` : '<span class="badge b-ok">On sale</span>'}</td><td class="r"><button type="button" class="btn sm" data-act="editdish" data-v="${m.id}" ${can('Edit menu, recipes & prices') ? '' : 'disabled'}>Edit</button></td></tr>`; }).join('') || '<tr><td colspan="9"><div class="empty">No dishes match.</div></td></tr>';
+}
+let draft = null;
+function openDish(id){
+  const m = MENU.find(x => x.id === id);
+  draft = {id, price:m.price, grab:m.grab, fp:m.fp, recipe:m.recipe.map(l => l.slice())};
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">${esc(m.name)}</h2><p>Changes sync to the tills and are logged for audit.</p></div>${xBtn()}</div><div class="dlg-b" id="dishBody"></div><div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="savedish">Save changes</button></div>`);
+  renderDish();
+}
+function renderDish(){
+  const cost = r2(draft.recipe.reduce((s, [id, q]) => s + (Number(q) || 0) * unitCost(id), 0));
+  const p = Number(draft.price) || 0;
+  $('#dishBody').innerHTML = `<div class="frow"><label class="field">Dine-in price (RM)<input type="number" step="0.10" min="0" value="${p.toFixed(2)}" data-dchg="price" class="num"></label>
+    <div class="math" style="justify-content:center"><div class="r"><span>Plate cost</span><b class="num">${rm(cost)}</b></div><div class="r"><span>Margin</span><b class="num">${rm(p - cost)}</b></div><div class="r"><span>Food cost</span><span>${p ? fcBadge(cost / p) : '—'}</span></div></div></div>
+    <div class="frow"><label class="field">GrabFood price (RM) <span class="badge b-info" style="align-self:flex-start">Phase B</span><input type="number" step="0.10" min="0" placeholder="Same as dine-in" value="${draft.grab ? draft.grab.toFixed(2) : ''}" data-dchg="grab"></label>
+    <label class="field">Foodpanda price (RM) <span class="badge b-info" style="align-self:flex-start">Phase B</span><input type="number" step="0.10" min="0" placeholder="Same as dine-in" value="${draft.fp ? draft.fp.toFixed(2) : ''}" data-dchg="fp"></label></div>
+    <div><b>Recipe per portion</b><div class="tbl" style="margin-top:8px"><table><thead><tr><th>Ingredient</th><th class="r">Quantity</th><th>Unit</th><th class="r">Unit cost</th><th class="r">Line cost</th><th></th></tr></thead><tbody>
+    ${draft.recipe.map(([id, q], k) => `<tr><td><select aria-label="Ingredient" data-dchg="ing" data-k="${k}" style="min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${ING.map(i => `<option value="${i.id}" ${i.id === id ? 'selected' : ''}>${esc(i.name)}</option>`).join('')}</select></td><td class="r"><input type="number" step="0.01" min="0" value="${q}" aria-label="Quantity" data-dchg="qty" data-k="${k}" style="width:90px;min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px;text-align:right"></td><td>${IB(id).unit}</td><td class="r">${rm(unitCost(id))}</td><td class="r">${rm((Number(q) || 0) * unitCost(id))}</td><td class="r"><button type="button" class="btn sm" data-act="rmline" data-k="${k}" aria-label="Remove ${esc(IB(id).name)}">Remove</button></td></tr>`).join('')}
+    </tbody></table></div><button type="button" class="btn sm" style="margin-top:8px" data-act="addline">+ Add ingredient</button></div>`;
+}
+
+/* ingredients */
+const FLAGS_ING = [{id:'f1', name:'Pandan leaves', by:'siti', at:ago(180), note:'Needed for the new kuih special'}];
+function vIng(){
+  const used = id => MENU.filter(m => m.recipe.some(l => l[0] === id)).length;
+  return `<div class="ph"><div><h1>Ingredients</h1><p>One catalogue for every outlet. Outlets pick from it and can’t create, rename or delete ingredients.</p></div><button type="button" class="btn primary" data-act="newing" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>+ Add ingredient</button></div>
+  ${lockNote('Edit ingredient catalogue')}
+  ${FLAGS_ING.length ? `<section class="card"><h2>Flagged by outlets</h2>${FLAGS_ING.map(f => `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><b>${esc(f.name)}</b> <span class="note">· requested by ${esc(uName(f.by))}, ${age(f.at)} ago · “${esc(f.note)}”</span></div><div style="display:flex;gap:8px"><button type="button" class="btn sm primary" data-act="flagadd" data-v="${f.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Add to catalogue</button><button type="button" class="btn sm" data-act="flagno" data-v="${f.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Decline</button></div></div>`).join('')}</section>` : ''}
+  <div class="tbl"><table><thead><tr><th>Ingredient</th><th>Unit</th><th class="r">Cost basis</th><th>Source</th><th class="r">On hand</th><th class="r">Low at</th><th>Status</th><th class="r">Used in</th><th></th></tr></thead><tbody>
+  ${ING.map(i => `<tr><td><b>${esc(i.name)}</b></td><td>${i.unit}</td><td class="r">${rm(unitCost(i.id))} / ${i.unit === 'kg' ? 'kg' : i.unit === 'pcs' ? 'pc' : 'portion'}</td><td><span class="note">${esc(costSource(i.id))}</span></td><td class="r">${fq(i.id, i.onHand)}</td><td class="r">${fq(i.id, i.low)}</td><td>${i.onHand <= 0 ? '<span class="badge b-bad">Out</span>' : i.onHand <= i.low ? '<span class="badge b-warn">Low</span>' : '<span class="badge b-ok">OK</span>'}</td><td class="r">${used(i.id)} dishes</td><td class="r"><button type="button" class="btn sm" data-act="editing" data-v="${i.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Edit</button></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function ingForm(i, prefill){
+  const v = i || {name:prefill || '', unit:'kg', low:1, manual:null};
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">${i ? 'Edit ' + esc(i.name) : 'Add ingredient'}</h2><p>${i ? 'Unit changes apply to every recipe that uses this ingredient.' : 'New ingredients become available to every outlet.'}</p></div>${xBtn()}</div>
+  <form class="dlg-b" id="ingForm" data-id="${i ? i.id : ''}">
+    <label class="field">Name<input id="f_name" required value="${esc(v.name)}" ${i ? 'readonly' : ''}></label>
+    <div class="frow"><label class="field">Stock unit<select id="f_unit">${['kg','pcs','portions'].map(u => `<option ${u === v.unit ? 'selected' : ''}>${u}</option>`).join('')}</select></label>
+    <label class="field">Low-stock alert at<input id="f_low" type="number" step="0.1" min="0" value="${v.low}"></label></div>
+    <label class="field">Manual cost per unit (RM)<input id="f_cost" type="number" step="0.01" min="0" placeholder="Leave empty when a supplier quote is tagged" value="${v.manual != null ? v.manual : ''}"></label>
+    <p class="note" style="margin:0">A tagged supplier quote always overrides the manual cost.</p>
+  </form>
+  <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="saveing">${i ? 'Save' : 'Add ingredient'}</button></div>`);
+}
+
+/* suppliers */
+const DAYS3 = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function unitLabel(id){ const u = IB(id).unit; return u === 'kg' ? 'kg' : u === 'pcs' ? 'pc' : 'portion'; }
+function vSupp(){
+  const edit = can('Suppliers & promotions');
+  const ings = ING.filter(i => QUOTES.some(q => q.ing === i.id));
+  const single = ings.filter(i => new Set(QUOTES.filter(q => q.ing === i.id && SUPINFO[q.sup].active).map(q => q.sup)).size < 2);
+  const list = S.suppFilter === 'single' ? single : ings;
+  return `<div class="ph"><div><h1>Suppliers & costs</h1><p>Each ingredient can have several suppliers. <b>Route</b> is where outlet orders go by default; <b>Cost basis</b> is the price recipes use. HQ can still pick another supplier when it approves an order.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-act="newsup" ${edit ? '' : 'disabled'}>+ Add supplier</button><button type="button" class="btn primary" data-act="newquote" ${edit ? '' : 'disabled'}>+ Add quote</button></div></div>
+  ${lockNote('Suppliers & promotions')}
+  <section class="card"><h2>Suppliers</h2><div class="tbl" style="border:0"><table><thead><tr><th>Supplier</th><th class="r">Lead time</th><th>Delivers</th><th>Next delivery</th><th class="r">Min order</th><th>Sends by</th><th class="r">Ingredients</th><th>Active</th><th></th></tr></thead><tbody>
+  ${Object.keys(SUPP).map(k => { const s = SUPINFO[k], n = new Set(QUOTES.filter(q => q.sup === k).map(q => q.ing)).size, routes = QUOTES.filter(q => q.sup === k && q.route).length, parts = SUPP[k].split(' · '); return `<tr${s.active ? '' : ' style="opacity:.6"'}><td><b>${esc(parts[0])}</b><br><span class="note">${esc(parts[1] || '')}</span></td><td class="r">${s.lead} day${s.lead === 1 ? '' : 's'}</td><td>${s.days.length === 7 ? 'Daily' : s.days.map(d => DAYS3[d - 1]).join(', ')}</td><td>${s.active ? dshort(nextDelivery(k)) : '—'}</td><td class="r">${s.min ? rm(s.min) : 'None'}</td><td>${esc(s.via)}</td><td class="r">${n}${routes ? ` <span class="badge b-info">route for ${routes}</span>` : ''}</td><td><button type="button" class="switch" role="switch" aria-checked="${s.active}" aria-label="${esc(parts[0])} active" data-act="togsup" data-v="${k}" ${edit ? '' : 'disabled'}></button></td><td class="r"><button type="button" class="btn sm" data-act="editsup" data-v="${k}" ${edit ? '' : 'disabled'}>Edit</button></td></tr>`; }).join('')}
+  </tbody></table></div></section>
+  <div class="ph"><h2 style="margin:0;font-size:17px">Routing & cost by ingredient</h2><div class="seg" role="group" aria-label="Filter ingredients">${[['all','All ingredients'],['single','Single source · ' + single.length]].map(([v, l]) => `<button type="button" data-act="suppf" data-v="${v}" aria-pressed="${(S.suppFilter || 'all') === v}">${l}</button>`).join('')}</div></div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr))">
+  ${list.map(i => ingRouteCard(i, edit)).join('') || '<div class="empty">Every ingredient has at least two active suppliers.</div>'}
+  </div>`;
+}
+function ingRouteCard(i, edit){
+  const qs = QUOTES.filter(q => q.ing === i.id).sort((a, b) => a.price / a.pack - b.price / b.pack);
+  const best = qs.filter(q => SUPINFO[q.sup].active)[0];
+  const rq = qs.find(q => q.route), dishes = MENU.filter(m => m.recipe.some(l => l[0] === i.id)).length;
+  const warn = !rq ? '<span class="badge b-bad">No route set</span>' : !SUPINFO[rq.sup].active ? '<span class="badge b-bad">Route supplier inactive</span>' : new Set(qs.filter(q => SUPINFO[q.sup].active).map(q => q.sup)).size < 2 ? '<span class="badge b-warn">Single source</span>' : '';
+  return `<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap"><h2 style="margin:0">${esc(i.name)} <span class="note" style="font-weight:600">· ${dishes} dish${dishes === 1 ? '' : 'es'} · on hand ${fq(i.id, i.onHand)}</span></h2>${warn}</div>
+  <div class="tbl" style="border:0"><table><thead><tr><th>Supplier</th><th class="r">Pack</th><th class="r">Per ${unitLabel(i.id)}</th><th>Next delivery</th><th style="text-align:center">Route</th><th style="text-align:center">Cost basis</th></tr></thead><tbody>
+  ${qs.map(q => { const s = SUPINFO[q.sup]; return `<tr${s.active ? '' : ' style="opacity:.55"'}><td><b>${esc(supName(q.sup))}</b>${best && best.id === q.id ? ' <span class="badge b-ok">Cheapest</span>' : ''}${s.active ? '' : ' <span class="badge b-mute">Inactive</span>'}</td><td class="r">${fq(i.id, q.pack)} · ${rm(q.price)}</td><td class="r"><b>${rm(q.price / q.pack)}</b></td><td>${s.active ? dshort(nextDelivery(q.sup)) : '—'}</td><td style="text-align:center"><input type="radio" name="route_${i.id}" value="${q.id}" aria-label="Route ${esc(i.name)} orders to ${esc(supName(q.sup))}" ${q.route ? 'checked' : ''} ${edit && s.active ? '' : 'disabled'} data-chg="route" style="width:20px;height:20px;accent-color:var(--accent)"></td><td style="text-align:center"><input type="radio" name="tag_${i.id}" value="${q.id}" aria-label="Use ${esc(supName(q.sup))} as cost basis for ${esc(i.name)}" ${q.tag ? 'checked' : ''} ${edit ? '' : 'disabled'} data-chg="tag" style="width:20px;height:20px;accent-color:var(--accent)"></td></tr>`; }).join('')}
+  </tbody></table></div></section>`;
+}
+function supForm(k){
+  const s = k ? SUPINFO[k] : {lead:1, days:[1,2,3,4,5,6], min:0, via:'Email'};
+  const parts = k ? SUPP[k].split(' · ') : ['', ''];
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">${k ? 'Edit ' + esc(parts[0]) : 'Add supplier'}</h2><p>Lead time and delivery days set the earliest delivery HQ sees when it approves an order.</p></div>${xBtn()}</div>
+  <div class="dlg-b" id="supForm" data-k="${k || ''}">
+    <div class="frow"><label class="field">Name<input id="s_name" value="${esc(parts[0])}" placeholder="e.g. Supplier H"></label><label class="field">What they supply<input id="s_cat" value="${esc(parts[1] || '')}" placeholder="e.g. Vegetables"></label></div>
+    <div class="frow"><label class="field">Lead time (days)<input id="s_lead" type="number" min="0" step="1" value="${s.lead}"></label><label class="field">Minimum order (RM)<input id="s_min" type="number" min="0" step="10" value="${s.min}"></label></div>
+    <fieldset style="border:0;padding:0;margin:0"><legend class="field" style="margin-bottom:6px">Delivery days</legend><div class="chips">${DAYS3.map((d, n) => `<label class="chip" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" class="s_day" value="${n + 1}" ${s.days.includes(n + 1) ? 'checked' : ''}> ${d}</label>`).join('')}</div></fieldset>
+    <label class="field">Send orders by<select id="s_via">${['Email','WhatsApp','Phone call'].map(v => `<option ${v === s.via ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+    <p class="note" id="s_err" role="alert" style="margin:0"></p>
+  </div>
+  <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="savesup">${k ? 'Save' : 'Add supplier'}</button></div>`);
+}
+function quoteForm(){
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">Add supplier quote</h2><p>Quotes are prices per pack, in the ingredient’s stock unit.</p></div>${xBtn()}</div>
+  <div class="dlg-b"><div class="frow"><label class="field">Supplier<select id="q_sup">${Object.keys(SUPP).filter(k => SUPINFO[k].active).map(k => `<option value="${k}">${esc(SUPP[k])}</option>`).join('')}</select></label>
+  <label class="field">Ingredient<select id="q_ing">${ING.map(i => `<option value="${i.id}">${esc(i.name)} (${i.unit})</option>`).join('')}</select></label></div>
+  <div class="frow"><label class="field">Pack size (in stock unit)<input id="q_pack" type="number" step="0.1" min="0.1" value="10"></label><label class="field">Pack price (RM)<input id="q_price" type="number" step="0.01" min="0" value="100.00"></label></div>
+  <label style="display:flex;gap:8px;align-items:center;font-weight:700"><input type="checkbox" id="q_route" style="width:18px;height:18px"> Route outlet orders for this ingredient here</label>
+  <label style="display:flex;gap:8px;align-items:center;font-weight:700"><input type="checkbox" id="q_tag" style="width:18px;height:18px"> Use as cost basis</label></div>
+  <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="savequote">Add quote</button></div>`);
+}
+
+/* promotions */
+function vPromos(){
+  return `<div class="ph"><div><h1>Promotions</h1><p>Time-windowed deals the till applies automatically. Managers can also draft them through the assistant (Phase B).</p></div><button type="button" class="btn primary" data-act="newpromo" ${can('Suppliers & promotions') ? '' : 'disabled'}>+ New promotion</button></div>
+  ${lockNote('Suppliers & promotions')}
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+  ${PROMOS.map(p => `<section class="card promo"><div class="promo-h"><b>${esc(p.name)}</b><button type="button" class="switch" role="switch" aria-checked="${p.on}" aria-label="${esc(p.name)} active" data-act="togpromo" data-v="${p.id}" ${can('Suppliers & promotions') ? '' : 'disabled'}></button></div>
+    <div>${esc(promoRule(p))}</div>
+    <div class="note">${p.days.map(d => DAYN[d - 1]).join(', ')} · ${p.start}–${p.end} · ${p.ch.map(c => c === 'dine' ? 'Dine-in' : 'Takeaway').join(', ')}</div>
+    <div class="chips" style="gap:6px">${promoNow(p) ? '<span class="badge b-ok">Running now</span>' : p.on ? '<span class="badge b-mute">Scheduled</span>' : '<span class="badge b-mute">Off</span>'}<span class="badge b-info">${p.type === 'pct' ? 'Percent off' : p.type === 'price' ? 'Price point' : 'Set deal'}</span></div>
+    <div><button type="button" class="link" data-act="delpromo" data-v="${p.id}" ${can('Suppliers & promotions') ? '' : 'disabled'}>Delete</button></div>
+  </section>`).join('') || '<div class="empty">No promotions yet.</div>'}
+  </div>`;
+}
+function promoForm(){
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">New promotion</h2><p>Applies automatically at the till inside its time window.</p></div>${xBtn()}</div>
+  <div class="dlg-b"><label class="field">Name<input id="p_name" placeholder="e.g. Breakfast roti deal"></label>
+  <div class="frow"><label class="field">Rule<select id="p_type"><option value="pct">Percent off</option><option value="price">Price point</option><option value="set">Set deal (items together)</option></select></label>
+  <label class="field">Value (% or RM)<input id="p_val" type="number" step="0.1" min="0" value="10"></label></div>
+  <fieldset style="border:0;padding:0;margin:0"><legend class="field" style="margin-bottom:6px">Dishes</legend><div class="chips">${MENU.map(m => `<label class="chip" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" value="${m.id}" class="p_item"> ${esc(m.name)}</label>`).join('')}</div></fieldset>
+  <fieldset style="border:0;padding:0;margin:0"><legend class="field" style="margin-bottom:6px">Days</legend><div class="chips">${DAYN.map((d, k) => `<label class="chip" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" value="${k + 1}" class="p_day" ${k < 5 ? 'checked' : ''}> ${d}</label>`).join('')}</div></fieldset>
+  <div class="frow"><label class="field">Starts<input id="p_start" type="time" value="11:00"></label><label class="field">Ends<input id="p_end" type="time" value="14:00"></label></div>
+  <div class="chips"><label class="chip" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" class="p_ch" value="dine" checked> Dine-in</label><label class="chip" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" class="p_ch" value="take" checked> Takeaway</label></div>
+  <p class="note" id="p_err" role="alert" style="margin:0"></p></div>
+  <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="savepromo">Create promotion</button></div>`);
+}
+
+/* closes */
+function vCloses(){
+  const list = CLOSES.filter(c => !S.closeOnly || c.cnt !== c.exp);
+  return `<div class="ph"><div><h1>Register closes</h1><p>Every end-of-day close from the outlet, with counted vs expected cash. Over/short needs a reason from the outlet and a review at HQ.</p></div>
+    <label style="display:flex;align-items:center;gap:8px;font-weight:700"><button type="button" class="switch" role="switch" aria-checked="${S.closeOnly}" data-act="closeonly" aria-label="Only over or short"></button>Only over/short</label></div>
+  ${lockNote('Review register closes')}
+  <div class="tbl"><table><thead><tr><th>Date</th><th>Till</th><th>Closed by</th><th class="r">Expected</th><th class="r">Counted</th><th class="r">Over / short</th><th>Reason</th><th>HQ review</th></tr></thead><tbody>
+  ${list.map((c, k) => { const d = r2(c.cnt - c.exp); return `<tr><td>${c.day.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})}</td><td>${c.till}</td><td>${c.by}</td><td class="r">${rm(c.exp)}</td><td class="r">${rm(c.cnt)}</td><td class="r">${d === 0 ? '<span class="badge b-ok">Balanced</span>' : `<span class="badge ${d < 0 ? 'b-bad' : 'b-warn'}">${d > 0 ? '+' : ''}${rm(d)}</span>`}</td><td>${esc(c.reason) || '<span class="note">—</span>'}</td><td>${d === 0 ? '<span class="note">Not needed</span>' : c.reviewed ? `<span class="badge b-ok">Reviewed${c.rBy ? ' · ' + esc(c.rBy) : ''}</span>` : `<button type="button" class="btn sm" data-act="review" data-v="${CLOSES.indexOf(c)}" ${can('Review register closes') ? '' : 'disabled'}>Mark reviewed</button>`}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+}
+
+/* users */
+function vUsers(){
+  const roles = Object.keys(ROLES);
+  return `<div class="ph"><div><h1>Users & roles</h1><p>Permissions are checked on the server for every action. Outlet users only see their own outlet.</p></div></div>
+  ${lockNote('Manage users & roles')}
+  <div class="tbl"><table><thead><tr><th>Name</th><th>Where</th><th>Role</th><th>Active</th><th></th></tr></thead><tbody>
+  ${USERS.map(u => `<tr><td><b>${esc(u.name)}</b>${u.id === S.user ? ' <span class="badge b-info">You</span>' : ''}</td><td>${esc(u.outlet)}</td><td><select aria-label="Role for ${esc(u.name)}" data-chg="role" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'} style="min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${roles.map(r => `<option value="${r}" ${r === u.role ? 'selected' : ''}>${ROLES[r]}</option>`).join('')}</select></td><td><button type="button" class="switch" role="switch" aria-checked="${u.active}" aria-label="${esc(u.name)} active" data-act="toguser" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'}></button></td><td class="r"><button type="button" class="btn sm" data-act="pin" data-v="${u.id}" ${can('Manage users & roles') ? '' : 'disabled'}>Reset PIN</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <section class="card"><h2>What each role can do</h2><div class="tbl" style="border:0"><table><thead><tr><th>Action</th>${roles.map(r => `<th style="text-align:center">${ROLES[r]}</th>`).join('')}</tr></thead><tbody>
+  ${PERMS.map(([p, rs]) => `<tr><td>${esc(p)}</td>${roles.map(r => `<td style="text-align:center">${rs.includes(r) ? '<span class="up" aria-label="Allowed">✓</span>' : '<span class="note" aria-label="Not allowed">—</span>'}</td>`).join('')}</tr>`).join('')}
+  </tbody></table></div></section>`;
+}
+
+/* assistant */
+function vAI(){
+  const used = AI.spend / AI.cap;
+  return `<div class="ph"><div><h1>AI assistant</h1><p>Chat to check how today is going, or approve and reject stock requests and supplier orders by ID. Every decision shows a confirmation first.</p></div></div>
+  <div class="grid g2">
+    <section class="card" style="display:flex;flex-direction:column;gap:12px" aria-label="HQ assistant chat"><h2 style="margin:0">Chat · ${esc(me().name)} (${esc(ROLES[me().role])})</h2>
+      <div class="thread" id="hqThread" role="log" aria-live="polite">${chatHTML()}</div>
+      <div class="sugg">${HQ_SUGG.map(s => `<button type="button" data-act="hq-ask" data-v="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+      <div class="comp"><label class="field" style="flex:1">Message<textarea id="hqIn" rows="2" placeholder="e.g. how is today going?"></textarea></label><button type="button" class="btn primary" data-act="hq-send" style="min-height:48px">Send</button></div>
+    </section>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="card" style="display:flex;flex-direction:column;gap:12px"><h2 style="margin:0">Usage this month</h2>
+      <div class="num" style="font-size:22px;font-weight:800">${rm(AI.spend)} <span class="note" style="font-size:13px">of ${rm(AI.cap)} cap</span></div>
+      <div class="meter" role="img" aria-label="${pct(used)} of the monthly cap used"><i style="width:${Math.min(100, used * 100).toFixed(1)}%"></i></div>
+      <div class="note">${AI.callsToday} model calls today. At the cap the assistant stops and tells users to try later; the till keeps working.</div>
+      <label class="field">Monthly cap (RM)<input id="capIn" type="number" step="10" min="0" value="${AI.cap}" ${can('Manage users & roles') ? '' : 'disabled'}></label>
+      <button type="button" class="btn" data-act="savecap" ${can('Manage users & roles') ? '' : 'disabled'}>Save cap</button>
+      <div class="lock" style="background:var(--surface-2);color:var(--muted)">100-command acceptance test: runs before Gate B (Phase B).</div>
+    </section>
+  <section class="card"><h2>Words the assistant understands</h2><p class="note" style="margin:-6px 0 12px">English and Malay names, short names and item codes mapped to ingredients and dishes.</p>
+    <div class="chips" style="margin-bottom:12px">${AI.syn.map(([w, t], k) => `<span class="chip" style="display:inline-flex;align-items:center;gap:8px">“${esc(w)}” → ${esc(t)}<button type="button" class="link" data-act="delsyn" data-v="${k}" aria-label="Remove ${esc(w)}" ${can('Edit menu, recipes & prices') ? '' : 'disabled'}>×</button></span>`).join('')}</div>
+    <div class="frow" style="grid-template-columns:minmax(0,1fr);align-items:end"><label class="field">Word or code<input id="synW" placeholder="e.g. bawang"></label><label class="field">Means<select id="synT">${ING.map(i => `<option>${esc(i.name)}</option>`).join('')}${MENU.map(m => `<option>${esc(m.name)}</option>`).join('')}</select></label><button type="button" class="btn primary" data-act="addsyn" ${can('Edit menu, recipes & prices') ? '' : 'disabled'}>Add</button></div>
+  </section>
+    </div>
+  </div>
+  <section class="card"><h2>Outlet assistant activity today</h2><div class="tbl" style="border:0"><table><thead><tr><th>Time</th><th>User</th><th>Instruction</th><th>Outcome</th></tr></thead><tbody>
+    ${AI.act.slice().sort((a, b) => b.at - a.at).map(a => `<tr><td>${tm(a.at)}</td><td>${esc(a.user)}</td><td>${esc(a.cmd)}</td><td><span class="badge ${/Applied|Answered|Sent/.test(a.out) ? 'b-ok' : /Undone|Cancelled/.test(a.out) ? 'b-mute' : 'b-warn'}">${esc(a.out)}</span></td></tr>`).join('')}
+    </tbody></table></div></section>`;
+}
+
+/* HQ chat */
+const HQ_SUGG = ['How is today going?', 'What’s pending?', 'PO-0313', 'Approve PO-0313 via Supplier E', 'Approve PO-0314 via Supplier F', 'Approve R-1048', 'Reject PO-0313 because prawns on hand cover two more days', 'Show low stock'];
+function hqBot(html){ S.chat.push({role:'bot', html}); }
+function hqSend(text){ text = String(text || '').trim(); if (!text) return; S.chat.push({role:'me', text}); hqHandle(text); render(); const ta = $('#hqIn'); if (ta) ta.focus(); }
+function idsIn(text){ return [...text.matchAll(/\b(r|po)\s*-?\s*(\d{3,4})\b/gi)].map(m => (m[1].toLowerCase() === 'r' ? 'R-' : 'PO-') + m[2].padStart(4, '0')); }
+const chipsFor = id => `<div class="chips"><button type="button" class="chip" data-act="hq-ask" data-v="Approve ${id}">Approve ${id}</button><button type="button" class="chip" data-act="hq-ask" data-v="Reject ${id}">Reject ${id}</button></div>`;
+function hqHandle(text){
+  const t = ' ' + text.toLowerCase().replace(/[’']/g, '') + ' ';
+  if (S.cdraft) {
+    const d = S.cdraft; S.cdraft = null;
+    if (/^\s*(cancel|stop|never ?mind|huỷ|hủy)\s*$/i.test(text)) { hqBot('Okay, nothing changed.'); return; }
+    buildDecision(d.ids.map(id => ({id, approve:false, note:text.trim()}))); return;
+  }
+  const ids = [...new Set(idsIn(text))];
+  const isRej = /(reject|decline|deny|từ chối|tolak)/.test(t), isApp = !isRej && /(approve|accept|duyệt|lulus|re-?route)/.test(t);
+  if (ids.length && isApp) {
+    const via = text.match(/(?:via|through|to|from|qua|using)\s+supplier\s+([a-z])\b/i), viaK = via ? 's' + via[1].toLowerCase() : null;
+    if (viaK && !SUPP[viaK]) { hqBot(`I don’t know Supplier ${esc(via[1].toUpperCase())}. The Suppliers page lists them.`); return; }
+    const items = [], errs = [];
+    ids.forEach(id => {
+      if (viaK && id.startsWith('PO-')) { const o = PO.find(x => x.id === id); if (!o) { errs.push(`I can’t find ${id}.`); return; } const r = routesVia(o, viaK); if (r.err) { errs.push(`${id}: ${r.err}`); return; } items.push({id, approve:true, routes:r.q}); }
+      else items.push({id, approve:true});
+    });
+    if (errs.length) hqBot(errs.map(esc).join('<br>'));
+    if (items.length) buildDecision(items);
+    return;
+  }
+  if (ids.length && isRej) {
+    if (isRej) {
+      const m = text.match(/(?:because|reason:?|lý do:?|\svì|sebab)\s+(.+)$/i);
+      if (!m) { S.cdraft = {ids}; hqBot(`What reason should the outlet see for ${esc(ids.join(', '))}? Type it, or “cancel”.`); return; }
+      buildDecision(ids.map(id => ({id, approve:false, note:m[1].trim()}))); return;
+    }
+    buildDecision(ids.map(id => ({id, approve:true}))); return;
+  }
+  if (ids.length) { hqBot(ids.map(describe).join('<br>')); return; }
+  if (/(today|how.*(going|doing)|summary|overview|tình hình|hôm nay|ringkasan)/.test(t)) { hqBot(todaySummary()); return; }
+  if (/(pending|waiting|queue|chờ duyệt)/.test(t)) { hqBot(pendingList()); return; }
+  if (/(low stock|running low|out of stock|sắp hết|habis|\slow\s)/.test(t)) { hqBot(lowList()); return; }
+  if (/(supplier order|purchase|\bpos?\b|đơn đặt)/.test(t)) { hqBot(poList()); return; }
+  if (/(sell|selling|best|top|bán chạy)/.test(t)) { hqBot(salesToday()); return; }
+  hqBot('I can summarise today, list what’s pending, show low stock and supplier orders, and approve or reject by ID. Try “how is today going?”, “approve R-1048” or “reject PO-0313 because prawns on hand cover two more days”.');
+}
+function describe(id){
+  if (id.startsWith('R-')) {
+    const r = REQ.find(x => x.id === id); if (!r) return `I can’t find ${esc(id)}.`;
+    const i = IB(r.ing);
+    return `<b>${r.id}</b> · ${TYPE[r.type]} · ${esc(i.name)} ${fd(r.ing, reqDelta(r))} · by ${esc(uName(r.by))} · ${r.status === 'pending' ? 'waiting ' + age(r.at) : r.status} · “${esc(r.reason)}”` + (r.status === 'pending' ? chipsFor(r.id) : '');
+  }
+  const o = PO.find(x => x.id === id); if (!o) return `I can’t find ${esc(id)}.`;
+  let alt = '';
+  if (o.status === 'pending') { const a = altRoutes(o); if (a.length) alt = `<br>Other routes: ${a.map(x => `${esc(supName(x.sup))} ${rm(x.total)}${x.onTime ? '' : ' (late)'}`).join(', ')}<div class="chips">${a.slice(0, 2).map(x => `<button type="button" class="chip" data-act="hq-ask" data-v="Approve ${o.id} via ${esc(supName(x.sup))}">Approve via ${esc(supName(x.sup))}</button>`).join('')}</div>`; }
+  return `<b>${o.id}</b> · ${esc(supName(o.sup))} · ${o.lines.map(l => esc(IB(l.ing).name) + ' ' + fq(l.ing, l.packs * l.pack)).join(', ')} · ${rm(o.total)} · arrives ${dshort(nextDelivery(o.sup))} · ${PO_ST[o.status][1].toLowerCase()}` + alt + (o.status === 'pending' ? chipsFor(o.id) : '');
+}
+function todaySummary(){
+  const d = DAYS[DAYS.length - 1], lw = DAYS[DAYS.length - 8], h = NOW.getHours();
+  const part = x => x.hourly.reduce((s, v, i) => s + (HOURS[i] <= h ? v : 0), 0);
+  const rev = part(d), lwRev = part(lw);
+  const pend = REQ.filter(r => r.status === 'pending'), stale = pend.filter(r => reqFlags(r).includes('stale'));
+  const pos = PO.filter(o => o.status === 'pending'), posSum = r2(pos.reduce((s, o) => s + o.total, 0));
+  const low = ING.filter(i => i.onHand <= i.low), cl = CLOSES.filter(c => c.cnt !== c.exp && !c.reviewed);
+  const L = [];
+  if (rev > 0) { const ch = lwRev ? (rev - lwRev) / lwRev : 0; L.push(`Revenue <b>${rm0(rev)}</b> from about ${Math.round(d.orders * rev / d.rev)} orders, ${ch >= 0 ? 'up' : 'down'} ${pct(Math.abs(ch))} on last ${lw.day.toLocaleDateString('en-GB', {weekday:'long'})} at the same time. Gross margin ${pct(d.gp / d.rev)}.`); }
+  else L.push('No sales yet today.');
+  L.push(`<b>${pend.length}</b> stock request${pend.length === 1 ? '' : 's'} waiting${stale.length ? `, ${stale.length} older than 4 h (${stale.map(r => r.id).join(', ')})` : ''}. <a href="#approvals">Open approvals</a>`);
+  L.push(`<b>${pos.length}</b> supplier order${pos.length === 1 ? '' : 's'} waiting, ${rm(posSum)} in total. <a href="#purchases">Open supplier orders</a>`);
+  L.push(low.length ? `Low stock: ${low.map(i => `${esc(i.name)} (${fq(i.id, i.onHand)})`).join(', ')}.` : 'No ingredient is below its low-stock level.');
+  if (cl.length) L.push(`${cl.length} register close${cl.length === 1 ? '' : 's'} with over/short to review. <a href="#closes">Open closes</a>`);
+  return `<b>Today so far, to ${tm(NOW)}</b> · [Pilot outlet] · sample figures<ul>${L.map(l => `<li>${l}</li>`).join('')}</ul><div class="chips"><button type="button" class="chip" data-act="hq-ask" data-v="What’s pending?">What’s pending?</button><button type="button" class="chip" data-act="hq-ask" data-v="Show low stock">Show low stock</button></div>`;
+}
+function pendingList(){
+  const pend = REQ.filter(r => r.status === 'pending').sort((a, b) => a.at - b.at), pos = PO.filter(o => o.status === 'pending').sort((a, b) => a.at - b.at);
+  if (!pend.length && !pos.length) return 'Nothing is waiting for a decision.';
+  const rq = pend.map(r => { const fl = reqFlags(r).filter(f => f !== 'self'); return `<li><b>${r.id}</b> ${TYPE[r.type]} · ${esc(IB(r.ing).name)} ${fd(r.ing, reqDelta(r))} · ${age(r.at)}${fl.length ? ' · ' + fl.map(f => FLAG[f][1].toLowerCase()).join(', ') : ''}${r.by === S.user ? ' · your request' : ''}</li>`; }).join('');
+  const po = pos.map(o => `<li><b>${o.id}</b> ${esc(supName(o.sup))} · ${o.lines.map(l => esc(IB(l.ing).name)).join(', ')} · ${rm(o.total)} · ${age(o.at)}</li>`).join('');
+  const clean = pend.filter(r => !reqFlags(r).length);
+  return `${pend.length ? `<b>Stock requests (${pend.length})</b><ul>${rq}</ul>` : ''}${pos.length ? `<b style="display:block;margin-top:8px">Supplier orders (${pos.length})</b><ul>${po}</ul>` : ''}<div class="chips">${clean.slice(0, 2).map(r => `<button type="button" class="chip" data-act="hq-ask" data-v="Approve ${r.id}">Approve ${r.id}</button>`).join('')}${pos.slice(0, 2).map(o => `<button type="button" class="chip" data-act="hq-ask" data-v="Approve ${o.id}">Approve ${o.id}</button>`).join('')}</div>`;
+}
+function lowList(){
+  const low = ING.filter(i => i.onHand <= i.low);
+  if (!low.length) return 'No ingredient is below its low-stock level.';
+  return `<b>Low stock at [Pilot outlet]</b><ul>${low.map(i => `<li>${esc(i.name)}: ${fq(i.id, i.onHand)} (alert at ${fq(i.id, i.low)})${USE[i.id] ? ` · about ${(i.onHand / USE[i.id]).toFixed(1)} days of cover` : ''}${PO.some(o => o.status === 'pending' && o.lines.some(l => l.ing === i.id)) ? ' · supplier order waiting' : ''}</li>`).join('')}</ul>`;
+}
+function poList(){ return `<b>Supplier orders</b><ul>${PO.slice().sort((a, b) => b.at - a.at).map(o => `<li><b>${o.id}</b> ${esc(supName(o.sup))} · ${rm(o.total)} · ${PO_ST[o.status][1].toLowerCase()}${o.status === 'rejected' && o.note ? ` — “${esc(o.note)}”` : ''}</li>`).join('')}</ul>`; }
+function salesToday(){ const d = DAYS[DAYS.length - 1]; const c = Object.entries(d.cats).sort((a, b) => b[1] - a[1]); return `Today’s sales mix by category: ${c.map(([k, v]) => `${CAT[k]} ${pct(v / d.rev)}`).join(', ')}. Dish-level detail comes from the till’s sales report.`; }
+function effectOf(it){
+  if (it.id.startsWith('R-')) { const r = REQ.find(x => x.id === it.id), i = IB(r.ing), d = reqDelta(r); return it.approve ? `${i.name} ${fq(r.ing, i.onHand)} → ${fq(r.ing, r3(i.onHand + d))}` : `No stock change. Outlet sees: “${it.note}”`; }
+  const o = PO.find(x => x.id === it.id);
+  if (!it.approve) return `Not sent. Outlet sees: “${it.note}”`;
+  const g = groupPlan(planFor(o, it.routes || o.lines.map(l => l.qid)), o.needed), tot = r2(g.reduce((s, x) => s + x.total, 0));
+  return `Send ${rm(tot)} to ${g.map(x => supName(x.sup)).join(' + ')}${g[0].sup !== o.sup ? ` (rerouted from ${supName(o.sup)}, was ${rm(o.total)})` : ''} · arrives ${dshort(g[0].next)}${g.some(x => !x.onTime) ? ' · after needed date' : ''}`;
+}
+function buildDecision(items){
+  const ok = [], errs = [];
+  items.forEach(it => { const err = it.id.startsWith('R-') ? checkReq(it.id, it.approve) : checkPO(it.id); if (err) errs.push(esc(err)); else ok.push(Object.assign(it, {effect:effectOf(it)})); });
+  if (errs.length) hqBot(errs.join('<br>'));
+  if (!ok.length) return;
+  const pid = 'c' + (S.seq++); S.cprops[pid] = {items:ok, status:'pending'}; S.chat.push({role:'card', pid});
+}
+function cardHTML(pid){
+  const p = S.cprops[pid], n = p.items.length;
+  const badge = {pending:'<span class="badge b-warn">Needs your confirmation</span>', applied:'<span class="badge b-ok">Done</span>', cancelled:'<span class="badge b-mute">Cancelled</span>'}[p.status];
+  const rows = p.items.map(it => {
+    let sub; if (it.id.startsWith('R-')) { const r = REQ.find(x => x.id === it.id); sub = `${TYPE[r.type]} · ${esc(IB(r.ing).name)}`; } else { const o = PO.find(x => x.id === it.id); sub = `${esc(supName(o.sup))} · ${rm(o.total)}`; }
+    return `<tr><td><b>${it.id}</b><br><span class="note">${sub}</span></td><td>${it.approve ? '<span class="badge b-ok">Approve</span>' : '<span class="badge b-bad">Reject</span>'}</td><td>${esc(it.effect)}</td></tr>`;
+  }).join('');
+  const foot = p.status === 'pending' ? `<div style="display:flex;gap:8px"><button type="button" class="btn primary" style="flex:1" data-act="hq-ok" data-v="${pid}">Confirm ${n} decision${n > 1 ? 's' : ''}</button><button type="button" class="btn" data-act="hq-no" data-v="${pid}">Cancel</button></div>` : p.status === 'applied' ? `<div class="note">${p.results.map(esc).join('<br>')}</div>` : '';
+  return `<div class="dcard"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b>Decision${n > 1 ? 's' : ''} to confirm</b>${badge}</div><div class="tbl"><table><thead><tr><th>Item</th><th>Action</th><th>Effect</th></tr></thead><tbody>${rows}</tbody></table></div>${foot}</div>`;
+}
+function chatHTML(){ return S.chat.map(m => m.role === 'me' ? `<div class="me">${esc(m.text)}</div>` : m.role === 'bot' ? `<div class="bot">${m.html}</div>` : cardHTML(m.pid)).join(''); }
+
+/* audit */
+function auditRows(){
+  const q = S.auditQ.toLowerCase();
+  return AUDIT.slice().reverse().filter(a => (S.auditType === 'all' || a.type === S.auditType) && (!q || (a.text + a.user).toLowerCase().includes(q)));
+}
+function vAudit(){
+  const types = ['all', ...new Set(AUDIT.map(a => a.type))];
+  return `<div class="ph"><div><h1>Audit log</h1><p>Every approval, catalogue, menu, supplier, user and assistant change, with who and when.</p></div><button type="button" class="btn" data-act="copycsv" ${can('Copy audit log') ? '' : 'disabled'}>Copy as CSV</button></div>
+  ${lockNote('Copy audit log')}
+  <div style="display:flex;gap:12px;flex-wrap:wrap"><label class="field">Type<select data-chg="atype">${types.map(t => `<option value="${t}" ${t === S.auditType ? 'selected' : ''}>${t === 'all' ? 'All types' : t}</option>`).join('')}</select></label><label class="field" style="flex:1;min-width:200px">Search<input type="search" value="${esc(S.auditQ)}" data-inp="auditQ" placeholder="Ingredient, user, request ID"></label></div>
+  <div class="tbl"><table><thead><tr><th>When</th><th>User</th><th>Type</th><th>Change</th></tr></thead><tbody id="auditBody">${auditBody()}</tbody></table></div>
+  <textarea id="csvOut" class="sr" aria-hidden="true" tabindex="-1"></textarea>`;
+}
+function auditBody(){ const rows = auditRows(); return rows.map(a => `<tr><td>${dt(a.at)}</td><td>${esc(a.user)}</td><td><span class="badge b-mute">${esc(a.type)}</span></td><td>${esc(a.text)}</td></tr>`).join('') || '<tr><td colspan="4"><div class="empty">No entries match.</div></td></tr>'; }
+
+/* ---------------- dialogs ---------------- */
+let opener = null;
+const xBtn = () => `<button type="button" class="x" data-act="dlg-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>`;
+function openDlg(html){ opener = document.activeElement; $('#dlgBox').innerHTML = html; $('#dlg').hidden = false; const f = $('#dlgBox').querySelector('input:not([readonly]), select, button.primary'); if (f) f.focus(); }
+function closeDlg(){ $('#dlg').hidden = true; draft = null; if (opener && document.body.contains(opener)) opener.focus(); }
+
+/* ---------------- events ---------------- */
+document.addEventListener('click', e => {
+  if (e.target.id === 'dlg') { closeDlg(); return; }
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
+  const a = el.dataset.act, v = el.dataset.v;
+  switch (a) {
+    case 'switch': S.user = v; render(); toast('Signed in as ' + me().name + ' (' + ROLES[me().role] + ')'); break;
+    case 'period': S.period = v; render(); break;
+    case 'reqtab': S.reqTab = v; S.reqSel = null; render(); break;
+    case 'reqflag': S.reqFlags = S.reqFlags.includes(v) ? S.reqFlags.filter(x => x !== v) : S.reqFlags.concat(v); S.reqSel = null; render(); break;
+    case 'req': S.reqSel = v; render(); break;
+    case 'approve': case 'reject': {
+      const note = (($('#decNote') || {}).value || '').trim();
+      const res = decideReq(v, a === 'approve', note);
+      if (!res.ok) { toast(res.msg); if (a === 'reject' && !note && $('#decNote')) $('#decNote').focus(); break; }
+      const next = REQ.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
+      S.reqSel = S.reqTab === 'pending' ? (next ? next.id : null) : v;
+      render(); toast(res.msg); break; }
+    case 'potab': S.poTab = v; S.poSel = null; render(); break;
+    case 'pocheap': { const o = PO.find(x => x.id === S.poSel); if (!o) break; getRoute(o); S.poRoute.q = cheapestOnTime(o); render(); toast('Routed each line to the cheapest supplier that delivers on time'); break; }
+    case 'poreset': S.poRoute = null; render(); break;
+    case 'suppf': S.suppFilter = v; render(); break;
+    case 'newsup': supForm(null); break;
+    case 'editsup': supForm(v); break;
+    case 'savesup': {
+      const k = $('#supForm').dataset.k, name = $('#s_name').value.trim(), cat = $('#s_cat').value.trim(), lead = Math.max(0, Math.round(Number($('#s_lead').value) || 0)), min = Math.max(0, Number($('#s_min').value) || 0), via = $('#s_via').value, days = [...document.querySelectorAll('.s_day:checked')].map(x => Number(x.value));
+      if (!name) { $('#s_err').textContent = 'Give the supplier a name.'; $('#s_name').focus(); break; }
+      if (!days.length) { $('#s_err').textContent = 'Pick at least one delivery day.'; break; }
+      const key = k || 's' + (S.seq++);
+      SUPP[key] = name + (cat ? ' · ' + cat : '');
+      SUPINFO[key] = Object.assign(SUPINFO[key] || {active:true}, {lead, min, via, days});
+      audit('Supplier', `${k ? 'Updated' : 'Added'} ${name} · lead ${lead} d · min ${rm(min)} · ${via}`);
+      closeDlg(); render(); toast(k ? `${name} updated` : `${name} added · add quotes to route ingredients to them`); break; }
+    case 'togsup': {
+      const s = SUPINFO[v]; s.active = !s.active;
+      const moved = [], stuck = [];
+      if (!s.active) QUOTES.filter(q => q.sup === v && q.route).forEach(q => {
+        const alt = QUOTES.filter(x => x.ing === q.ing && x.sup !== v && SUPINFO[x.sup].active).sort((a, b) => a.price / a.pack - b.price / b.pack)[0];
+        if (alt) { q.route = false; alt.route = true; moved.push(`${IB(q.ing).name} → ${supName(alt.sup)}`); } else stuck.push(IB(q.ing).name);
+      });
+      audit('Supplier', `${supName(v)} ${s.active ? 'reactivated' : 'deactivated'}${moved.length ? ' · routes moved: ' + moved.join(', ') : ''}`);
+      render(); toast(`${supName(v)} ${s.active ? 'is active again' : 'deactivated'}${moved.length ? ' · routes moved: ' + moved.join(', ') : ''}${stuck.length ? ' · no other supplier for ' + stuck.join(', ') : ''}`); break; }
+    case 'po': S.poSel = v; render(); break;
+    case 'po-ok': case 'po-no': {
+      const note = (($('#poNote') || {}).value || '').trim();
+      const res = decidePO(v, a === 'po-ok', note, S.poRoute && S.poRoute.id === v ? S.poRoute.q : null);
+      if (res.ok) S.poRoute = null;
+      if (!res.ok) { toast(res.msg); if (a === 'po-no' && !note && $('#poNote')) $('#poNote').focus(); break; }
+      const next = PO.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
+      S.poSel = S.poTab === 'pending' ? (next ? next.id : null) : v;
+      render(); toast(res.msg); break; }
+    case 'hq-send': { const ta = $('#hqIn'); hqSend(ta ? ta.value : ''); break; }
+    case 'hq-ask': hqSend(v); break;
+    case 'hq-ok': {
+      const p = S.cprops[v]; if (!p || p.status !== 'pending') break;
+      p.results = p.items.map(it => (it.id.startsWith('R-') ? decideReq(it.id, it.approve, it.note || '') : decidePO(it.id, it.approve, it.note || '', it.routes || null)).msg);
+      p.status = 'applied'; render(); toast(p.results.join(' · ')); break; }
+    case 'hq-no': { const p = S.cprops[v]; if (p && p.status === 'pending') p.status = 'cancelled'; render(); break; }
+    case 'editdish': openDish(v); break;
+    case 'addline': draft.recipe.push([ING[0].id, 0]); renderDish(); break;
+    case 'rmline': draft.recipe.splice(Number(el.dataset.k), 1); renderDish(); break;
+    case 'savedish': {
+      const m = MENU.find(x => x.id === draft.id), ch = [];
+      const rec = draft.recipe.filter(([, q]) => Number(q) > 0).map(([id, q]) => [id, Number(q)]);
+      if (!(Number(draft.price) > 0)) { toast('Enter a price above zero'); break; }
+      if (Number(draft.price) !== m.price) ch.push(`price ${rm(m.price)} → ${rm(Number(draft.price))}`);
+      if (JSON.stringify(rec) !== JSON.stringify(m.recipe)) ch.push('recipe updated');
+      if ((draft.grab || null) !== m.grab || (draft.fp || null) !== m.fp) ch.push('channel prices updated');
+      m.price = r2(Number(draft.price)); m.recipe = rec; m.grab = draft.grab || null; m.fp = draft.fp || null;
+      if (ch.length) audit('Menu', `${m.name} · ${ch.join(', ')}`);
+      closeDlg(); render(); toast(ch.length ? `${m.name} saved · tills update on next sync` : 'No changes');
+      break; }
+    case 'newing': ingForm(null); break;
+    case 'editing': ingForm(IB(v)); break;
+    case 'saveing': {
+      const id = $('#ingForm').dataset.id, name = $('#f_name').value.trim(), unit = $('#f_unit').value, low = Number($('#f_low').value) || 0, c = $('#f_cost').value;
+      if (!name) { toast('Give the ingredient a name'); $('#f_name').focus(); break; }
+      if (!id && ING.some(i => i.name.toLowerCase() === name.toLowerCase())) { toast(`${name} is already in the catalogue`); break; }
+      if (id) { const i = IB(id); i.unit = unit; i.low = low; i.manual = c === '' ? null : Number(c); audit('Catalogue', `${i.name} · unit ${unit}, low at ${low}`); }
+      else { const nid = name.toLowerCase().replace(/[^a-z0-9]+/g, '_'); ING.push({id:nid, name, unit, low, onHand:0, manual:c === '' ? null : Number(c)}); audit('Catalogue', `Added ${name} (${unit})`); const fi = FLAGS_ING.findIndex(f => f.name.toLowerCase() === name.toLowerCase()); if (fi > -1) FLAGS_ING.splice(fi, 1); }
+      closeDlg(); render(); toast(id ? 'Ingredient updated' : `${name} added for every outlet`);
+      break; }
+    case 'flagadd': { const f = FLAGS_ING.find(x => x.id === v); ingForm(null, f.name); break; }
+    case 'flagno': { const k = FLAGS_ING.findIndex(x => x.id === v); const f = FLAGS_ING.splice(k, 1)[0]; audit('Catalogue', `Declined outlet request · ${f.name}`); render(); toast(`${f.name} declined · ${uName(f.by)} notified`); break; }
+    case 'newquote': quoteForm(); break;
+    case 'savequote': {
+      const q = {id:'q' + (S.seq++), sup:$('#q_sup').value, ing:$('#q_ing').value, pack:Number($('#q_pack').value), price:Number($('#q_price').value), tag:$('#q_tag').checked, route:$('#q_route').checked};
+      if (!(q.pack > 0) || !(q.price >= 0)) { toast('Enter a pack size and price'); break; }
+      if (q.tag) QUOTES.forEach(x => { if (x.ing === q.ing) x.tag = false; });
+      if (q.route) QUOTES.forEach(x => { if (x.ing === q.ing) x.route = false; });
+      if (!QUOTES.some(x => x.ing === q.ing && x.route)) q.route = true;
+      QUOTES.push(q); audit('Supplier', `Quote added · ${SUPP[q.sup].split(' · ')[0]} · ${IB(q.ing).name} ${q.pack} ${IB(q.ing).unit} ${rm(q.price)}${q.tag ? ' · tagged as cost basis' : ''}`);
+      closeDlg(); render(); toast('Quote added'); break; }
+    case 'newpromo': promoForm(); break;
+    case 'savepromo': {
+      const items = [...document.querySelectorAll('.p_item:checked')].map(x => x.value), days = [...document.querySelectorAll('.p_day:checked')].map(x => Number(x.value)), ch = [...document.querySelectorAll('.p_ch:checked')].map(x => x.value);
+      const name = $('#p_name').value.trim(), type = $('#p_type').value, val = Number($('#p_val').value), st = $('#p_start').value, en = $('#p_end').value;
+      const err = !name ? 'Give the promotion a name.' : !items.length ? 'Pick at least one dish.' : !days.length ? 'Pick at least one day.' : !ch.length ? 'Pick at least one channel.' : !(st < en) ? 'End time must be after start time.' : (type === 'pct' && (val <= 0 || val >= 100)) ? 'Percent must be between 1 and 99.' : !(val > 0) ? 'Enter a value above zero.' : '';
+      if (err) { $('#p_err').textContent = err; break; }
+      const p = {id:'p' + (S.seq++), name, type, value:val, items, days, start:st, end:en, ch, on:true}; PROMOS.push(p);
+      audit('Promotion', `Created ${name} · ${promoRule(p)}`); closeDlg(); render(); toast(`${name} created`); break; }
+    case 'togpromo': { const p = PROMOS.find(x => x.id === v); p.on = !p.on; audit('Promotion', `${p.name} ${p.on ? 'switched on' : 'switched off'}`); render(); break; }
+    case 'delpromo': { const k = PROMOS.findIndex(x => x.id === v); const p = PROMOS.splice(k, 1)[0]; audit('Promotion', `Deleted ${p.name}`); render(); toast(`${p.name} deleted`); break; }
+    case 'closeonly': S.closeOnly = !S.closeOnly; render(); break;
+    case 'review': { const c = CLOSES[Number(v)]; c.reviewed = true; c.rBy = me().name; audit('Close', `Reviewed ${c.day.toLocaleDateString('en-GB', {day:'numeric', month:'short'})} close · ${rm(r2(c.cnt - c.exp))} · ${c.reason}`); render(); toast('Close marked as reviewed'); break; }
+    case 'toguser': { const u = USERS.find(x => x.id === v); u.active = !u.active; audit('Users', `${u.name} ${u.active ? 'reactivated' : 'deactivated'}`); render(); break; }
+    case 'pin': { const u = USERS.find(x => x.id === v); audit('Users', `PIN reset for ${u.name}`); toast(`${u.name} sets a new PIN at next sign-in`); break; }
+    case 'savecap': { const c = Number($('#capIn').value); if (!(c >= 0)) break; AI.cap = c; audit('Assistant', `Monthly LLM cap set to ${rm(c)}`); render(); toast('Cap saved'); break; }
+    case 'addsyn': { const w = $('#synW').value.trim().toLowerCase(), t = $('#synT').value; if (!w) { toast('Type a word or code'); break; } if (AI.syn.some(s => s[0] === w)) { toast(`“${w}” is already mapped`); break; } AI.syn.push([w, t]); audit('Assistant', `Synonym added · “${w}” → ${t}`); render(); toast('Synonym added'); break; }
+    case 'delsyn': { const s = AI.syn.splice(Number(v), 1)[0]; audit('Assistant', `Synonym removed · “${s[0]}”`); render(); break; }
+    case 'copycsv': {
+      const rows = auditRows(), csv = ['When,User,Type,Change'].concat(rows.map(a => [dt(a.at), a.user, a.type, a.text].map(x => '"' + String(x).replace(/"/g, '""') + '"').join(','))).join('\n');
+      const done = () => toast(`${rows.length} rows copied as CSV`);
+      const fallback = () => { const ta = $('#csvOut'); ta.value = csv; ta.classList.remove('sr'); ta.style.cssText = 'width:100%;min-height:160px'; ta.removeAttribute('aria-hidden'); ta.select(); toast('Clipboard blocked — the CSV is selected below, press Ctrl/Cmd+C'); };
+      try { navigator.clipboard.writeText(csv).then(done, fallback); } catch (err) { fallback(); }
+      break; }
+    case 'dlg-close': closeDlg(); break;
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'userSel') { S.user = t.value; render(); toast('Signed in as ' + me().name + ' (' + ROLES[me().role] + ')'); return; }
+  if (t.dataset.chg === 'route') { const q = QUOTES.find(x => x.id === t.value); QUOTES.forEach(x => { if (x.ing === q.ing) x.route = x.id === q.id; }); audit('Supplier', `Route for ${IB(q.ing).name} → ${supName(q.sup)}`); render(); toast(`${IB(q.ing).name} orders now go to ${supName(q.sup)} by default`); return; }
+  if (t.dataset.chg === 'poline') { const o = PO.find(x => x.id === S.poSel); if (!o) return; getRoute(o)[Number(t.dataset.k)] = t.value; render(); return; }
+  if (t.dataset.chg === 'poall') { const o = PO.find(x => x.id === S.poSel); if (!o || !t.value) return; const r = routesVia(o, t.value); if (r.err) { toast(r.err); render(); return; } getRoute(o); S.poRoute.q = r.q; render(); toast(`Whole order routed to ${supName(t.value)}`); return; }
+  if (t.dataset.chg === 'tag') { const q = QUOTES.find(x => x.id === t.value); const before = MENU.filter(m => m.recipe.some(l => l[0] === q.ing)).map(m => [m.name, plate(m)]); QUOTES.forEach(x => { if (x.ing === q.ing) x.tag = x.id === q.id; }); audit('Supplier', `Cost basis for ${IB(q.ing).name} → ${SUPP[q.sup].split(' · ')[0]} ${rm(q.price / q.pack)}/${IB(q.ing).unit}`); render(); const ch = before.map(([n, c]) => { const m = MENU.find(x => x.name === n); return `${n} ${rm(c)} → ${rm(plate(m))}`; }); toast('Plate cost updated: ' + ch.join('; ')); return; }
+  if (t.dataset.chg === 'role') { const u = USERS.find(x => x.id === t.dataset.v); audit('Users', `${u.name} role ${ROLES[u.role]} → ${ROLES[t.value]}`); u.role = t.value; render(); toast(`${u.name} is now ${ROLES[u.role]}`); return; }
+  if (t.dataset.chg === 'atype') { S.auditType = t.value; $('#auditBody').innerHTML = auditBody(); return; }
+  if (t.dataset.dchg && draft) {
+    const k = Number(t.dataset.k), f = t.dataset.dchg;
+    if (f === 'price') draft.price = Number(t.value);
+    else if (f === 'grab' || f === 'fp') draft[f] = t.value === '' ? null : r2(Number(t.value));
+    else if (f === 'ing') draft.recipe[k][0] = t.value;
+    else if (f === 'qty') draft.recipe[k][1] = Number(t.value);
+    renderDish();
+  }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.inp === 'menuQ') { S.menuQ = t.value; const q = S.menuQ.toLowerCase(); $('#menuBody').innerHTML = menuRows(MENU.filter(m => !q || m.name.toLowerCase().includes(q))); }
+  if (t.dataset.inp === 'auditQ') { S.auditQ = t.value; $('#auditBody').innerHTML = auditBody(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#dlg').hidden) closeDlg();
+  if (e.key === 'Enter' && !e.shiftKey && e.target.id === 'hqIn') { e.preventDefault(); hqSend(e.target.value); }
+});
+document.addEventListener('submit', e => { e.preventDefault(); const b = $('#dlgBox [data-act="saveing"]'); if (b) b.click(); });
+window.addEventListener('hashchange', () => { render(); $('#view').focus({preventScroll:true}); });
+
+/* ---------------- start ---------------- */
+$('#userSel').innerHTML = USERS.filter(u => ['hq_approver','hq_admin','auditor','coo'].includes(u.role)).map(u => `<option value="${u.id}">${esc(u.name)} · ${ROLES[u.role]}</option>`).join('');
+S.chat.push({role:'bot', html:'Ask how today is going, see what’s waiting, or decide requests by ID — for example “approve R-1048” or “reject PO-0313 because prawns on hand cover two more days”. I show every decision first; nothing changes until you confirm.'});
+$('#today').textContent = NOW.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+render();
+})();
+</script>
+</body>
+</html>
