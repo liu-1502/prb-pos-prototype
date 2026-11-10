@@ -1113,11 +1113,13 @@ button:disabled{cursor:not-allowed}
    align-items:flex-start de avatar bam MEP TREN cua bong chu, khong troi
    xuong giua khi tin nhan dai. */
 .botrow{align-self:flex-start;max-width:92%;display:flex;align-items:flex-start;gap:8px}
-/* Avatar trong chat lech pha so voi nut tren bar — hai con cung nhay mot
-   nhip thi nhin ra ngay la mot vong lap. */
-.aiimg.botav{flex:none;width:38px;height:38px;margin-top:-2px;animation-delay:-2.4s}
-.botav .ai-lid{animation-delay:-3.1s}
-.botav .ai-s{animation-delay:-1.7s}
+/* Avatar trong chat DUNG YEN. Cu dong la de goi y "bam vao day di" — dung
+   cho cai nut tren bar. Trong luong chat no chi la nhan cua nguoi noi, ma
+   mot cai nhan cu nhun nhay canh moi tin nhan thi chi lam mat chu.
+   Tat animation thi mi mat ve scaleY(0) (vo hinh) va sao ve opacity 1,
+   nen avatar hien dung nhu anh goc. */
+.aiimg.botav{flex:none;width:38px;height:38px;margin-top:-2px}
+.aiimg.botav,.botav .ai-lid,.botav .ai-s{animation:none}
 /* Bong chu cua tro ly mang mau brand pha loang, khong phai xam trung tinh:
    o ban xanh thi no la xanh rat nhat. --accent 10% tren --surface — du de
    thay la "phia ben kia dang noi", chua du de doi mau chu. */
@@ -3721,7 +3723,10 @@ document.addEventListener('click', e => {
     case 'asst-open': openAsst(); break;
     case 'asst-close': closeLayer('#asstDlg'); break;
     case 'asst-tab': S.tab = v; renderAsst(); break;
-    case 'sugg': $('#asstIn').value = v; $('#asstIn').focus(); break;
+    /* Bam goi y la GUI LUON, khong phai do chu vao o roi bat bam them nut.
+       Khong mat an toan: cau goi y nao cung chi lam tro ly DE XUAT thay doi,
+       va de xuat do van phai bam Confirm moi duoc ap dung. */
+    case 'sugg': { const ta = $('#asstIn'); ta.value = ''; send(v); ta.focus(); break; }
     case 'asst-send': { const ta = $('#asstIn'); send(ta.value); ta.value = ''; ta.focus(); break; }
     case 'chip': {
       const m = S.thread[Number(el.dataset.m)]; if (!m || m.used || !S.draft) break;
