@@ -761,7 +761,13 @@ button:disabled{cursor:not-allowed}
 .ov2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:stretch}
 /* Hang bieu do: cot dung can be ngang hon danh sach chu thich cua donut. */
 .ov2.ov2c{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
-.ovp{padding:16px 18px 18px;border-radius:20px;border:0;background:var(--surface)}
+/* Hai the tren cung mot hang cao bang nhau (align-items:stretch), nhung noi
+   dung ben trong thi dai ngan khac nhau — the nao ngan hon se de thua mot
+   mang trong o DAY, nhin ra la hai the lech nhau. Cho moi the la mot cot
+   flex, phan noi dung chinh an het cho con lai va tu can giua. */
+.ovp{padding:16px 18px 18px;border-radius:20px;border:0;background:var(--surface);display:flex;flex-direction:column}
+.ovp .dn{flex:1}
+.ovp .vb{margin-top:auto}
 .ovp h3{margin:0 0 4px;font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
 .ovi{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .ovi .n{font-size:14px;font-weight:600;color:var(--ink)}
