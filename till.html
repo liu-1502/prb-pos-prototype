@@ -1174,7 +1174,9 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 .stk-out .r{display:flex;align-items:baseline;gap:10px;min-height:44px;padding:0 14px;border-radius:var(--r-md);background:var(--surface-2)}
 .stk-out .r b{font-size:15px;font-weight:600}
 .composer{border-top:1px solid var(--line);padding:12px 20px 16px;display:flex;flex-direction:column;gap:10px}
-.sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+/* Duong ke tach HAI VIEC khac nhau: hang tren la cau co san bam la gui
+   luon, hang duoi la tu go. Khong co no thi hai hang doc ra nhu mot cum. */
+.sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;border-bottom:1px solid var(--line)}
 /* Goi y la nut BAM DUOC, nen no mang duong vien chu khong phai mot mang
    nen: trong khung chat, mot mang nen kem nam ngay duoi bong chu cua tro
    ly (cung mau --surface-2) doc ra nhu mot tin nhan nua, khong phai nut. */
@@ -2275,7 +2277,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
       <div class="composer" id="composer">
         <div class="sugg" id="sugg"></div>
         <div class="comp-row">
-          <label class="field">Instruction<textarea id="asstIn" rows="1" placeholder="e.g. write off 0.5 kg prawns, spoiled"></textarea></label>
+          <label class="field"><span class="sr">Instruction</span><textarea id="asstIn" rows="1" placeholder="e.g. write off 0.5 kg prawns, spoiled"></textarea></label>
           <button type="button" class="btn dark" data-act="asst-send" aria-label="Send instruction" style="width:52px;padding:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
         </div>
       </div>
