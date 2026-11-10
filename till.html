@@ -308,6 +308,10 @@ button:disabled{cursor:not-allowed}
    truc tiep cua luoi nhu cu, bo cuc nau khong doi mot pixel nao. */
 .catsrow{display:contents}
 .cscroll{display:none}
+/* Icon mon an la EMOJI mau, khong phai net ve: chung giu mau rieng nen
+   khong doi theo mau chu cua chip — do la y do, mot bang mau de phan biet
+   nhom mon. Chip "All" van la icon luoi ve net vi no khong phai mot mon an. */
+.cemo{flex:none;font-size:20px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .cat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:92px;height:76px;border-radius:var(--r-lg);border:0;background:transparent;color:var(--muted);font-size:12px;font-weight:600}
 .cat[aria-pressed="true"]{background:var(--warm);color:var(--warm-ink)}
 .menu{display:flex;flex-direction:column;gap:14px;min-width:0}
@@ -1846,10 +1850,18 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .dish.in::after{border-color:var(--accent-ink)}
 :root[data-theme="yellow"] .dish.off{background:#f5f5f5;box-shadow:inset 0 0 0 1.5px var(--line)}
 :root[data-theme="yellow"] .unav{background:#ebebeb}
-/* Chip KHONG dung vien: nen kem am. Day la cho ban vang khac han ban xanh. */
-:root[data-theme="yellow"] .cat{background:var(--surface-2);box-shadow:none;color:var(--accent-ink)}
-:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:var(--surface-2);color:var(--accent-ink);opacity:1}
+/* Chip KHONG dung vien: nen kem am, tach ra bang BONG NOI mem chu khong
+   bang mot duong ke. Bong hai lop — mot lop sat de ta be day, mot lop toa
+   rong de ta do cao; mot lop thi hoac qua cung hoac qua mo. */
+:root[data-theme="yellow"] .cat{background:#f7f3ef;color:var(--accent-ink);box-shadow:0 1px 2px rgba(0,0,0,.05), 0 5px 12px rgba(0,0,0,.055)}
+/* Chip dang chon: vang CHUYEN SAC nhe (sang o tren, dam o duoi) nen no doc ra
+   la mot nut loi; bong an theo mau vang chu khong phai xam, neu khong vien
+   bong se ra mot quang xam ban quanh mang vang. */
+:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:linear-gradient(180deg,#ffc940,#f6a81f);color:#171717;box-shadow:0 1px 2px rgba(0,0,0,.08), 0 6px 14px rgba(246,168,31,.38)}
+:root[data-theme="yellow"] .cat .cc{background:#e7e3df;color:#6b6b6b}
+/* Badge tren chip dang chon: nen TRANG dac. Mot lop trang mo tren nen vang
+   se ra mau vang nhat, doc nhu mot badge bi mo di. */
+:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:#ffffff;color:#171717;opacity:1}
 :root[data-theme="yellow"] .ri,
 :root[data-theme="yellow"] .rail .ib{color:#ffffff;border-radius:16px}
 /* Cung cach, nhung 15% — rail vang sang hon rail nau nhieu nen 5% se mat hut. */
@@ -2269,10 +2281,10 @@ ALIAS.sort((x,y) => y.a.length - x.a.length);
 
 const CATS = [
   {id:'all', label:'All', icon:'<rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\"></rect><rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\"></rect><rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\"></rect><rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\"></rect>'},
-  {id:'rice', label:'Rice', icon:'<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"></path><path d=\"M7 2v20\"></path><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"></path>'},
-  {id:'noodles', label:'Noodles', icon:'<path d=\"M11.248 3c.273.1.808.53.747 1.36-.05.83-.938 1.2-.989 2.02-.06.78.333 1.24.727 1.62\"></path><path d=\"M16.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.725 1.62\"></path><path d=\"M19.5 12 22 6\"></path><path d=\"M4 12a1 1 0 00-.99 1.133A9 9 0 0012 21a9 9 0 008.99-7.867A1 1 0 0020 12z\"></path><path d=\"M6.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.735 1.62\"></path><path d=\"M7 21h10\"></path>'},
-  {id:'roti', label:'Roti', icon:'<path d=\"M11 17h.01\"></path><path d=\"M11.496 2c.324-.016.558.292.529.615a4 4 0 004.235 4.368.713.713 0 01.758.757 4 4 0 004.366 4.237c.323-.03.63.204.614.527a10 10 0 01-2.915 6.566A1 1 0 114.93 4.918 10 10 0 0111.496 2\"></path><path d=\"M12 12h.01\"></path><path d=\"M16 16h.01\"></path><path d=\"M16 3h.01\"></path><path d=\"M21 4h.01\"></path><path d=\"M21 8h.01\"></path><path d=\"M7 14h.01\"></path><path d=\"M9 8h.01\"></path>'},
-  {id:'drinks', label:'Drinks', icon:'<path d=\"m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8\"></path><path d=\"M5 8h14\"></path><path d=\"M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0\"></path><path d=\"m12 8 1-6h2\"></path>'}
+  {id:'rice', emo:'🍴', label:'Rice', icon:'<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"></path><path d=\"M7 2v20\"></path><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"></path>'},
+  {id:'noodles', emo:'🍜', label:'Noodles', icon:'<path d=\"M11.248 3c.273.1.808.53.747 1.36-.05.83-.938 1.2-.989 2.02-.06.78.333 1.24.727 1.62\"></path><path d=\"M16.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.725 1.62\"></path><path d=\"M19.5 12 22 6\"></path><path d=\"M4 12a1 1 0 00-.99 1.133A9 9 0 0012 21a9 9 0 008.99-7.867A1 1 0 0020 12z\"></path><path d=\"M6.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.735 1.62\"></path><path d=\"M7 21h10\"></path>'},
+  {id:'roti', emo:'🍪', label:'Roti', icon:'<path d=\"M11 17h.01\"></path><path d=\"M11.496 2c.324-.016.558.292.529.615a4 4 0 004.235 4.368.713.713 0 01.758.757 4 4 0 004.366 4.237c.323-.03.63.204.614.527a10 10 0 01-2.915 6.566A1 1 0 114.93 4.918 10 10 0 0111.496 2\"></path><path d=\"M12 12h.01\"></path><path d=\"M16 16h.01\"></path><path d=\"M16 3h.01\"></path><path d=\"M21 4h.01\"></path><path d=\"M21 8h.01\"></path><path d=\"M7 14h.01\"></path><path d=\"M9 8h.01\"></path>'},
+  {id:'drinks', emo:'🥤', label:'Drinks', icon:'<path d=\"m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8\"></path><path d=\"M5 8h14\"></path><path d=\"M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0\"></path><path d=\"m12 8 1-6h2\"></path>'}
 ];
 
 const S = {
@@ -2545,7 +2557,7 @@ function syncCats(){
 function renderCats(){
   /* So mon moi nhom. Theme nau an con so nay bang CSS, theme do hien no tren the. */
   const n = id => (id === 'all' ? MENU.length : MENU.filter(m => m.cat === id).length);
-  $('#cats').innerHTML = CATS.map(c => `<button type="button" class="cat" data-act="cat" data-v="${c.id}" aria-pressed="${S.cat === c.id}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.64" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${c.icon}</svg><span class="cl">${c.label}</span><span class="cc">${n(c.id)}</span></button>`).join('');
+  $('#cats').innerHTML = CATS.map(c => `<button type="button" class="cat" data-act="cat" data-v="${c.id}" aria-pressed="${S.cat === c.id}">${c.emo ? '' : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.64" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${c.icon}</svg>`}${c.emo ? `<span class="cemo" aria-hidden="true">${c.emo}</span>` : ''}<span class="cl">${c.label}</span><span class="cc">${n(c.id)}</span></button>`).join('');
   syncCats();
 }
 function renderGrid(){
