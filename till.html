@@ -441,7 +441,15 @@ button:disabled{cursor:not-allowed}
    trong hang tab. Ten day du van con o aria-label + title.
    Mask doi tu `10px 0 0` (mot khoi vuong lech phai) sang `0 0 0 8px` — mot
    vanh --bg bao quanh, khop voi hinh tron va che duoc tab truot vao tu moi phia. */
-.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px auto;padding:0;border:0;border-radius:var(--r-pill);background:var(--surface-2);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px var(--bg)}
+/* Nut + di NGAY SAU tab vua tao, khong phai ghim o goc phai: no la "them
+   mot tab nua", nen cho cua no la cuoi hang tab. margin-left KHONG phai auto
+   — auto la thu day no sang tan mep du hang tab con ngan.
+   position:sticky;right:0 chi co tac dung KHI hang tab tran: luc do no dinh
+   lai o mep phai de van bam duoc. Hang ngan thi sticky khong lam gi ca.
+   Nen la --bg (dung mau nen cua hang tab) chu khong phai mot the TRANG: khi
+   hang tran, tab chay o duoi no va phai bi che, nhung che bang chinh mau nen
+   thi khong ai thay o day co mot mang mau la. */
+.onew{position:sticky;right:0;flex:none;width:40px;height:40px;margin:0 2px 3px;padding:0;border:0;border-radius:var(--r-pill);background:var(--bg);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px var(--bg)}
 .onew::before{content:"";position:absolute;inset:-4px}
 .onew:hover{background:var(--accent);color:var(--accent-ink)}
 /* Hang 1: ten don (trai) + chon Dine-in/Takeaway (phai). Hang 2: so the.
@@ -1445,7 +1453,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    huong, vien o day bien moi muc thanh mot cai hop roi rac. Can selector nay
    vi :root[data-layout="modern"] .ib (0,3,0) thang .rail .ib (0,2,0). */
 :root[data-layout="modern"] .rail .ib{border:0;background:transparent}
-:root[data-layout="modern"] .onew{background:var(--surface)}
+:root[data-layout="modern"] .onew{background:var(--bg);box-shadow:0 0 0 6px var(--bg)}
 :root[data-layout="modern"] .onew:hover{background:var(--accent);color:var(--accent-ink)}
 :root[data-layout="modern"] .cat{position:relative;overflow:hidden;background:var(--surface);border:0;border-radius:var(--r-pill);color:var(--ink);box-shadow:var(--card-shadow)}
 :root[data-layout="modern"] .cat[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
