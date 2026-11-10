@@ -988,7 +988,6 @@ button:disabled{cursor:not-allowed}
    Ma mau co dinh, khong lay tu --ok: o theme xanh la --ok la mau XANH DUONG. */
 .hpill.paid{background:color-mix(in srgb, var(--ink) 8%, var(--surface));color:var(--ink)}
 .hpill.sent{background:#fff1d8;color:#7a4f00}
-.hpill.ready{background:#e4f2e6;color:#17652f}
 .hpill.served{background:var(--surface);color:#17652f;box-shadow:inset 0 0 0 1.5px #bcdcc4}
 /* Tren the don o man Orders: nho hon, vi o do no di kem ma don chu khong
    phai mot cot rieng. */
@@ -2291,11 +2290,10 @@ S.po = []; S.poNext = 311;
 /* VONG DOI MOT DON, bon moc theo dung thu tu. Khai bao MOT cho de badge,
    bo loc, day moc trang thai va du lieu mau khong the lech nhau.
    kAt / rAt / sAt la gio cua tung moc — moc nao chua toi thi null. */
-const OST_SEQ = ['paid', 'sent', 'ready', 'served'];
+const OST_SEQ = ['paid', 'sent', 'served'];
 const OST = {
   paid:   {lbl:'Not sent',   step:'Not sent to kitchen', at:null},
   sent:   {lbl:'In kitchen', step:'Sent to kitchen',     at:'kAt'},
-  ready:  {lbl:'Ready',      step:'Ready',               at:'rAt'},
   served: {lbl:'Served',     step:'Served',              at:'sAt'}
 };
 const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
@@ -2314,8 +2312,7 @@ const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
       by: no % 3 === 0 ? 'Farid' : 'Aina',
       status,
       kAt: OST_SEQ.indexOf(status) >= 1 ? hm(new Date(d.getTime() + 90000)) : null,
-      rAt: OST_SEQ.indexOf(status) >= 2 ? hm(new Date(d.getTime() + 9 * 60000)) : null,
-      sAt: OST_SEQ.indexOf(status) >= 3 ? hm(new Date(d.getTime() + 12 * 60000)) : null};
+      sAt: OST_SEQ.indexOf(status) >= 2 ? hm(new Date(d.getTime() + 12 * 60000)) : null};
   };
   S.done = [
     mk(141, 'dine', '12', [['nlag',2],['teh',2,'Less sweet']], 'cash', 6, 'paid'),
@@ -2324,12 +2321,12 @@ const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
     mk(131, 'take', '',   [['roti',8],['teh',4]], 'cash', 19, 'paid'),
     mk(130, 'dine', '15', [['nlb',1],['kopi',1]], 'qr', 27, 'sent'),
     mk(129, 'dine', '6',  [['hainan',2],['ngk',1],['mee',1],['teh',3],['roti',5],['milo',2]], 'card', 41, 'sent', 'Two bills, split by table'),
-    mk(128, 'take', '',   [['rtelur',1]], 'cash', 55, 'ready'),
-    mk(127, 'dine', '1',  [['ckt',1],['laksa',2],['kopi',2]], 'qr', 69, 'ready'),
+    mk(128, 'take', '',   [['rtelur',1]], 'cash', 55, 'sent'),
+    mk(127, 'dine', '1',  [['ckt',1],['laksa',2],['kopi',2]], 'qr', 69, 'sent'),
     mk(139, 'dine', '4',  [['roti',3,'Kuah dhal'],['teh',2],['kopi',1]], 'cash', 23, 'sent'),
     mk(138, 'dine', '9',  [['mee',2],['laksa',1],['milo',3]], 'card', 35, 'sent'),
-    mk(137, 'take', '',   [['nlb',4],['rtelur',2]], 'cash', 48, 'ready'),
-    mk(136, 'dine', '2',  [['ngk',1],['hainan',1],['teh',2,'Extra hot']], 'card', 61, 'ready'),
+    mk(137, 'take', '',   [['nlb',4],['rtelur',2]], 'cash', 48, 'sent'),
+    mk(136, 'dine', '2',  [['ngk',1],['hainan',1],['teh',2,'Extra hot']], 'card', 61, 'sent'),
     mk(135, 'dine', '7',  [['nlag',1],['roti',2],['kopi',2]], 'cash', 77, 'served'),
     mk(134, 'take', '',   [['teh',6]], 'qr', 92, 'served'),
     mk(133, 'dine', '11', [['ckt',2],['mee',1],['milo',2],['roti',4]], 'card', 108, 'served')
