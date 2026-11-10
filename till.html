@@ -953,20 +953,27 @@ button:disabled{cursor:not-allowed}
 .histbl .hno{display:inline-flex;align-items:center;gap:8px}
 /* Bang rong gan 900px: de nguyen thi ten mon va gia cua mot dong nam cach
    nhau nua man, mat phai di het chieu ngang de ghep lai. */
-.histbl td.det .ord-l,.histbl td.det .ord-note{max-width:620px}
+.histbl td.det .ord-l,.histbl td.det .ord-note{max-width:460px}
+.histbl td.det .ord-l .r{text-align:left}
+.histbl td.det .ord-l .r > .num:last-child{text-align:right}
 .hchev{flex:none;color:var(--muted);transition:transform .12s ease}
 .histbl tr.hr.on .hchev{transform:rotate(180deg);color:var(--ink)}
-/* Day MOC TRANG THAI trong phan mo rong. Mau xanh la dat cung nhu .hpill.sent:
-   --ok o theme xanh la mau XANH DUONG, dung vao day se ra mot the lac long. */
-.hsteps{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 0}
-.hstep{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:var(--r-pill);font-size:12px;font-weight:600;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
-.hstep svg{flex:none}
-.hstep.done{color:#17652f}
-.hstep.wait{color:var(--ink)}
-.hstep .t{font-weight:500;color:var(--muted)}
 .hpill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:var(--r-pill);font-size:12px;font-weight:600;white-space:nowrap}
-.hpill.sent{background:#e4f2e6;color:#17652f}
+/* BON TRANG THAI, mau di theo TIEN TRINH chu khong theo "tot/xau":
+     Not sent  xam   — chua bat dau
+     In kitchen amber — dang lam, con viec cua ai do
+     Ready     xanh  — da xong, cho bung ra
+     Served    vien xanh tren nen trang — da khep lai, nhe nhat
+   Vi the "In kitchen" doi tu xanh sang amber: khi co bon buoc thi mau xanh
+   phai danh cho buoc DA XONG, khong the dung cho buoc dang chay.
+   Ma mau co dinh, khong lay tu --ok: o theme xanh la --ok la mau XANH DUONG. */
 .hpill.paid{background:color-mix(in srgb, var(--ink) 8%, var(--surface));color:var(--ink)}
+.hpill.sent{background:#fff1d8;color:#7a4f00}
+.hpill.ready{background:#e4f2e6;color:#17652f}
+.hpill.served{background:var(--surface);color:#17652f;box-shadow:inset 0 0 0 1.5px #bcdcc4}
+/* Tren the don o man Orders: nho hon, vi o do no di kem ma don chu khong
+   phai mot cot rieng. */
+.ord-top .r1 .hpill{flex:none;font-size:11px;padding:2px 9px}
 .hempty{padding:40px 16px;text-align:center;font-size:14px;color:var(--muted)}
 .paygrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 .paygrid .keys{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -2262,6 +2269,18 @@ S.po = []; S.poNext = 311;
    tinh tien theo dung cong thuc that (10% service charge cho dine-in, SST 6%,
    lam tron 5 sen) chu khong dat so bua. Hai don con o trang thai 'paid' de
    man Orders va chuong thong bao co cai de hien. */
+/* VONG DOI MOT DON, bon moc theo dung thu tu. Khai bao MOT cho de badge,
+   bo loc, day moc trang thai va du lieu mau khong the lech nhau.
+   kAt / rAt / sAt la gio cua tung moc — moc nao chua toi thi null. */
+const OST_SEQ = ['paid', 'sent', 'ready', 'served'];
+const OST = {
+  paid:   {lbl:'Not sent',   step:'Not sent to kitchen', at:null},
+  sent:   {lbl:'In kitchen', step:'Sent to kitchen',     at:'kAt'},
+  ready:  {lbl:'Ready',      step:'Ready',               at:'rAt'},
+  served: {lbl:'Served',     step:'Served',              at:'sAt'}
+};
+const ostAt = (o, k) => { const f = OST[k].at; return f ? o[f] : null; };
+
 (function seedOrders(){
   const q2 = v => Math.round(v * 100) / 100;
   const mk = (no, type, table, items, method, mins, status, note) => {
@@ -2274,7 +2293,10 @@ S.po = []; S.poNext = 311;
     const hm = x => x.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
     return {no, type, table, note:note || '', lines, total:tot, method, at:hm(d), ts:d.getTime(),
       by: no % 3 === 0 ? 'Farid' : 'Aina',
-      status, kAt: status === 'sent' ? hm(new Date(d.getTime() + 90000)) : null};
+      status,
+      kAt: OST_SEQ.indexOf(status) >= 1 ? hm(new Date(d.getTime() + 90000)) : null,
+      rAt: OST_SEQ.indexOf(status) >= 2 ? hm(new Date(d.getTime() + 9 * 60000)) : null,
+      sAt: OST_SEQ.indexOf(status) >= 3 ? hm(new Date(d.getTime() + 12 * 60000)) : null};
   };
   S.done = [
     mk(141, 'dine', '12', [['nlag',2],['teh',2,'Less sweet']], 'cash', 6, 'paid'),
@@ -2283,15 +2305,15 @@ S.po = []; S.poNext = 311;
     mk(131, 'take', '',   [['roti',8],['teh',4]], 'cash', 19, 'paid'),
     mk(130, 'dine', '15', [['nlb',1],['kopi',1]], 'qr', 27, 'sent'),
     mk(129, 'dine', '6',  [['hainan',2],['ngk',1],['mee',1],['teh',3],['roti',5],['milo',2]], 'card', 41, 'sent', 'Two bills, split by table'),
-    mk(128, 'take', '',   [['rtelur',1]], 'cash', 55, 'sent'),
-    mk(127, 'dine', '1',  [['ckt',1],['laksa',2],['kopi',2]], 'qr', 69, 'sent'),
+    mk(128, 'take', '',   [['rtelur',1]], 'cash', 55, 'ready'),
+    mk(127, 'dine', '1',  [['ckt',1],['laksa',2],['kopi',2]], 'qr', 69, 'ready'),
     mk(139, 'dine', '4',  [['roti',3,'Kuah dhal'],['teh',2],['kopi',1]], 'cash', 23, 'sent'),
     mk(138, 'dine', '9',  [['mee',2],['laksa',1],['milo',3]], 'card', 35, 'sent'),
-    mk(137, 'take', '',   [['nlb',4],['rtelur',2]], 'cash', 48, 'sent'),
-    mk(136, 'dine', '2',  [['ngk',1],['hainan',1],['teh',2,'Extra hot']], 'card', 61, 'sent'),
-    mk(135, 'dine', '7',  [['nlag',1],['roti',2],['kopi',2]], 'cash', 77, 'sent'),
-    mk(134, 'take', '',   [['teh',6]], 'qr', 92, 'sent'),
-    mk(133, 'dine', '11', [['ckt',2],['mee',1],['milo',2],['roti',4]], 'card', 108, 'sent')
+    mk(137, 'take', '',   [['nlb',4],['rtelur',2]], 'cash', 48, 'ready'),
+    mk(136, 'dine', '2',  [['ngk',1],['hainan',1],['teh',2,'Extra hot']], 'card', 61, 'ready'),
+    mk(135, 'dine', '7',  [['nlag',1],['roti',2],['kopi',2]], 'cash', 77, 'served'),
+    mk(134, 'take', '',   [['teh',6]], 'qr', 92, 'served'),
+    mk(133, 'dine', '11', [['ckt',2],['mee',1],['milo',2],['roti',4]], 'card', 108, 'served')
   ];
   /* 29 ngay truoc: lich su xem duoc 30 ngay. Sinh deterministic (khong dung
      Math.random) de moi lan mo prototype ra cung mot bo so — doi chieu duoc. */
@@ -2311,7 +2333,7 @@ S.po = []; S.poNext = 311;
       const type = (seed % 3 === 0) ? 'take' : 'dine';
       const mins = d * 1440 + 480 + (k * 95) + (seed % 60);
       S.done.push(mk(no, type, type === 'dine' ? String(1 + (seed % 15)) : '',
-        items, METHODS[seed % 3], mins, 'sent'));
+        items, METHODS[seed % 3], mins, 'served'));
     }
   }
 })();
@@ -2776,7 +2798,9 @@ const AUTO_KITCHEN = false;
 function waited(ts){ if (!ts) return ''; const m = Math.round((Date.now() - ts) / 60000); return m < 1 ? 'just now' : `waiting ${m} min`; }
 function renderOrds(){
   const wait = S.done.filter(o => o.status === 'paid');
-  const sent = S.done.filter(o => o.status === 'sent');
+  /* Tab Sent la "da xuong bep", khong phai "dang o bep": don da Ready hay
+     Served ma roi khoi ca hai tab thi chung bien mat khoi man Orders. */
+  const sent = S.done.filter(o => o.status !== 'paid');
   const his = S.ordF === 'history', q = S.hisQ.trim().toLowerCase();
   let list = his ? S.done : (S.ordF === 'sent' ? sent : wait);
   if (his && q) list = list.filter(o => ordNo(o.no).toLowerCase().includes(q) || (o.by || '').toLowerCase().includes(q) || (o.table || '').toLowerCase().includes(q) || o.lines.some(l => BY[l.id].name.toLowerCase().includes(q)));
@@ -2809,7 +2833,7 @@ function renderOrds(){
    nam trong phan bung ra — do la viec chinh cua man nay, bat nguoi ta cham hai
    lan moi toi la sai. Nut in lai thi hiem hon nen de trong chi tiet. */
 function ordCard(o){
-  const open = S.ordOpen === o.no, sent = o.status === 'sent';
+  const open = S.ordOpen === o.no, sent = o.status !== 'paid';
   /* Nhan : gia tri, hai cot. Cot trai la dieu kien cua don (ai lam, may mon,
      tra bang gi), cot phai la con so de liec: cho ngoi, tien, gio.
      BO BADGE: o tab Waiting thi ca danh sach deu la chua gui — mot cai badge
@@ -2819,7 +2843,9 @@ function ordCard(o){
   const where = o.type === 'dine' ? 'Stand ' + esc(o.table) : 'Takeaway';
   const meth = o.method === 'qr' ? 'QR' : esc(o.method);
   const wt = waited(o.ts);
-  const when = sent ? `Sent ${esc(o.kAt)}` : esc(o.at) + (wt ? ' · ' + esc(wt) : '');
+  /* Ghi moc GAN NHAT da dat, khong phai luon luon "Sent": don da Served ma
+     van in gio gui bep thi doc ra nhu no con nam o bep. */
+  const when = sent ? `${OST[o.status].step} ${esc(ostAt(o, o.status) || o.at)}` : esc(o.at) + (wt ? ' · ' + esc(wt) : '');
   const n = o.lines.reduce((t, l) => t + l.qty, 0);
   const det = open ? `<div class="ord-d"><div class="ord-l">` + o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}×</span><span class="n">${esc(BY[l.id].name)}${l.desc ? `<br><span class="note">${esc(l.desc)}</span>` : ''}</span><span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>`
     + (o.note ? `<div class="ord-note"><b>Note</b> · ${esc(o.note)}</div>` : '')
@@ -2827,7 +2853,7 @@ function ordCard(o){
   return `<div class="ord${open ? ' open' : ''}">
     <div class="ord-row">
       <button type="button" class="ord-top" data-act="ord-toggle" data-v="${o.no}" aria-expanded="${open}">
-        <span class="r1"><b>${ordNo(o.no)}</b><span class="rt">${where}</span></span>
+        <span class="r1"><b>${ordNo(o.no)}</b><span class="rt">${where}</span>${sent ? `<span class="hpill ${o.status}">${OST[o.status].lbl}</span>` : ''}</span>
         <span class="r2"><span class="sub"><span class="k">Staff</span>${esc(o.by || '—')}</span><span class="num rt tot">${rm(o.total)}</span></span>
         <span class="r3"><span class="sub">${n} item${n > 1 ? 's' : ''}</span><span class="sub rt${sent ? '' : ' wt'}">${when}</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>
       </button>
@@ -2843,7 +2869,7 @@ function showPayDone(rec, change){
   $('#payTitle').textContent = ordNo(rec.no) + ' paid';
   $('#paySub').textContent = `${rm(rec.total)} by ${rec.method === 'qr' ? 'QR' : rec.method} · receipt printed`;
   $('#payMeta').hidden = true;
-  const sent = rec.status === 'sent';
+  const sent = rec.status !== 'paid';
   const nIt = rec.lines.reduce((a, l) => a + l.qty, 0);
   $('#payDoneBox').innerHTML =
     `<div class="paid">
@@ -2933,10 +2959,6 @@ function renderHis(){
   if (S.hisBy !== 'all') list = list.filter(o => o.by === S.hisBy);
   const CHEV = '<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
   const TICK = '<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
-  /* Rieng cho day moc trang thai — khong dung lai TICK o tren vi no mang
-     class .tick cua menu xo xuong, keo theo kich thuoc va vi tri cua menu. */
-  const SOK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
-  const SWAIT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>';
   const sel = (id, label, val, opts) => {
     const cur = (opts.find(o => o[0] === val) || opts[0])[1];
     const open = S.hisDD === id;
@@ -2950,7 +2972,7 @@ function renderHis(){
     `<span class="hisfil">` +
       sel('hisType', 'Order type', S.hisType, [['all', 'All types'], ['dine', 'Dine-in'], ['take', 'Takeaway']]) +
       sel('hisPaid', 'Paid by', S.hisPaid, [['all', 'All payments'], ['cash', 'Cash'], ['card', 'Card'], ['qr', 'QR']]) +
-      sel('hisKit', 'Kitchen', S.hisKit, [['all', 'All kitchen'], ['sent', 'In kitchen'], ['paid', 'Not sent']]) +
+      sel('hisKit', 'Kitchen', S.hisKit, [['all', 'All kitchen']].concat(OST_SEQ.map(k => [k, OST[k].lbl]))) +
       sel('hisBy', 'Staff', S.hisBy, [['all', 'All staff']].concat(STAFF.map(n => [n, n]))) +
     `</span>` +
     `<span class="cnt">${list.length} order${list.length === 1 ? '' : 's'}</span></div>`;
@@ -2965,17 +2987,7 @@ function renderHis(){
   const rows = pageList.map(o => {
     const n = o.lines.reduce((a, l) => a + l.qty, 0);
     const open = S.ordOpen === o.no;
-    const meth = o.method === 'qr' ? 'QR' : o.method === 'card' ? 'Card' : 'Cash';
-    /* Mot don di qua HAI moc that trong du lieu: thu tien, roi gui bep. Nhan
-       o cot Kitchen chi noi duoc moc thu hai — mo ra thi phai thay ca hai,
-       kem gio, neu khong nguoi doc van phai tu suy. */
-    const steps = `<div class="hsteps">` +
-      `<span class="hstep done">${SOK}Paid<span class="t">${esc(o.at)} \u00b7 ${esc(meth)}</span></span>` +
-      (o.status === 'sent'
-        ? `<span class="hstep done">${SOK}Sent to kitchen<span class="t">${esc(o.kAt || o.at)}</span></span>`
-        : `<span class="hstep wait">${SWAIT}Not sent to kitchen<span class="t">waiting</span></span>`) +
-      `</div>`;
-    const det = open ? `<tr><td class="det" colspan="7">${steps}<div class="ord-l">` +
+    const det = open ? `<tr><td class="det" colspan="7"><div class="ord-l">` +
       o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}\u00d7</span>` +
         `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}</span>` +
         `<span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>` +
@@ -2987,7 +2999,7 @@ function renderHis(){
       `<td>${o.type === 'dine' ? 'Dine-in \u00b7 ' + esc(o.table || '\u2014') : 'Takeaway'}</td>` +
       `<td><span class="stf">${avatar(o.by, 24)}${esc(o.by)}</span></td><td class="r num">${n}</td>` +
       `<td>${o.method === 'qr' ? 'QR' : o.method === 'card' ? 'Card' : 'Cash'}</td>` +
-      `<td class="r"><span class="hpill ${o.status}">${o.status === 'sent' ? 'In kitchen' : 'Not sent'}</span></td>` +
+      `<td class="r"><span class="hpill ${o.status}">${OST[o.status].lbl}</span></td>` +
       `</tr>` + det;
   }).join('');
   const nums = Array.from({length: pages}, (_, i) =>
@@ -3441,8 +3453,9 @@ document.addEventListener('click', e => {
       if (!$('#hisDlg').hidden) renderHis(); else renderOrds(); break;
     case 'ord-kitchen': {
       const o = S.done.find(x => String(x.no) === v); if (!o) break;
-      const n = o.lines.reduce((a,l) => a + l.qty, 0), again = o.status === 'sent';
-      o.status = 'sent'; o.kAt = hhmm();
+      const n = o.lines.reduce((a,l) => a + l.qty, 0), again = o.status !== 'paid';
+      if (o.status === 'paid') o.status = 'sent';
+      o.kAt = hhmm();
       renderOrds(); render(); toast(`KOT ${again ? 'printed again' : 'printed'} in the kitchen · ${ordNo(o.no)} · ${n} item${n > 1 ? 's' : ''}`); break; }
     case 'ord-print': { const o = S.done.find(x => String(x.no) === v); if (o) toast(`Receipt reprinted · ${ordNo(o.no)}`); break; }
     case 'charge':
