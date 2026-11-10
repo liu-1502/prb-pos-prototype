@@ -929,9 +929,12 @@ button:disabled{cursor:not-allowed}
 .histool{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
 /* Phai khoanh bang #hisDlg: rule .search cua layout/theme co do uu tien cao
    hon .histool .search (0,2,0) nen nen va be rong khong an. */
-/* 220 chu khong phai 240: o 240 thi ca thanh dung 920/940, du dung 20px —
-   chon mot nhan vien co ten dai hon "All staff" la no rot dong. */
-#hisDlg .histool .search{flex:none;width:220px;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
+/* O tim AN HET cho con lai thay vi mot be ngang co dinh: cac bo loc co be
+   ngang rieng cua chung (nhan dai ngan khac nhau), nen con bao nhieu thi o
+   tim lay bay nhieu. Dat con so cung thi hoac no cat placeholder, hoac no
+   de thua mot mang trong giua thanh. */
+#hisDlg .histool .search{flex:1;width:auto;min-width:0;height:44px;background:transparent;border:1.5px solid var(--line-2);box-shadow:none}
+#hisDlg .histool .hisfil{flex:none}
 /* O chon ngay deo cung bo vo voi .ddb: cung chieu cao 44, cung vien, cung
    bo goc. Hai o nam trong MOT vo de nguoi doc thay no la mot khoang, khong
    phai hai bo loc roi nhau. */
@@ -947,6 +950,9 @@ button:disabled{cursor:not-allowed}
 .hispag button{min-width:36px;height:36px;padding:0 10px;border:1.5px solid var(--line-2);border-radius:var(--r-sm);background:transparent;color:var(--ink);font-size:13px;font-weight:600}
 .hispag button[aria-current="page"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
 .hispag button:disabled{opacity:.4}
+/* Dau "..." KHONG phai mot nut: no chi bao rang o day co trang bi bo qua.
+   Cung be ngang voi mot o so de hang nut khong xo ngang khi doi trang. */
+.hispag .gap{min-width:36px;text-align:center;color:var(--muted);font-weight:600}
 .histbl{width:100%;border-collapse:collapse;font-size:13px}
 .histbl th{position:sticky;top:0;z-index:1;background:var(--surface);text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line)}
 .histbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -3038,8 +3044,30 @@ function renderHis(){
       `<td class="r"><span class="hpill ${o.status}">${OST[o.status].lbl}</span></td>` +
       `</tr>` + det;
   }).join('');
-  const nums = Array.from({length: pages}, (_, i) =>
-    `<button type="button" data-act="his-page" data-v="${i}"${i === S.hisPage ? ' aria-current="page"' : ''}>${i + 1}</button>`).join('');
+  /* KHONG in het moi trang. 30 ngay du lieu la 7-8 trang, nhung chi can doi
+     khoang ngay rong hon hay bo het bo loc la no thanh mot hang so dai khong
+     doc duoc — va khong ai bam vao "trang 23" giua danh sach don bao gio.
+     Luat: luon co trang DAU, trang CUOI, trang DANG XEM va hai trang ke no;
+     cho nao nhay cach thi dat mot dau "...". Toi da 7 o, so o khong doi khi
+     dang o giua nen hang nut khong nhay ngang luc chuyen trang. */
+  const pbtn = i => `<button type="button" data-act="his-page" data-v="${i}"${i === S.hisPage ? ' aria-current="page"' : ''}>${i + 1}</button>`;
+  let nums;
+  if (pages <= 7) {
+    nums = Array.from({length: pages}, (_, i) => pbtn(i)).join('');
+  } else {
+    const keep = new Set([0, pages - 1, S.hisPage, S.hisPage - 1, S.hisPage + 1]);
+    /* Gan hai dau thi mo rong ve phia con lai, de so o luon la 7 thay vi tut
+       xuong 5 khi dang o trang 1. */
+    if (S.hisPage <= 2) [1, 2, 3, 4].forEach(i => keep.add(i));
+    if (S.hisPage >= pages - 3) [pages - 2, pages - 3, pages - 4, pages - 5].forEach(i => keep.add(i));
+    const arr = [...keep].filter(i => i >= 0 && i < pages).sort((a, b) => a - b);
+    let out = '', prev = -1;
+    for (const i of arr) {
+      if (prev >= 0 && i - prev > 1) out += `<span class="gap" aria-hidden="true">\u2026</span>`;
+      out += pbtn(i); prev = i;
+    }
+    nums = out;
+  }
   /* LUON ve thanh phan trang, ke ca khi chi co mot trang: no la day co dinh
    cua hop. An di thi bang tu nhien thieu mot khoi o duoi va hop ho mot mang. */
   const pag = true
