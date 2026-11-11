@@ -3253,13 +3253,21 @@ function renderOpts(){
   const o = S.opt, it = BY[o.id];
   $('#optImg').src = IMG[o.id];
   $('#optTitle').textContent = it.name;
-  const res = reserved();
   /* Dang sua thi chinh dong do van nam trong reserved() — phai tru ra, khong
      thi no tu chiem cho cua minh va bao "het nguyen lieu" oan. */
+  const resOther = reserved();
   if (o.editKey) {
     const old = S.cart.find(x => x.key === o.editKey);
-    if (old) { const n = lineNeed(old.id, old.mods, old.qty); Object.keys(n).forEach(k => res[k] = r3((res[k] || 0) - n[k])); }
+    if (old) { const n = lineNeed(old.id, old.mods, old.qty); Object.keys(n).forEach(k => resOther[k] = r3((resOther[k] || 0) - n[k])); }
   }
+  /* Hai bien khac nhau, dung dung cho:
+       resOther = cac dong KHAC dang giu cho        -> cho NUT Add/Save
+       res      = resOther + phan NEN cua mon nay   -> cho tung o lua chon,
+                  vi luc do chi con hoi "them rieng add-on nay co du khong".
+     Truoc day nut goi shortOf(need) khong truyen gi, nen shortOf tu goi
+     reserved() va dem ca dong dang sua — dong do bi tinh HAI LAN. */
+  const res = {};
+  Object.keys(resOther).forEach(k => res[k] = resOther[k]);
   const base = lineNeed(o.id, [], o.qty);
   Object.keys(base).forEach(k => res[k] = r3((res[k] || 0) + base[k]));
   $('#optBody').innerHTML = it.opts.map((g, gi) => `<div class="og" role="group" aria-label="${esc(g.group)}"><h3>${esc(g.group)}${g.type === 'many' ? '<span class="oreq opt">(Optional)</span>' : ''}</h3><div class="ochoices">` + g.choices.map(c => {
@@ -3269,7 +3277,7 @@ function renderOpts(){
   }).join('') + `</div></div>`).join('');
   $('#optQty').textContent = o.qty;
   const need = lineNeed(o.id, o.mods, o.qty);
-  const short = shortOf(need);
+  const short = shortOf(need, resOther);
   const btn = $('#optAdd');
   btn.disabled = !!short;
   btn.textContent = short ? `Not enough ${INGR[short].name.toLowerCase()}` : (o.qty === 0 ? 'Remove from order' : o.editKey ? 'Save changes' : 'Add to order');
