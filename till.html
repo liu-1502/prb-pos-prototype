@@ -539,9 +539,12 @@ button:disabled{cursor:not-allowed}
 .step button[data-act$="-inc"]{background:var(--accent);color:var(--accent-ink)}
 .step span{min-width:26px;text-align:center;font-size:19px;font-weight:600;color:var(--ink)}
 .ln{font-size:15px;font-weight:500}
-.mods{font-size:13px;color:color-mix(in srgb, var(--ink) 80%, var(--surface));margin-top:3px}
-/* Dong "No options" GIU --muted: no la trang thai rong, lam no dam len thi
-   dong khong co gi lai noi hon dong co noi dung. */
+.mods{font-size:13px;color:var(--ink);margin-top:3px}
+/* Dong "No options" giu --muted. KHONG ha weight duoc: file chi nhung Inter
+   400 / 500 / 600, dat 300 thi trinh duyet roi ve 400 — khong doi gi ca.
+   Nhung no da tu nhat han di roi: .mods vua len --ink (11.82-17.93) con dong
+   nay van 5.97-6.69, khoang cach giua hai dong gio rong gap doi truoc.
+   Ha mau them nua thi roi xuong 3.6-4.0, duoi nguong 4.5 cho chu 13px. */
 .mods.none{color:var(--muted)}
 .amt{font-size:15px;font-weight:600;text-align:right}
 /* Tien TUNG DONG: 14/600, DONG NHAT ca bon ban mau. Truoc do moi ban mot co
