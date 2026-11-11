@@ -1368,6 +1368,26 @@ button:disabled{cursor:not-allowed}
 .bot .chip.picked{background:var(--warm);color:var(--warm-ink);box-shadow:none}
 .bot .chip:disabled{opacity:.55}
 .card{border:0;background:var(--surface-2);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+/* --- The don nha cung cap: co VIEN va GOP LAI duoc ------------------------
+   Rieng .pocard moi co vien: .card con dung cho the de xuat trong Assistant,
+   o do chung nam trong bong chat nen them vien la hai vong long nhau.
+   Danh sach nay thi nguoc lai — cac the dinh lien nhau tren cung mot nen
+   trang, khong co vien thi khong biet don nay het o dau. */
+.pocard{border:1px solid var(--line-2);padding:0;gap:0;overflow:hidden}
+.pohead{width:100%;padding:12px 14px;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.pohead:hover{background:color-mix(in srgb, var(--ink) 4%, transparent)}
+.poh1{display:flex;align-items:center;gap:10px;min-width:0}
+.poh1 b{font-size:15px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.poh1 .badge{flex:none;margin-left:auto}
+.poh2{display:flex;align-items:center;gap:10px}
+.poh2 .note{flex:1;min-width:0}
+/* Tong tien nam ngay tren dau de: khong phai mo tung don ra moi biet no bao
+   nhieu tien. */
+.potot{flex:none;font-size:15px;font-weight:600;color:var(--price)}
+.pochev{flex:none;color:var(--muted);transition:transform .15s}
+.pocard.open .pochev{transform:rotate(180deg)}
+.pobody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
+.pobody > :first-child{margin-top:10px}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-h b{font-size:16px;font-weight:600}
 .badge{font-size:12px;font-weight:600;border-radius:var(--r-sm);padding:4px 8px;white-space:nowrap}
@@ -2799,7 +2819,7 @@ const BUY = {
   rice:{sup:'sb', pack:10, price:32}, noodles:{sup:'sb', pack:5, price:20}, prawn:{sup:'sc', pack:2, price:56},
   tea:{sup:'sd', pack:100, price:35}, coffee:{sup:'sd', pack:100, price:40}, milo:{sup:'sd', pack:30, price:27}
 };
-S.po = []; S.poNext = 311;
+S.po = []; S.poNext = 311; S.poOpen = null;
 
 /* Don demo cho man quan ly order. Tat ca deu la don DA THU TIEN cua ca sang,
    tinh tien theo dung cong thuc that (10% service charge cho dine-in, SST 6%,
@@ -4146,7 +4166,19 @@ function poListHTML(){
     let act = '';
     if (o.status === 'pending') act = `<div class="btns"><button type="button" class="btn" data-act="po-withdraw" data-v="${o.id}">Withdraw this order</button></div><div class="sim"><span class="lbl">Prototype only</span><button type="button" class="btn" data-act="po-sim-ok" data-v="${o.id}">Simulate HQ approval</button><button type="button" class="btn" data-act="po-sim-no" data-v="${o.id}">Simulate rejection</button></div>`;
     if (o.status === 'ordered') act = `<div class="btns"><button type="button" class="btn primary grow" data-act="po-recv" data-v="${o.id}">Delivery received</button></div>`;
-    return `<div class="card"><div class="card-h"><b>${o.id} · ${esc(SUPN[o.sup])}</b><span class="badge ${st[0]}">${st[1]}</span></div><div class="note">Created ${hhmmOf(o.at)} by ${esc(o.by)} via ${esc(o.via)} · needed by ${esc(dshort(o.needed))}</div><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>`;
+    /* GOP LAI: mot don chi hien dau de cho toi khi cham. Danh sach nay dai dan
+       theo ngay, ma phan lon thoi gian quan ly chi can liec "don nao con cho
+       HQ" chu khong doc tung dong nguyen lieu.
+       Dau de da mang du thu de quyet dinh co mo ra khong: ma don, nha cung cap,
+       trang thai va TONG TIEN — khong phai mo ra moi biet don nay bao nhieu. */
+    const open = S.poOpen === o.id;
+    return `<div class="card pocard${open ? ' open' : ''}">` +
+      `<button type="button" class="pohead" data-act="po-toggle" data-v="${o.id}" aria-expanded="${open}">` +
+        `<span class="poh1"><b>${o.id} · ${esc(SUPN[o.sup])}</b><span class="badge ${st[0]}">${st[1]}</span></span>` +
+        `<span class="poh2"><span class="note">Needed by ${esc(dshort(o.needed))}</span><span class="potot num">${rm(o.total)}</span><svg class="pochev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>` +
+      `</button>` +
+      (open ? `<div class="pobody"><div class="note">Created ${hhmmOf(o.at)} by ${esc(o.by)} via ${esc(o.via)}</div><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>` : '') +
+    `</div>`;
   }).join('');
 }
 function renderPO(){ const h = poListHTML(); if (!$('#poDlg').hidden) $('#poBody').innerHTML = h; $('#poPane').innerHTML = h; }
@@ -4305,7 +4337,8 @@ document.addEventListener('click', e => {
     case 'prop-ok': applyProp(el.dataset.p); break;
     case 'prop-no': S.props[el.dataset.p].status = 'cancelled'; renderAsst(); break;
     case 'undo': undo(el.dataset.l); break;
-    case 'po-open': if (!PO_ON) break; openLayer('#poDlg'); renderPO(); break;
+    case 'po-open': if (!PO_ON) break; S.poOpen = null; openLayer('#poDlg'); renderPO(); break;
+    case 'po-toggle': S.poOpen = S.poOpen === v ? null : v; renderPO(); break;
     case 'po-close': closeLayer('#poDlg'); break;
     case 'po-withdraw': case 'po-sim-ok': case 'po-sim-no': case 'po-recv': {
       const o = S.po.find(x => x.id === v); if (!o) break;
