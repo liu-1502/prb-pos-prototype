@@ -50,7 +50,7 @@
   /* semantic. Warning dung vang dam dac thay vi mang nhat, vi mang nhat mau vang
      se trung voi nen be. No tach khoi vang-dang-chon bang do sang (lech 15%). */
   --ok-soft:#e8f1d4; --ok-ink:#4c6b1c; --ok-line:#6f9433;
-  --warn-soft:#fbd24e; --warn-ink:#4a2e20; --warn-line:#9a6a00;
+  --warn-soft:#fbd24e; --warn-ink:#4a2e20; --warn-line:#8f4a00;
   --bad-soft:#fae0dc; --bad-ink:#8c1220; --bad-line:#8c1220;
   --danger:#8c1220; --danger-hover:#6e0d19;
 
@@ -89,7 +89,7 @@
   /* Thanh cong PHAI la xanh la: brand da chiem sac do roi, dung chung thi
      "xong viec" va "co loi" tro thanh mot mau. */
   --ok-soft:#e9f3e2; --ok-ink:#2f6b1f; --ok-line:#4a9a2f;
-  --warn-soft:#fbd24e; --warn-ink:#262626; --warn-line:#9a6a00;
+  --warn-soft:#fbd24e; --warn-ink:#262626; --warn-line:#8f4a00;
   /* Loi dung MAROON dam han brand. Van chi tach brand duoc 2.35:1 — do la gia
      phai tra khi thuong hieu la mau do. Bu lai bang chu + vi tri, dung bao gio
      de mau do la tin hieu loi DUY NHAT. */
@@ -147,7 +147,7 @@
      khong thi "xong viec" va "mau thuong hieu" thanh mot. Doi sang xanh duong:
      van doc ra la tich cuc, ma khong doi mat voi brand. */
   --ok-soft:#e0edfb; --ok-ink:#1b4f8a; --ok-line:#2563eb;
-  --warn-soft:#fde9b9; --warn-ink:#262626; --warn-line:#8a5a00;
+  --warn-soft:#fde9b9; --warn-ink:#262626; --warn-line:#8f4a00;
   --bad-soft:#fde2e2; --bad-ink:#9b1c1c; --bad-line:#9b1c1c;
   --danger:#9b1c1c; --danger-hover:#7f1515;
   /* Khong bong. Lop phu (sheet, dialog) thi VAN co --shadow, vi no that su
@@ -185,10 +185,11 @@
   --accent-fg:#6e4400;
   --warm:#fbf6ef; --warm-ink:#000000;
   --ok-soft:#e3f0e3; --ok-ink:#2d6b2d; --ok-line:#2d6b2d;
-  /* "Cho xu ly" KHONG duoc dung vang nua — brand da chiem sac vang roi, dung
-     chung thi badge trang thai va nut thuong hieu thanh mot. Doi sang xanh lam
-     xam: van doc ra la "dang cho", ma khong doi mat voi brand. */
-  --warn-soft:#e4e9f0; --warn-ink:#1f2937; --warn-line:#3c5068;
+  /* "Cho xu ly" dung ho CAM CHAY chu khong phai vang: brand da chiem sac vang
+     (#ffb22a), ma cam chay #8f4a00 cach no toi 3.70 nen hai thu khong lan vao
+     nhau. Ban truoc tung doi han sang xanh lam xam cho an toan, nhung the thi
+     badge "dang cho" mat han nghia canh bao. */
+  --warn-soft:#fdeada; --warn-ink:#5a2f00; --warn-line:#8f4a00;
   --bad-soft:#fbe0dd; --bad-ink:#9b1c1c; --bad-line:#9b1c1c;
   --danger:#9b1c1c; --danger-hover:#7f1515;
   --card-shadow:0 1px 2px rgba(42,30,15,.05), 0 4px 12px rgba(42,30,15,.04);
@@ -1432,17 +1433,18 @@ button:disabled{cursor:not-allowed}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-h b{font-size:16px;font-weight:600}
 .badge{font-size:12px;font-weight:600;border-radius:var(--r-sm);padding:4px 8px;white-space:nowrap}
-/* BON badge dung CUNG MOT CONG THUC: nen la chinh mau chu pha 10% vao
-   --surface. Truoc day moi badge lay mot token --*-soft rieng, bon token do
-   duoc chon tay o bon ban mau nen do dam khong deu nhau — xep canh nhau trong
-   mot danh sach thi doc ra lung tung. Pha tu mau chu thi nen va chu luon cung
-   mot sac, va bon badge luon cung mot do nhat.
-   Chua luon mot loi cu: .badge.pend o ban nau/do lay nen #fbd24e (vang dac)
-   voi chu #9a6a00 — do duoc chi 3.25, duoi nguong 4.5 cho chu 11px. Nen nhat
-   di thi chu giu nguyen ma ty le len han. */
-.badge.pend{background:color-mix(in srgb, var(--warn-line) 10%, var(--surface));color:var(--warn-line)}
-.badge.ok{background:color-mix(in srgb, var(--ok-ink) 10%, var(--surface));color:var(--ok-ink)}
-.badge.bad{background:color-mix(in srgb, var(--bad-ink) 10%, var(--surface));color:var(--bad-ink)}
+/* Nen lay DUNG token --*-soft, khong pha tu mau chu.
+   DA THU cong thuc color-mix(mau chu 10%, surface) cho "nhat quan" — sai:
+   pha mot mau TOI vao trang thi mat bao hoa, badge ra xam duc. Do duoc:
+     bad   0.79 -> 0.48 bao hoa
+     pend  0.90 -> 0.39
+   --*-soft la pastel chon tay, giu bao hoa cao nen tuoi han. Cai gia phai tra
+   truoc day la tuong phan: pend o ban nau chi 3.25 — nhung do la loi cua
+   --warn-line #9a6a00 qua nhat, khong phai loi cua nen. Ha --warn-line xuong
+   #8f4a00 thi pend len 4.58 (nau) / 5.71 (vang) ma nen van tuoi. */
+.badge.pend{background:var(--warn-soft);color:var(--warn-line)}
+.badge.ok{background:var(--ok-soft);color:var(--ok-ink)}
+.badge.bad{background:var(--bad-soft);color:var(--bad-ink)}
 .badge.mute{background:color-mix(in srgb, var(--ink) 6%, var(--surface));color:var(--muted)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
