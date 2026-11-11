@@ -1908,7 +1908,17 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-layout="modern"] .cart-t{padding:0 16px 12px;border-bottom:0}
 :root[data-layout="modern"] .seg.sm{padding:3px}
 :root[data-layout="modern"] .seg.sm button{flex:1;height:36px;font-size:14px}
-:root[data-layout="modern"] .seg.sm button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+/* O DANG CHON to DEN, khong phai sac brand — thong nhat o ca bon ban mau.
+   1) Den von la mac dinh cua chinh file (.seg button[aria-pressed] lay
+      --bar-ink); accent chi la mot lop de len cua ban "modern".
+   2) Sac brand tren man Till da co viec: no danh dau TIEN (gia mon, nut
+      Charge, so luong trong gio) — do duoc 13-15 mang dac moi ban mau. Dine-in
+      / Takeaway la mot CONG TAC CHE DO, khong thuoc ho tien.
+   3) O hai ban xanh la va vang, mang nay ra #ffb22a — ma accent cua ban xanh
+      la #015726. Tuc la no khong he "an theo brand", chi la mot sac vang bi
+      bo quen o do.
+   4) Den cho 17.49 o ca bon, thay vi 7.47 (xanh) / 11.65 (vang). */
+:root[data-layout="modern"] .seg.sm button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
 /* MAU BRAND CHI CON 6 CHO. Do duoc truoc do: #d62302 xuat hien 32 lan tren mot
    man (13 nen + 19 chu). Mot mau dung 32 lan khong con la mau nhan — no thanh
    mau nen, va khi moi thu deu het thi khong con thu tu uu tien nao.
@@ -2040,7 +2050,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 /* PHAI la .seg.sm: :root[data-layout="modern"] .seg.sm button[aria-pressed]
    co do uu tien (0,5,1), con .seg button[aria-pressed] chi (0,4,1) nen thua.
    Day la lan thu hai do uu tien lam rule theme bi nuot. */
-:root[data-theme="green"] .seg.sm button[aria-pressed="true"]{background:var(--pick);color:var(--pick-ink)}
+:root[data-theme="green"] .seg.sm button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
 /* Danh sach mon boc trong khung vien amber; o so ban xuong DUOI danh sach. */
 /* ---- COT DON THEME XANH: cung BO CUC voi theme vang ---------------------
    Chi chep VI TRI, khong chep mau: xanh giu nguyen accent xanh, pick amber,
@@ -2308,7 +2318,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .cart-body{background:var(--surface-2);border-radius:24px}
 :root[data-theme="yellow"] .ot.on{background:var(--surface-2)}
 :root[data-theme="yellow"] .seg{background:var(--bar-2);box-shadow:none}
-:root[data-theme="yellow"] .seg.sm button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+:root[data-theme="yellow"] .seg.sm button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
 /* O nhap va nut Note VAN phai co vien; chi rieng .seg.sm la khong (design cua
    no la mot track dac). Truoc day gop chung mot rule nen vien o nhap bi xoa
    theo, o so ban troi lo lung khong co khung. */
