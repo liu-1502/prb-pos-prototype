@@ -2902,11 +2902,16 @@ function totals(){
   return {sub, sc, sst, raw, total, round:r2(total - raw)};
 }
 function lineDesc(l){ const it = BY[l.id]; return choicesOf(it, l.mods).filter(c => !c.def || c.show).map(c => c.label + (c.price ? ' +' + rm(c.price) : '')).join(' · '); }
+function lineKey(id, mods, note){ return id + '|' + mods.slice().sort().join(',') + '|' + (note || '').trim(); }
+/* Mon moi len DAU danh sach (unshift), nen gio hang doc tu MOI nhat xuong cu
+   nhat. Doi o day chu khong dao luc render: nhu vay man thanh toan va don da
+   chot deu cung mot thu tu voi gio — thu ngan doc lai don thi hai man khop.
+   Dong DA CO ma them tiep thi giu nguyen cho: gop them khong phai mon moi. */
 function addLine(id, mods, qty, note){
   note = (note || '').trim();
-  const key = id + '|' + mods.slice().sort().join(',') + '|' + note;
+  const key = lineKey(id, mods, note);
   const ex = S.cart.find(l => l.key === key);
-  if (ex) ex.qty += qty; else S.cart.push({key, id, mods:mods.slice(), qty, note, unit:unitPrice(BY[id], mods)});
+  if (ex) ex.qty += qty; else S.cart.unshift({key, id, mods:mods.slice(), qty, note, unit:unitPrice(BY[id], mods)});
 }
 const THEMES = {brown:'Brown theme', red:'Red theme', green:'Green theme', yellow:'Yellow theme'};
 /* data-layout tach khoi data-theme: "modern" la BO CUC (rail doc, o tim thu
@@ -4193,10 +4198,23 @@ document.addEventListener('click', e => {
     case 'line-edit': editLine(el.dataset.key); break;
     case 'opt-add': {
       const o = S.opt;
-      /* Sua = bo dong cu roi them lai. addLine tu gop neu bo option moi trung
-         voi mot dong khac dang co trong gio. */
-      if (o.editKey) { const i = S.cart.findIndex(x => x.key === o.editKey); if (i >= 0) S.cart.splice(i, 1); }
-      if (o.qty > 0) addLine(o.id, o.mods, o.qty, o.note);
+      /* Sua thi THAY TAI CHO. Ban cu xoa dong roi goi addLine, ma addLine them
+         vao mot dau danh sach — nen chi sua so luong thoi la dong do nhay di
+         cho khac, danh sach xao lai truoc mat thu ngan.
+         Van con mot truong hop PHAI doi cho: sua option thanh trung het voi
+         mot dong khac dang co, luc do hai dong gop lam mot that su. */
+      if (o.editKey) {
+        const i = S.cart.findIndex(x => x.key === o.editKey);
+        if (i >= 0) {
+          if (o.qty <= 0) S.cart.splice(i, 1);
+          else {
+            const note = (o.note || '').trim(), key = lineKey(o.id, o.mods, note);
+            const dup = S.cart.findIndex((x, j) => j !== i && x.key === key);
+            if (dup >= 0) { S.cart[dup].qty += o.qty; S.cart.splice(i, 1); }
+            else S.cart[i] = {key, id:o.id, mods:o.mods.slice(), qty:o.qty, note, unit:unitPrice(BY[o.id], o.mods)};
+          }
+        }
+      } else if (o.qty > 0) addLine(o.id, o.mods, o.qty, o.note);
       S.closeArm = null; closeLayer('#optDlg'); render();
       toast(o.qty === 0 ? `Removed ${BY[o.id].name}` : o.editKey ? `Updated ${BY[o.id].name}` : `Added ${o.qty} × ${BY[o.id].name}`); break; }
     case 'line-inc': case 'line-dec': {
