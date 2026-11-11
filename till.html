@@ -199,7 +199,8 @@
    --accent-fg, neu khong chi dat 1.81. Cac cho brand lam NEN thi giu nguyen
    #ffb12a, vi chu tren no da la nau dam. */
 :root[data-theme="yellow"] :focus-visible{outline-color:var(--accent-fg)}
-:root[data-theme="yellow"] .ftab button.on{color:var(--accent-fg);border-bottom-color:var(--accent-fg)}
+:root[data-theme="yellow"] .ftab button.on{color:var(--accent-fg)}
+:root[data-theme="yellow"] .ftab button.on::after{background:var(--accent-fg)}
 :root[data-theme="yellow"] .tab[aria-selected="true"]{border-bottom-color:var(--accent-fg)}
 :root[data-theme="yellow"] .dish .pr{color:var(--accent-fg)}
 /* Vang: --accent tren nen sang chi dat 1.81, phai dung ban dam. */
@@ -677,7 +678,7 @@ button:disabled{cursor:not-allowed}
    chu dam len, cong mot lop tint 6% rat nhe. Mot mang den dac o day keo no
    len ngang hang voi cac hanh dong chinh, trong khi no chi la bo loc. */
 .scrim.sheet .hisb.on{background:color-mix(in srgb, var(--ink) 7%, transparent);border-color:var(--ink);color:var(--ink)}
-.scrim.sheet .ftab button{padding:0 10px;font-size:13px;gap:6px}
+.scrim.sheet .ftab button{font-size:13px;gap:6px}
 .scrim.sheet .ftab button .n{font-size:11px;padding:0 5px}
 .scrim.sheet .ords{gap:12px}
 .scrim.sheet .ord-top{padding:8px;gap:1px}
@@ -1788,9 +1789,14 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    het padding cua .dlg-b), dong thoi ap len ngay duoi header — padding
    tren 14px cua than sheet chinh la khoang ho can bo. */
 .scrim.sheet .ftab{margin:-14px -16px 10px;padding:0;gap:0}
-.scrim.sheet .ftab button{flex:1;justify-content:center;padding:0}
-.ftab button{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 12px;border:0;border-bottom:2px solid transparent;margin-bottom:-1.5px;background:transparent;color:var(--muted);font-size:14px;font-weight:600}
-.ftab button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.ftab button{position:relative;flex:none;display:flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border:0;margin-bottom:-1.5px;background:transparent;color:var(--muted);font-size:14px;font-weight:600}
+/* Gach dang chon ve bang ::after, thut vao dung bang padding nen no dai BANG
+   NHAN. De no la border-bottom thi no chay het be ngang nut — o man Orders
+   nut chia deu nen gach rong gap doi chu, nhin ra mot net le loi khong biet
+   dang chi vao dau. */
+.ftab button::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:2px;background:transparent;border-radius:2px}
+.ftab button.on{color:var(--accent)}
+.ftab button.on::after{background:var(--accent)}
 /* Badge dem: tab KHONG chon dung mang --ink (den) chu trang; tab DANG chon
    dung mang brand chu --accent-ink. Mang xam nhat truoc day gan nhu khong
    thay, nen con so — thu duy nhat noi hang doi dai bao nhieu — bi chim. */
@@ -1813,7 +1819,6 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    vien duoi) va sau cai nut tran ra ngoai, nhin nhu MAT TAB.
    Va KHONG an thanh cuon: an di thi nguoi dung khong biet con tab phia sau. */
 #poBody .ftab{gap:0;overflow-x:auto;min-height:44px;scrollbar-width:thin}
-#poBody .ftab button{flex:none;padding:0 14px}
 /* Dem 0: mang xam mo thay vi cham den dac. Van doc duoc con so — biet la tab
    do RONG chu khong phai chua tai — nhung khong doi lay cai nhin. Dat SAU
    rule .on de tab dang chon ma rong cung mo theo. */
@@ -3523,7 +3528,7 @@ function renderOrds(){
      thai o day. */
   /* History gio la mot DIALOG rieng, khong con la che do cua sheet nay. */
   const tabs = `<div class="ftab" role="tablist">` + [['wait', 'Waiting', wait.length], ['sent', 'Sent', sent.length]]
-    .map(([v, l, n]) => `<button type="button" role="tab" class="${S.ordF === v ? 'on' : ''}" data-act="ord-filter" data-v="${v}" aria-selected="${S.ordF === v}">${l}<span class="n${n ? '' : ' z'}">${n}</span></button>`).join('') + `</div>`;
+    .map(([v, l, n]) => `<button type="button" role="tab" class="${S.ordF === v ? 'on' : ''}" data-act="ord-filter" data-v="${v}" aria-selected="${S.ordF === v}">${l}</button>`).join('') + `</div>`;
   /* O tim chi co o tab History. Hai tab kia la hang doi viec dang lam, thuong
      duoi 10 don — them o tim vao do chi ton mot hang. */
   const search = his ? `<label class="search sm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span class="sr">Search orders</span><input id="hq" type="search" value="${esc(S.hisQ)}" placeholder="Order no., staff, table or dish" autocomplete="off"></label>` : '';
@@ -4070,7 +4075,7 @@ function renderStock(){
   const list = S.stkF === 'all' ? rows : rows.filter(r => r.st === S.stkF);
   const gone = MENU.filter(it => unavailable(it));
   const tabs = `<div class="ftab" role="tablist">` + [['all', 'All', rows.length], ['low', 'Low', nLow], ['out', 'Out', nOut]]
-    .map(([v, l, n]) => `<button type="button" role="tab" class="${S.stkF === v ? 'on' : ''}" data-act="stk-filter" data-v="${v}" aria-selected="${S.stkF === v}">${l}<span class="n${n ? '' : ' z'}">${n}</span></button>`).join('') + `</div>`;
+    .map(([v, l, n]) => `<button type="button" role="tab" class="${S.stkF === v ? 'on' : ''}" data-act="stk-filter" data-v="${v}" aria-selected="${S.stkF === v}">${l}</button>`).join('') + `</div>`;
   const badge = {out:'<span class="badge bad">Out</span>', low:'<span class="badge pend">Low</span>', ok:'<span class="badge ok">OK</span>'};
   const tbl = list.length
     ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Ingredient</th><th class="r">On hand</th><th class="r">In open orders</th><th class="r">Free</th><th class="r">Status</th></tr></thead><tbody>`
