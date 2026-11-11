@@ -519,7 +519,7 @@ button:disabled{cursor:not-allowed}
 .line .step span{min-width:20px;font-size:16px}
 /* Nut Edit: icon + chu, mau brand. Vung cham 44 cao, ghi thang height chu
    khong dung inset am — inset am tinh tu padding box nen khong ra du 44. */
-.ledit{position:relative;flex:none;height:21px;padding:0;border:0;background:transparent;color:var(--price);display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:500}
+.ledit{position:relative;flex:none;height:21px;padding:0;border:0;background:transparent;color:var(--muted);display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:500}
 .ledit::before{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%)}
 .ledit:hover{color:var(--ink)}
 /* 48x48 theo Material; con so o giua tao khoang cach that giua - va +.
@@ -541,7 +541,7 @@ button:disabled{cursor:not-allowed}
    luong x don gia, va duoc cong lai ngay o dong Total ben duoi — khong phai
    so thu ngan phai soi. Thu phai soi la SO LUONG: no go tay nen de sai, va
    doc lai don cho khach chinh la de bat cai sai do. */
-.line .amt{color:var(--ink)}
+.line .amt{color:var(--price)}
 .cart-f{padding:14px 18px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
 .row.total{color:var(--ink);align-items:baseline;margin:0}
@@ -2210,7 +2210,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="red"] .tpanel{background:transparent;padding:12px 0 0}
 :root[data-theme="red"] .cart-f{border-top:1px solid var(--line-2)}
 /* Gia tung dong trong cot don lay mau brand, giong ban nau. */
-:root[data-theme="red"] .line .amt{color:var(--ink);font-size:14px}
+:root[data-theme="red"] .line .amt{color:var(--price);font-size:14px}
 
 /* ---- THEME NAU ----------------------------------------------------------
    Rail la mang NAU RAT DAM #43290a, icon trang; o dang mo la mang BRAND.
@@ -2238,7 +2238,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="brown"] .who{background:#ffffff;border:1.5px solid var(--line-2)}
 /* Gia tung dong trong COT DON lay mau brand — chi o cot don, khong ap cho
    luoi mon (12 the x mau brand thi thanh on). */
-:root[data-theme="brown"] .line .amt{color:var(--ink);font-size:16px}
+:root[data-theme="brown"] .line .amt{color:var(--price);font-size:16px}
 /* Track XAM NHAT, o dang chon to DEN — cung mot luat voi chip danh muc o
    tren: o ban nau cai dang chon phai tach ra bang DO DAM chu khong bang sac
    brand, vi nen quanh no cung dang am mau brand roi.
