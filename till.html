@@ -936,10 +936,18 @@ button:disabled{cursor:not-allowed}
    mau XANH LAM (vi xanh la da la brand o do), badge se ra xanh lam.
    #17652f tren #e4f2e6 dat 5.33. */
 .ofree{font-size:12px;font-weight:600;padding:2px 8px;border-radius:var(--r-pill);background:#e4f2e6;color:#17652f}
-.ochoices{display:flex;flex-wrap:wrap;gap:8px}
+.ochoices{display:flex;flex-wrap:wrap;gap:12px}
 .ochoice{position:relative}
 .ochoice input{position:absolute;opacity:0;pointer-events:none}
-.ochoice > span{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:var(--r-pill);border:0;background:var(--surface-2);font-size:14px;font-weight:600}
+.ochoice > span{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:var(--r-pill);border:0;background:var(--surface-2);font-size:14px;font-weight:600}
+/* VE 36 nhung CHAM 44.
+   BAY: inset:-4px KHONG ra 44. inset tinh tu PADDING BOX cua phan tu dinh vi,
+   ma span nay co border 1.5 nen padding box chi cao 33 -> vong cham ra 41, do
+   duoc bang elementFromPoint. Ghi thang height:44 va can giua thi khong con
+   phu thuoc vao do day border nua.
+   Khoang cach giua cac chip phai >= 12: de 8 thi hai vong cham ke nhau giap
+   mep va diem giap ranh chip nao an cung duoc. */
+.ochoice > span::before{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%);border-radius:inherit}
 /* Gia cong them tung la xam --muted, doc ra nhu chu phu. Doi sang
    --accent-soft-ink: ban dam cua brand, co dinh nghia o CA BON theme. */
 .ochoice > span .num{flex:none;min-height:0;padding:0;border:0;background:none;border-radius:0;font-weight:600;color:var(--accent-soft-ink)}
@@ -1850,7 +1858,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 /* Chip tuy chon trong sheet: cung dang vien. Dang chon doi mau vien + chu,
    kem mang tint rat nhat — tint nay khac HAN sac kem cua nen phu nen hai
    trang thai khong con lan nhau nua. */
-:root[data-layout="modern"] .ochoice > span{border:1.5px solid var(--line);background:transparent;color:var(--ink)}
+:root[data-layout="modern"] .ochoice > span{border:1.5px solid var(--line-2);background:transparent;color:var(--ink)}
 :root[data-layout="modern"] .ochoice input:checked + span{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-soft-ink)}
 :root[data-layout="modern"] .cart-t #standNo.need{border-color:var(--bad-line);background:transparent;color:var(--bad-ink)}
 /* Nhom tuy chon trong sheet: bo khung, de nhan + khoang cach lam viec phan vung */
