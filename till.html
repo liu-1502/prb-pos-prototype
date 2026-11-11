@@ -1796,6 +1796,20 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    thay, nen con so — thu duy nhat noi hang doi dai bao nhieu — bi chim. */
 .ftab button .n{min-width:20px;padding:1px 7px;border-radius:var(--r-pill);background:var(--ink);color:var(--surface);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
 .ftab button.on .n{background:var(--accent);color:var(--accent-ink)}
+/* SAU tab thi khong chia deu nua. .scrim.sheet .ftab button ep flex:1 va
+   padding:0 — hop ly voi hai ba tab, nhung voi sau tab trong sheet 560 thi
+   moi tab chi con ~85px, bang dung be rong CHU, nen chu tab nay dinh vao chu
+   tab kia. Do be rong tu nhien: tong sau tab 495, cong gap con 515, vua trong
+   528 cho co san — nen cu de chung rong tu nhien va co padding that.
+   padding 6 chu khong 10: voi 10 thi tong thanh 592, tran khoi 560 va
+   "Withdrawn" bi cat. 6 cho tong 544, con 16 ho. Khoang giua hai nhan ke
+   nhau = 6+6 = 12, du de khong dinh nhau.
+   Them overflow-x:auto lam luoi an toan: nhan dai hon (doi ngon ngu, them
+   trang thai) thi hang tab CUON chu khong bi cat. An thanh cuon vi no chi la
+   luoi, khong phai cach dung chinh. */
+#poBody .ftab{gap:0;overflow-x:auto;scrollbar-width:none}
+#poBody .ftab::-webkit-scrollbar{display:none}
+#poBody .ftab button{flex:none;padding:0 6px}
 /* Dem 0: mang xam mo thay vi cham den dac. Van doc duoc con so — biet la tab
    do RONG chu khong phai chua tai — nhung khong doi lay cai nhin. Dat SAU
    rule .on de tab dang chon ma rong cung mo theo. */
