@@ -1383,10 +1383,14 @@ button:disabled{cursor:not-allowed}
 .pohead{width:100%;padding:12px 14px;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px}
 .pohead:hover{background:color-mix(in srgb, var(--ink) 4%, transparent)}
 .poh1{display:flex;align-items:center;gap:10px;min-width:0}
-.poh1 b{font-size:15px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* Ma don: ma TRA CUU, khong phai tieu de. Nho hon, mau phu, chu dang bang so
-   co do rong deu — doc ra la mot ma chu khong phai mot cai ten. */
-.poid{flex:none;font-size:12px;font-weight:500;color:var(--muted)}
+/* Ma don la TIEU DE: no la thu duy nhat trong danh sach. Mot nha cung cap co
+   nhieu don (PO-0312 va PO-0315 deu la Supplier B) nen lay ten lam tieu de
+   thi khong phan biet duoc don nao voi don nao. */
+.poid{flex:none;font-size:15px;font-weight:600;color:var(--ink)}
+/* Ten nha cung cap: thong tin phu, ngan bang mot VACH DOC. Dau cham giua hai
+   cai doc ra nhu mot cum tu lien; vach doc noi ro day la hai thong tin khac
+   loai dung canh nhau. */
+.posup{flex:none;padding-left:10px;border-left:1px solid var(--line-2);font-size:13px;font-weight:500;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .poh1 .badge{flex:none;margin-left:auto}
 .poh2{display:flex;align-items:center;gap:10px}
 .poh2 .note{flex:1;min-width:0;font-size:13px}
@@ -2858,7 +2862,7 @@ const BUY = {
   rice:{sup:'sb', pack:10, price:32}, noodles:{sup:'sb', pack:5, price:20}, prawn:{sup:'sc', pack:2, price:56},
   tea:{sup:'sd', pack:100, price:35}, coffee:{sup:'sd', pack:100, price:40}, milo:{sup:'sd', pack:30, price:27}
 };
-S.po = []; S.poNext = 311; S.poOpen = null;
+S.po = []; S.poNext = 311; S.poOpen = null; S.poF = 'all';
 
 /* Don demo cho man quan ly order. Tat ca deu la don DA THU TIEN cua ca sang,
    tinh tien theo dung cong thuc that (10% service charge cho dine-in, SST 6%,
@@ -4196,7 +4200,22 @@ function poSummary(){
 }
 function poListHTML(){
   if (!S.po.length) return '<div class="empty">No supplier orders yet. Ask the assistant, e.g. “order 20kg rice for tomorrow”.</div>';
-  return S.po.slice().sort((a,b) => b.at - a.at).map(o => {
+  /* BA BO LOC, chia theo AI DANG PHAI LAM GI chu khong liet ke nam trang thai:
+       Waiting for HQ  — dang cho nguoi khac, minh khong lam gi duoc
+       To receive      — HQ duyet roi, HANG SE TOI, viec cua cua hang
+       All             — ca nhung don da xong hoac da bo
+     Mot cua hang dat 2-5 lan moi tuan, ma mot cau "order what's running low"
+     tach ra 3-4 don mot luc — qua mot thang la vai chuc don. Luc do cau hoi
+     thuc te khong phai "cho xem tat ca" ma "con don nao cho toi nhan".
+     Cung ngu phap .ftab voi man Orders va man Stock. */
+  const all = S.po.slice().sort((a,b) => b.at - a.at);
+  const wait = all.filter(o => o.status === 'pending');
+  const recv = all.filter(o => o.status === 'ordered');
+  const list = S.poF === 'wait' ? wait : S.poF === 'recv' ? recv : all;
+  const tabs = `<div class="ftab" role="tablist">` + [['all', 'All', all.length], ['wait', 'Waiting for HQ', wait.length], ['recv', 'To receive', recv.length]]
+    .map(([v, l, n]) => `<button type="button" role="tab" class="${S.poF === v ? 'on' : ''}" data-act="po-filter" data-v="${v}" aria-selected="${S.poF === v}">${l}<span class="n">${n}</span></button>`).join('') + `</div>`;
+  if (!list.length) return tabs + `<div class="empty">${S.poF === 'wait' ? 'Nothing is waiting for HQ.' : 'No delivery to receive right now.'}</div>`;
+  return tabs + list.map(o => {
     const st = PO_ST[o.status];
     /* MOT dong thoi gian duy nhat, thay cho ba cum chu roi rac truoc day
        (mot cum tren bang, hai cum duoi bang). Doi cua don la mot chuoi viec
@@ -4224,7 +4243,7 @@ function poListHTML(){
     const open = S.poOpen === o.id;
     return `<div class="card pocard${open ? ' open' : ''}">` +
       `<button type="button" class="pohead" data-act="po-toggle" data-v="${o.id}" aria-expanded="${open}">` +
-        `<span class="poh1"><b>${esc(SUPN[o.sup])}</b><span class="poid num">${o.id}</span><span class="badge ${st[0]}">${st[1]}</span></span>` +
+        `<span class="poh1"><b class="poid num">${o.id}</b><span class="posup">${esc(SUPN[o.sup])}</span><span class="badge ${st[0]}">${st[1]}</span></span>` +
         `<span class="poh2"><span class="note">Needed by ${esc(dshort(o.needed))}</span><span class="potot num">${rm(o.total)}</span><svg class="pochev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>` +
       `</button>` +
       (open ? `<div class="pobody"><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>` : '') +
@@ -4387,8 +4406,9 @@ document.addEventListener('click', e => {
     case 'prop-ok': applyProp(el.dataset.p); break;
     case 'prop-no': S.props[el.dataset.p].status = 'cancelled'; renderAsst(); break;
     case 'undo': undo(el.dataset.l); break;
-    case 'po-open': if (!PO_ON) break; S.poOpen = null; openLayer('#poDlg'); renderPO(); break;
+    case 'po-open': if (!PO_ON) break; S.poOpen = null; S.poF = 'all'; openLayer('#poDlg'); renderPO(); break;
     case 'po-toggle': S.poOpen = S.poOpen === v ? null : v; renderPO(); break;
+    case 'po-filter': S.poF = v; renderPO(); break;
     case 'po-close': closeLayer('#poDlg'); break;
     /* CHI hai hanh dong co that cua cua hang: rut don da gui, va nhan hang.
        Duyet / tu choi la viec cua HQ — khong bao gio hien tren may cua hang,
