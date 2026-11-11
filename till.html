@@ -916,6 +916,11 @@ button:disabled{cursor:not-allowed}
    voi dong tuy chon ngay tren no — bep doc luot phai biet dau la lua chon
    co san, dau la yeu cau viet tay. */
 .lnote{font-style:italic}
+/* Dong "No options". KHONG lam mo bang opacity: thu .6 thi do ra 2.52-2.71,
+   duoi han nguong 4.5 cho chu 13px. No da tu tach duoc voi dong tuy chon that
+   bang CHINH NOI DUNG cua no, cong them in nghieng de mat luot qua biet day
+   la mot TRANG THAI chu khong phai mot lua chon co ten. */
+.mods.none{font-style:italic}
 /* Nhan "Note:" thay luon viec ma cap dau nhay dang lam — bao day la chu go
    tay chu khong phai mot lua chon co san. Giu in nghieng de bep liec qua van
    tach duoc ngay ma khong phai doc het dong. */
@@ -3108,7 +3113,7 @@ function renderCart(){
     return `<div class="line">`
       + `<span class="lthumb" aria-hidden="true"><img src="${IMG[l.id]}" alt="" loading="lazy" decoding="async"></span>`
       + `<div class="lmid"><div class="ln"><span class="lq num">${l.qty}× </span>${esc(it.name)}</div>`
-        + (d ? `<div class="mods">${esc(d)}</div>` : '')
+        + (d ? `<div class="mods">${esc(d)}</div>` : (l.note ? '' : `<div class="mods none">No options</div>`))
         + (l.note ? `<div class="mods lnote">Note: ${esc(l.note)}</div>` : '')
       + `</div>`
       + `<div class="lside">`
