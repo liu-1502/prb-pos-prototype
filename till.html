@@ -1397,11 +1397,22 @@ button:disabled{cursor:not-allowed}
 .pocard.open .pochev{transform:rotate(180deg)}
 .pobody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
 .pobody > :first-child{margin-top:10px}
-/* Dong thoi gian cua don. Muon nguyen .ovl cua nhat ky o Overview nen hai man
-   doc giong het nhau; chi them mot duong ke tren de tach khoi bang. */
-.potl{margin-top:2px}
+/* BA KHOI, BA VAI, tach nhau ro:
+     bang nguyen lieu = don hang co gi      -> nam tran tren nen the
+     dong thoi gian   = don da di qua dau   -> MANG XAM rieng
+     hang nut         = lam gi tiep          -> cach ra bang mot duong ke
+   Truoc day ca ba chi ngan nhau bang khoang trong nen doc thanh mot mach dai
+   khong biet cho nao het cho nao bat dau. */
+.potl{margin-top:2px;padding:2px 12px;border-radius:var(--r-md);background:color-mix(in srgb, var(--ink) 4%, var(--surface))}
 .potl .ovl:first-child{border-top:0}
-.potl .l .bad{color:var(--bad-ink);font-weight:600}
+/* BAY: .ovl lay border-top la --line — mau do chon cho nen TRANG, dat tren
+   mang xam nay thi mat hut. Trong day dung mot vach suy tu --ink. */
+.potl .ovl{border-top-color:color-mix(in srgb, var(--ink) 12%, transparent)}
+/* Hang nut tach khoi noi dung bang mot duong ke chay het be ngang the.
+   Nut CHAY HET BE NGANG: moi trang thai chi co dung mot hanh dong, de no co
+   dai bang chu thi no troi lung lo ben trai mot khoang trong rong. */
+.pobody .btns{margin:4px -14px 0;padding:14px 14px 0;border-top:1px solid var(--line)}
+.pobody .btns .btn{flex:1}
 /* "Withdraw this order" dang VIEN, khong to nen: no la hanh dong rut lai mot
    don DA GUI di, nen phai doc ra la viec can can nhac chu khong phai nut bam
    tiep. Rieng .primary ("Delivery received") giu nen dac — do la buoc tien
@@ -4198,7 +4209,7 @@ function poListHTML(){
     if (o.status === 'ordered' || o.status === 'received')
       tl.push([hhmmOf(o.hqAt) + ' · ' + esc(o.hqBy), 'Approved · sent to supplier' + (o.hqNote ? ' ' + esc(o.hqNote) : '')]);
     if (o.status === 'rejected')
-      tl.push([hhmmOf(o.hqAt) + ' · ' + esc(o.hqBy), '<span class="bad">Rejected</span> · “' + esc(o.hqNote) + '”']);
+      tl.push([hhmmOf(o.hqAt) + ' · ' + esc(o.hqBy), 'Rejected · “' + esc(o.hqNote) + '”']);
     if (o.status === 'received') tl.push([hhmmOf(o.recAt), 'Delivery received · stock added']);
     if (o.status === 'withdrawn') tl.push([o.wdAt ? hhmmOf(o.wdAt) : '', 'Withdrawn by the outlet']);
     const hq = `<div class="potl">` + tl.map(r => `<div class="ovl"><span class="w">${r[0]}</span><span class="l">${r[1]}</span></div>`).join('') + `</div>`;
