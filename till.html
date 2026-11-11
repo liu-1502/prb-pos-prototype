@@ -912,7 +912,7 @@ button:disabled{cursor:not-allowed}
 .otot .k{font-size:12px;font-weight:500;color:var(--muted)}
 /* 22px. Thu 17 (chim qua) roi 26 (bu qua) moi chot o day. Van phai thang
    so luong, nen ha so luong xuong 20 de giu khoang cach. */
-.otot .v{font-size:22px;font-weight:600;line-height:1.15}
+.otot .v{font-size:22px;font-weight:600;line-height:1.15;color:var(--price)}
 /* Ten nhom + nhan Required/Optional nam cung mot hang. "one" = buoc chon mot
    (va luon co san mot lua chon mac dinh) nen la Required; "many" la Optional. */
 .og h3{margin:0 0 10px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
@@ -3201,7 +3201,6 @@ function renderOpts(){
   const o = S.opt, it = BY[o.id];
   $('#optImg').src = IMG[o.id];
   $('#optTitle').textContent = it.name;
-  $('#optSub').textContent = rm(it.price) + ' · tap options, then add to the order';
   const res = reserved();
   /* Dang sua thi chinh dong do van nam trong reserved() — phai tru ra, khong
      thi no tu chiem cho cua minh va bao "het nguyen lieu" oan. */
@@ -3223,7 +3222,7 @@ function renderOpts(){
   btn.disabled = !!short;
   btn.textContent = short ? `Not enough ${INGR[short].name.toLowerCase()}` : (o.qty === 0 ? 'Remove from order' : o.editKey ? 'Save changes' : 'Add to order');
   btn.classList.toggle('danger', o.qty === 0);
-  $('#optSub').textContent = rm(it.price) + (o.editKey ? ' · change the options, then save' : ' · tap options, then add to the order');
+  $('#optSub').textContent = rm(it.price) + (o.editKey ? ' · change the options, then save' : '');
   $('#optTotal').textContent = rm(unitPrice(it, o.mods) * o.qty);
   /* GAN chu khong doc: #optNote nam ngoai #optBody nen no song qua moi lan
      render. Phai dong bo lai tu S.opt, khong thi mo mon khac van con chu cu. */
