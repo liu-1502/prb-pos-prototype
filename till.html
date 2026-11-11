@@ -539,7 +539,10 @@ button:disabled{cursor:not-allowed}
 .step button[data-act$="-inc"]{background:var(--accent);color:var(--accent-ink)}
 .step span{min-width:26px;text-align:center;font-size:19px;font-weight:600;color:var(--ink)}
 .ln{font-size:15px;font-weight:500}
-.mods{font-size:13px;color:var(--muted);margin-top:3px}
+.mods{font-size:13px;color:color-mix(in srgb, var(--ink) 80%, var(--surface));margin-top:3px}
+/* Dong "No options" GIU --muted: no la trang thai rong, lam no dam len thi
+   dong khong co gi lai noi hon dong co noi dung. */
+.mods.none{color:var(--muted)}
 .amt{font-size:15px;font-weight:600;text-align:right}
 /* Tien TUNG DONG: 14/600, DONG NHAT ca bon ban mau. Truoc do moi ban mot co
    (do 14, xanh/vang 15, nau 16) — cung mot con so ma ba co khac nhau.
@@ -2901,7 +2904,7 @@ function totals(){
   const total = r2(Math.round(raw * 20) / 20);
   return {sub, sc, sst, raw, total, round:r2(total - raw)};
 }
-function lineDesc(l){ const it = BY[l.id]; return choicesOf(it, l.mods).filter(c => !c.def || c.show).map(c => c.label + (c.price ? ' +' + rm(c.price) : '')).join(' · '); }
+function lineDesc(l){ const it = BY[l.id]; return choicesOf(it, l.mods).filter(c => !c.def || c.show).map(c => c.label).join(' · '); }
 function lineKey(id, mods, note){ return id + '|' + mods.slice().sort().join(',') + '|' + (note || '').trim(); }
 /* Mon moi len DAU danh sach (unshift), nen gio hang doc tu MOI nhat xuong cu
    nhat. Doi o day chu khong dao luc render: nhu vay man thanh toan va don da
