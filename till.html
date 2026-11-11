@@ -889,6 +889,18 @@ button:disabled{cursor:not-allowed}
 .othumb{flex:none;width:56px;height:56px;border-radius:var(--r-md);overflow:hidden;background:var(--surface-2);display:block}
 .othumb img{width:100%;height:100%;object-fit:cover;display:block}
 /* Moi nhom tuy chon la mot section co vien rieng, nhan nam ben trong. */
+/* Ghi chu rieng TUNG MON. Khong nhet vao .og cung cac nhom tuy chon: tuy
+   chon la thu CHON SAN co gia, con day la chu thu ngan go tay — de chung
+   mot khung thi doc ra nhu mot lua chon nua. Nam ngoai #optBody nen no
+   khong bi renderOpts() dung lai moi khi doi option. */
+.onote{flex:none;padding:0 20px 14px;display:flex;flex-direction:column;gap:8px}
+.onote label{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+#optNote{width:100%;height:48px;padding:0 16px;border:1.5px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);color:var(--ink);font-size:15px;font-weight:500}
+#optNote::placeholder{color:var(--muted);font-weight:400}
+/* Ghi chu khi da nam tren dong: in nghieng va co dau nhay de phan biet NGAY
+   voi dong tuy chon ngay tren no — bep doc luot phai biet dau la lua chon
+   co san, dau la yeu cau viet tay. */
+.lnote{font-style:italic}
 .og{border:1.5px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
 .otot{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
 /* So luong day sang phai, ngan voi nut Add bang mot vach xam nhat.
@@ -2391,6 +2403,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="optTitle" style="max-width:560px">
     <div class="dlg-h"><div style="display:flex;gap:12px;align-items:center;min-width:0"><span class="othumb"><img id="optImg" alt=""></span><div style="min-width:0"><h2 id="optTitle">Dish</h2><p id="optSub"></p></div></div><button type="button" class="x" data-act="opt-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
     <div class="dlg-b" id="optBody"></div>
+    <div class="onote"><label for="optNote">Note for the kitchen<span class="oreq opt">Optional</span></label><input type="text" id="optNote" maxlength="60" autocomplete="off" placeholder="e.g. no peanuts, cut in half"></div>
     <div class="dlg-f">
       <div class="otot"><span class="k">Item total</span><span class="v num" id="optTotal">RM 0.00</span></div>
       <div class="step"><button type="button" data-act="opt-dec" aria-label="One fewer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button><span class="num" id="optQty">1</span><button type="button" data-act="opt-inc" aria-label="One more"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button></div>
@@ -2825,10 +2838,11 @@ function totals(){
   return {sub, sc, sst, raw, total, round:r2(total - raw)};
 }
 function lineDesc(l){ const it = BY[l.id]; return choicesOf(it, l.mods).filter(c => !c.def || c.show).map(c => c.label + (c.price ? ' +' + rm(c.price) : '')).join(' · '); }
-function addLine(id, mods, qty){
-  const key = id + '|' + mods.slice().sort().join(',');
+function addLine(id, mods, qty, note){
+  note = (note || '').trim();
+  const key = id + '|' + mods.slice().sort().join(',') + '|' + note;
   const ex = S.cart.find(l => l.key === key);
-  if (ex) ex.qty += qty; else S.cart.push({key, id, mods:mods.slice(), qty, unit:unitPrice(BY[id], mods)});
+  if (ex) ex.qty += qty; else S.cart.push({key, id, mods:mods.slice(), qty, note, unit:unitPrice(BY[id], mods)});
 }
 const THEMES = {brown:'Brown theme', red:'Red theme', green:'Green theme', yellow:'Yellow theme'};
 /* data-layout tach khoi data-theme: "modern" la BO CUC (rail doc, o tim thu
@@ -3054,7 +3068,7 @@ function renderCart(){
        phai thay duoc — thu ngan doc lai don cho khach can biet may phan — nen
        no chuyen thanh tien to "2 × " truoc ten mon. Doi so luong / xoa mon
        gio di qua nut but chi -> sheet tuy chon. */
-    return `<div class="line"><div><div class="ln"><span class="lq num">${l.qty} × </span>${esc(it.name)}</div>${d ? `<div class="mods">${esc(d)}</div>` : ''}</div>`
+    return `<div class="line"><div><div class="ln"><span class="lq num">${l.qty} × </span>${esc(it.name)}</div>${d ? `<div class="mods">${esc(d)}</div>` : ''}${l.note ? `<div class="mods lnote">“${esc(l.note)}”</div>` : ''}</div>`
       + `<div class="amt num">${rm(l.unit * l.qty)}</div>`
       + `<button type="button" class="ledit" data-act="line-edit" data-key="${esc(l.key)}" title="Edit options" aria-label="Edit options for ${esc(it.name)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></button></div>`;
   }).join('');
@@ -3154,14 +3168,14 @@ function syncRail(){
 function openOpts(id){
   const it = BY[id];
   const mods = []; it.opts.forEach(g => g.choices.forEach(c => { if (c.def) mods.push(c.id); }));
-  S.opt = {id, mods, qty:1, editKey:null};
+  S.opt = {id, mods, qty:1, editKey:null, note:''};
   renderOpts(); openLayer('#optDlg', '#optAdd');
 }
 /* Sua option cua mot dong DA CO trong gio. Truoc day muon doi option phai xoa
    dong roi them lai — day la duong tat cho dung viec do, khong phai mot buoc moi. */
 function editLine(key){
   const l = S.cart.find(x => x.key === key); if (!l) return;
-  S.opt = {id:l.id, mods:l.mods.slice(), qty:l.qty, editKey:key};
+  S.opt = {id:l.id, mods:l.mods.slice(), qty:l.qty, editKey:key, note:l.note || ''};
   renderOpts(); openLayer('#optDlg', '#optAdd');
 }
 function renderOpts(){
@@ -3192,6 +3206,9 @@ function renderOpts(){
   btn.classList.toggle('danger', o.qty === 0);
   $('#optSub').textContent = rm(it.price) + (o.editKey ? ' · change the options, then save' : ' · tap options, then add to the order');
   $('#optTotal').textContent = rm(unitPrice(it, o.mods) * o.qty);
+  /* GAN chu khong doc: #optNote nam ngoai #optBody nen no song qua moi lan
+     render. Phai dong bo lai tu S.opt, khong thi mo mon khac van con chu cu. */
+  const nin = $('#optNote'); if (nin && nin.value !== (o.note || '')) nin.value = o.note || '';
 }
 
 /* payment */
@@ -3211,7 +3228,7 @@ function renderPay(){
   $('#paySub').textContent = 'Order A-' + String(S.curNo).padStart(4, '0') + ' · ' + (S.type === 'dine' ? 'Stand ' + S.table : 'Takeaway') + ' · ' + nIt + ' items';
   const lines = S.cart.map(l => {
     const d = lineDesc(l);
-    return `<tr><td>${esc(BY[l.id].name)}${d ? `<span class="md">${esc(d)}</span>` : ''}</td>` +
+    return `<tr><td>${esc(BY[l.id].name)}${d ? `<span class="md">${esc(d)}</span>` : ''}${l.note ? `<span class="md lnote">“${esc(l.note)}”</span>` : ''}</td>` +
       `<td class="r num">${l.qty}</td><td class="r num">${rm(l.unit)}</td>` +
       `<td class="r num" style="font-weight:600">${rm(r2(l.unit * l.qty))}</td></tr>`;
   }).join('');
@@ -3271,7 +3288,7 @@ function completePay(){
   const change = m === 'cash' ? r2((parseFloat(S.pay.entry) || 0) - t.total) : 0;
   /* Don di vao man quan ly order chu khong bien mat — do la cho bam gui bep va in lai. */
   const rec = {no:S.curNo, type:S.type, table:S.table, note:(S.note || '').trim(),
-    lines:S.cart.map(l => ({id:l.id, qty:l.qty, desc:lineDesc(l), amt:r2(l.unit * l.qty)})),
+    lines:S.cart.map(l => ({id:l.id, qty:l.qty, desc:lineDesc(l), note:(l.note || ''), amt:r2(l.unit * l.qty)})),
     total:t.total, method:m, at:hhmm(), ts:Date.now(), by:userName(),
     status:AUTO_KITCHEN ? 'sent' : 'paid', kAt:AUTO_KITCHEN ? hhmm() : null};
   S.done.unshift(rec);
@@ -3349,7 +3366,7 @@ function ordCard(o){
      van in gio gui bep thi doc ra nhu no con nam o bep. */
   const when = sent ? `${OST[o.status].step} ${esc(ostAt(o, o.status) || o.at)}` : esc(o.at) + (wt ? ' · ' + esc(wt) : '');
   const n = o.lines.reduce((t, l) => t + l.qty, 0);
-  const det = open ? `<div class="ord-d"><div class="ord-l">` + o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}×</span><span class="n">${esc(BY[l.id].name)}${l.desc ? `<br><span class="note">${esc(l.desc)}</span>` : ''}</span><span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>`
+  const det = open ? `<div class="ord-d"><div class="ord-l">` + o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}×</span><span class="n">${esc(BY[l.id].name)}${l.desc ? `<br><span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<br><span class="note lnote">“${esc(l.note)}”</span>` : ''}</span><span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>`
     + (o.note ? `<div class="ord-note"><b>Note</b> · ${esc(o.note)}</div>` : '')
     + `<div class="btns"><button type="button" class="btn" data-act="ord-print" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>Print receipt</button>${sent ? `<button type="button" class="btn" data-act="ord-kitchen" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.54 21.69a.5.5 0 0 0 .93-.03l6.5-19a.5.5 0 0 0-.63-.63l-19 6.5a.5.5 0 0 0-.03.93l7.93 3.18a2 2 0 0 1 1.11 1.11z"></path><path d="m21.85 2.15-10.94 10.94"></path></svg>Send again</button>` : ''}</div></div>` : '';
   return `<div class="ord${open ? ' open' : ''}">
@@ -3522,7 +3539,7 @@ function renderHis(){
     const open = S.ordOpen === o.no;
     const det = open ? `<tr><td class="det" colspan="7"><div class="ord-l">` +
       o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}\u00d7</span>` +
-        `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}</span>` +
+        `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<span class="note lnote">“${esc(l.note)}”</span>` : ''}</span>` +
         `<span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>` +
       (o.note ? `<div class="ord-note"><b>Note</b> \u00b7 ${esc(o.note)}</div>` : '') +
       `<div class="btns"><button type="button" class="btn" data-act="ord-print" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>Print receipt</button></div></td></tr>` : '';
@@ -4101,7 +4118,7 @@ document.addEventListener('click', e => {
       /* Sua = bo dong cu roi them lai. addLine tu gop neu bo option moi trung
          voi mot dong khac dang co trong gio. */
       if (o.editKey) { const i = S.cart.findIndex(x => x.key === o.editKey); if (i >= 0) S.cart.splice(i, 1); }
-      if (o.qty > 0) addLine(o.id, o.mods, o.qty);
+      if (o.qty > 0) addLine(o.id, o.mods, o.qty, o.note);
       S.closeArm = null; closeLayer('#optDlg'); render();
       toast(o.qty === 0 ? `Removed ${BY[o.id].name}` : o.editKey ? `Updated ${BY[o.id].name}` : `Added ${o.qty} × ${BY[o.id].name}`); break; }
     case 'line-inc': case 'line-dec': {
@@ -4299,6 +4316,7 @@ setTheme('red');
 /* Chi nhan chu so. S.table van la chuoi vi day la ma dinh danh, khong phai so dem. */
 /* Roi khoi o ma van de trong thi luc do moi la loi that. */
 $('#standNo').addEventListener('blur', () => { S.standTouched = true; renderCart(); });
+$('#optNote').addEventListener('input', e => { if (S.opt) S.opt.note = e.target.value; });
 $('#standNo').addEventListener('input', e => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 3); if (e.target.value !== v) e.target.value = v; S.table = v; if (v) S.chargeTried = false; renderCart(); });
 /* Mo len la MOT don trong, chua co mon nao — dung trang thai thu ngan gap
    dau ca. Truoc day co san ba don co mon de xem nhanh cot gio, nhung the thi
