@@ -501,8 +501,8 @@ button:disabled{cursor:not-allowed}
 .cart-t #standNo.need{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);box-shadow:none}
 .lines{flex:1;min-height:0;overflow:auto;padding:0 18px}
 /* Ba cot: ten mon · tien · nut sua. Cot stepper 102px da bo. */
-.line{display:grid;grid-template-columns:minmax(0,1fr) 76px 32px;gap:10px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
-.lq{color:var(--muted);font-weight:600}
+.line{display:grid;grid-template-columns:minmax(0,1fr) 76px 32px;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
+.lq{color:var(--ink);font-weight:600}
 .line .step{justify-content:center}
 /* Stepper trong dong nho hon ban o cot don chinh — o day no la thong tin phu,
    ten mon moi la thu doc truoc. Vung cham van giu 44px. */
@@ -527,6 +527,11 @@ button:disabled{cursor:not-allowed}
 .ln{font-size:15px;font-weight:600}
 .mods{font-size:13px;color:var(--muted);margin-top:3px}
 .amt{font-size:15px;font-weight:600;text-align:right}
+/* Tien TUNG DONG lui ve --muted o ca bon ban mau. No la so TINH RA tu so
+   luong x don gia, va duoc cong lai ngay o dong Total ben duoi — khong phai
+   so thu ngan phai soi. Thu phai soi la SO LUONG: no go tay nen de sai, va
+   doc lai don cho khach chinh la de bat cai sai do. */
+.line .amt{color:var(--muted)}
 .cart-f{padding:14px 18px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
 .row.total{color:var(--ink);align-items:baseline;margin:0}
@@ -2040,7 +2045,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    la ranh gioi giua mang trang cua than gio va mang trang cua danh sach. */
 :root[data-theme="green"] #lines{grid-area:list;border:1.5px solid var(--pick);background:var(--surface);border-radius:16px;padding:8px 14px;margin:0 16px;overflow:auto}
 :root[data-theme="green"] .lines-l{display:none}
-:root[data-theme="green"] .line{border-bottom-color:transparent;padding:10px 0}
+:root[data-theme="green"] .line{border-bottom-color:transparent;padding:8px 0}
 :root[data-theme="green"] #totals{grid-area:tot;padding:0 16px;margin-top:10px}
 :root[data-theme="green"] #chargeHint{grid-area:hint;padding:0 16px}
 :root[data-theme="green"] .cart-t #tableWrap{grid-area:tbl;font-size:0;margin:14px 16px 10px 12px;gap:0;align-self:center;min-width:0}
@@ -2195,7 +2200,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="red"] .tpanel{background:transparent;padding:12px 0 0}
 :root[data-theme="red"] .cart-f{border-top:1px solid var(--line-2)}
 /* Gia tung dong trong cot don lay mau brand, giong ban nau. */
-:root[data-theme="red"] .line .amt{color:var(--accent);font-size:14px}
+:root[data-theme="red"] .line .amt{color:var(--muted);font-size:14px}
 
 /* ---- THEME NAU ----------------------------------------------------------
    Rail la mang NAU RAT DAM #43290a, icon trang; o dang mo la mang BRAND.
@@ -2223,7 +2228,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="brown"] .who{background:#ffffff;border:1.5px solid var(--line-2)}
 /* Gia tung dong trong COT DON lay mau brand — chi o cot don, khong ap cho
    luoi mon (12 the x mau brand thi thanh on). */
-:root[data-theme="brown"] .line .amt{color:var(--accent);font-size:16px}
+:root[data-theme="brown"] .line .amt{color:var(--muted);font-size:16px}
 /* Track XAM NHAT, o dang chon to DEN — cung mot luat voi chip danh muc o
    tren: o ban nau cai dang chon phai tach ra bang DO DAM chu khong bang sac
    brand, vi nen quanh no cung dang am mau brand roi.
@@ -2329,7 +2334,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .cart-h .seg{flex:0 0 auto}
 :root[data-theme="yellow"] #lines{grid-area:list;border:0;background:var(--surface);border-radius:16px;padding:8px 14px;margin:0 16px;overflow:auto}
 :root[data-theme="yellow"] .lines-l{display:none}
-:root[data-theme="yellow"] .line{border-bottom-color:transparent;padding:10px 0}
+:root[data-theme="yellow"] .line{border-bottom-color:transparent;padding:8px 0}
 :root[data-theme="yellow"] #totals{grid-area:tot;padding:0 16px;margin-top:10px}
 :root[data-theme="yellow"] #chargeHint{grid-area:hint;padding:0 16px}
 /* Ba o cua hang cuoi — cung chieu cao 56px de khong so le. */
