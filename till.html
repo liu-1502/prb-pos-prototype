@@ -1804,13 +1804,16 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    padding 6 chu khong 10: voi 10 thi tong thanh 592, tran khoi 560 va
    "Withdrawn" bi cat. 6 cho tong 544, con 16 ho. Khoang giua hai nhan ke
    nhau = 6+6 = 12, du de khong dinh nhau.
-   DA THU them overflow-x:auto lam luoi an toan — hong: .ftab button chi co
-   min-height:44 chu khong co height, nen khi .ftab thanh scroll container thi
-   chieu cao auto cua no ra 0 (chi con 2px vien duoi) va sau cai nut tran ra
-   ngoai, nhin nhu MAT TAB. Da bo. Neu sau nay nhan dai ra thi rut nhan, dung
-   cho hang tab cuon ngam. */
-#poBody .ftab{gap:0}
-#poBody .ftab button{flex:none;padding:0 6px}
+   padding 14 moi ben -> hai nhan ke nhau cach 28px, khong con dinh.
+   Tong sau tab thanh ~616 > 560 nen hang tab CUON NGANG — chap nhan, cuon
+   con hon ep chu dinh vao nhau.
+   BAT BUOC co min-height:44 khi dung overflow-x. Da dinh mot lan: .ftab
+   button chi co min-height chu khong co height, nen khi .ftab thanh scroll
+   container thi chieu cao auto cua no ra 0 — hang tab co con 2px (dung bang
+   vien duoi) va sau cai nut tran ra ngoai, nhin nhu MAT TAB.
+   Va KHONG an thanh cuon: an di thi nguoi dung khong biet con tab phia sau. */
+#poBody .ftab{gap:0;overflow-x:auto;min-height:44px;scrollbar-width:thin}
+#poBody .ftab button{flex:none;padding:0 14px}
 /* Dem 0: mang xam mo thay vi cham den dac. Van doc duoc con so — biet la tab
    do RONG chu khong phai chua tai — nhung khong doi lay cai nhin. Dat SAU
    rule .on de tab dang chon ma rong cung mo theo. */
