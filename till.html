@@ -901,6 +901,9 @@ button:disabled{cursor:not-allowed}
    voi dong tuy chon ngay tren no — bep doc luot phai biet dau la lua chon
    co san, dau la yeu cau viet tay. */
 .lnote{font-style:italic}
+/* Nhan "Note:" thay luon viec ma cap dau nhay dang lam — bao day la chu go
+   tay chu khong phai mot lua chon co san. Giu in nghieng de bep liec qua van
+   tach duoc ngay ma khong phai doc het dong. */
 .og{border:1.5px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
 .otot{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
 /* So luong day sang phai, ngan voi nut Add bang mot vach xam nhat.
@@ -3087,7 +3090,7 @@ function renderCart(){
        phai thay duoc — thu ngan doc lai don cho khach can biet may phan — nen
        no chuyen thanh tien to "2 × " truoc ten mon. Doi so luong / xoa mon
        gio di qua nut but chi -> sheet tuy chon. */
-    return `<div class="line"><div><div class="ln"><span class="lq num">${l.qty} × </span>${esc(it.name)}</div>${d ? `<div class="mods">${esc(d)}</div>` : ''}${l.note ? `<div class="mods lnote">“${esc(l.note)}”</div>` : ''}</div>`
+    return `<div class="line"><div><div class="ln"><span class="lq num">${l.qty} × </span>${esc(it.name)}</div>${d ? `<div class="mods">${esc(d)}</div>` : ''}${l.note ? `<div class="mods lnote">Note: ${esc(l.note)}</div>` : ''}</div>`
       + `<div class="amt num">${rm(l.unit * l.qty)}</div>`
       + `<button type="button" class="ledit" data-act="line-edit" data-key="${esc(l.key)}" title="Edit options" aria-label="Edit options for ${esc(it.name)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></button></div>`;
   }).join('');
@@ -3246,7 +3249,7 @@ function renderPay(){
   $('#paySub').textContent = 'Order A-' + String(S.curNo).padStart(4, '0') + ' · ' + (S.type === 'dine' ? 'Stand ' + S.table : 'Takeaway') + ' · ' + nIt + ' items';
   const lines = S.cart.map(l => {
     const d = lineDesc(l);
-    return `<tr><td>${esc(BY[l.id].name)}${d ? `<span class="md">${esc(d)}</span>` : ''}${l.note ? `<span class="md lnote">“${esc(l.note)}”</span>` : ''}</td>` +
+    return `<tr><td>${esc(BY[l.id].name)}${d ? `<span class="md">${esc(d)}</span>` : ''}${l.note ? `<span class="md lnote">Note: ${esc(l.note)}</span>` : ''}</td>` +
       `<td class="r num">${l.qty}</td><td class="r num">${rm(l.unit)}</td>` +
       `<td class="r num" style="font-weight:600">${rm(r2(l.unit * l.qty))}</td></tr>`;
   }).join('');
@@ -3384,7 +3387,7 @@ function ordCard(o){
      van in gio gui bep thi doc ra nhu no con nam o bep. */
   const when = sent ? `${OST[o.status].step} ${esc(ostAt(o, o.status) || o.at)}` : esc(o.at) + (wt ? ' · ' + esc(wt) : '');
   const n = o.lines.reduce((t, l) => t + l.qty, 0);
-  const det = open ? `<div class="ord-d"><div class="ord-l">` + o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}×</span><span class="n">${esc(BY[l.id].name)}${l.desc ? `<br><span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<br><span class="note lnote">“${esc(l.note)}”</span>` : ''}</span><span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>`
+  const det = open ? `<div class="ord-d"><div class="ord-l">` + o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}×</span><span class="n">${esc(BY[l.id].name)}${l.desc ? `<br><span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<br><span class="note lnote">Note: ${esc(l.note)}</span>` : ''}</span><span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>`
     + (o.note ? `<div class="ord-note"><b>Note</b> · ${esc(o.note)}</div>` : '')
     + `<div class="btns"><button type="button" class="btn" data-act="ord-print" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>Print receipt</button>${sent ? `<button type="button" class="btn" data-act="ord-kitchen" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.54 21.69a.5.5 0 0 0 .93-.03l6.5-19a.5.5 0 0 0-.63-.63l-19 6.5a.5.5 0 0 0-.03.93l7.93 3.18a2 2 0 0 1 1.11 1.11z"></path><path d="m21.85 2.15-10.94 10.94"></path></svg>Send again</button>` : ''}</div></div>` : '';
   return `<div class="ord${open ? ' open' : ''}">
@@ -3557,7 +3560,7 @@ function renderHis(){
     const open = S.ordOpen === o.no;
     const det = open ? `<tr><td class="det" colspan="7"><div class="ord-l">` +
       o.lines.map(l => `<div class="r"><span class="c num">${esc(BY[l.id].code)}</span><span class="q num">${l.qty}\u00d7</span>` +
-        `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<span class="note lnote">“${esc(l.note)}”</span>` : ''}</span>` +
+        `<span class="n">${esc(BY[l.id].name)}${l.desc ? `<span class="note">${esc(l.desc)}</span>` : ''}${l.note ? `<span class="note lnote">Note: ${esc(l.note)}</span>` : ''}</span>` +
         `<span class="num">${rm(l.amt)}</span></div>`).join('') + `</div>` +
       (o.note ? `<div class="ord-note"><b>Note</b> \u00b7 ${esc(o.note)}</div>` : '') +
       `<div class="btns"><button type="button" class="btn" data-act="ord-print" data-v="${o.no}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>Print receipt</button></div></td></tr>` : '';
