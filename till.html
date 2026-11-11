@@ -4253,7 +4253,7 @@ function poListHTML(){
   const cur = F.find(f => f[0] === S.poF) || F[0];
   const list = cur[2];
   const tabs = `<div class="ftab" role="tablist">` + F
-    .map(([v, l, g]) => `<button type="button" role="tab" class="${S.poF === v ? 'on' : ''}" data-act="po-filter" data-v="${v}" aria-selected="${S.poF === v}">${l}<span class="n${g.length ? '' : ' z'}">${g.length}</span></button>`).join('') + `</div>`;
+    .map(([v, l, g]) => `<button type="button" role="tab" class="${S.poF === v ? 'on' : ''}" data-act="po-filter" data-v="${v}" aria-selected="${S.poF === v}">${l}</button>`).join('') + `</div>`;
   if (!list.length) return tabs + `<div class="empty">No orders ${esc(cur[1].toLowerCase())} right now.</div>`;
   return tabs + list.map(o => {
     const st = PO_ST[o.status];
