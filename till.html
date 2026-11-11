@@ -501,17 +501,27 @@ button:disabled{cursor:not-allowed}
 .cart-t #standNo.need{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);box-shadow:none}
 .lines{flex:1;min-height:0;overflow:auto;padding:0 18px}
 /* Ba cot: ten mon · tien · nut sua. Cot stepper 102px da bo. */
-.line{display:grid;grid-template-columns:minmax(0,1fr) 76px 32px;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
-.lq{color:var(--ink);font-weight:600}
+/* BA COT: anh mon / ten + tuy chon / cum ben phai (Edit tren, tien duoi).
+   Anh giup thu ngan doi chieu voi mon vua bam o luoi ben trai ma khong phai
+   doc ten — luc quay dong thi nhan hinh nhanh hon doc chu. */
+.line{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
+.lthumb{flex:none;width:44px;height:44px;border-radius:12px;overflow:hidden;background:var(--surface-2);display:block}
+.lthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.lmid{min-width:0}
+/* Cum phai xep DOC: Edit tren, tien duoi, cung can le phai. */
+.lside{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.lq{color:var(--price);font-weight:600}
 .line .step{justify-content:center}
 /* Stepper trong dong nho hon ban o cot don chinh — o day no la thong tin phu,
    ten mon moi la thu doc truoc. Vung cham van giu 44px. */
 .line .step button{width:28px;height:28px;font-size:15px}
 .line .step button::before{inset:-8px}
 .line .step span{min-width:20px;font-size:16px}
-.ledit{position:relative;flex:none;width:32px;height:21px;padding:0;border:0;border-radius:var(--r-pill);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center}
-.ledit::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
-.ledit:hover{background:var(--surface-2);color:var(--ink)}
+/* Nut Edit: icon + chu, mau brand. Vung cham 44 cao, ghi thang height chu
+   khong dung inset am — inset am tinh tu padding box nen khong ra du 44. */
+.ledit{position:relative;flex:none;height:21px;padding:0;border:0;background:transparent;color:var(--price);display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:500}
+.ledit::before{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%)}
+.ledit:hover{color:var(--ink)}
 /* 48x48 theo Material; con so o giua tao khoang cach that giua - va +.
    Day la hai nut duoc bam nhieu nhat trong app, tren tablet dung ca ca. */
 /* Cung mot kieu voi stepper tren the mon: hai nut TRON roi, so nam giua,
@@ -531,7 +541,7 @@ button:disabled{cursor:not-allowed}
    luong x don gia, va duoc cong lai ngay o dong Total ben duoi — khong phai
    so thu ngan phai soi. Thu phai soi la SO LUONG: no go tay nen de sai, va
    doc lai don cho khach chinh la de bat cai sai do. */
-.line .amt{color:var(--muted)}
+.line .amt{color:var(--ink)}
 .cart-f{padding:14px 18px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
 .row.total{color:var(--ink);align-items:baseline;margin:0}
@@ -2200,7 +2210,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="red"] .tpanel{background:transparent;padding:12px 0 0}
 :root[data-theme="red"] .cart-f{border-top:1px solid var(--line-2)}
 /* Gia tung dong trong cot don lay mau brand, giong ban nau. */
-:root[data-theme="red"] .line .amt{color:var(--muted);font-size:14px}
+:root[data-theme="red"] .line .amt{color:var(--ink);font-size:14px}
 
 /* ---- THEME NAU ----------------------------------------------------------
    Rail la mang NAU RAT DAM #43290a, icon trang; o dang mo la mang BRAND.
@@ -2228,7 +2238,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="brown"] .who{background:#ffffff;border:1.5px solid var(--line-2)}
 /* Gia tung dong trong COT DON lay mau brand — chi o cot don, khong ap cho
    luoi mon (12 the x mau brand thi thanh on). */
-:root[data-theme="brown"] .line .amt{color:var(--muted);font-size:16px}
+:root[data-theme="brown"] .line .amt{color:var(--ink);font-size:16px}
 /* Track XAM NHAT, o dang chon to DEN — cung mot luat voi chip danh muc o
    tren: o ban nau cai dang chon phai tach ra bang DO DAM chu khong bang sac
    brand, vi nen quanh no cung dang am mau brand roi.
@@ -3095,9 +3105,16 @@ function renderCart(){
        phai thay duoc — thu ngan doc lai don cho khach can biet may phan — nen
        no chuyen thanh tien to "2 × " truoc ten mon. Doi so luong / xoa mon
        gio di qua nut but chi -> sheet tuy chon. */
-    return `<div class="line"><div><div class="ln"><span class="lq num">${l.qty} × </span>${esc(it.name)}</div>${d ? `<div class="mods">${esc(d)}</div>` : ''}${l.note ? `<div class="mods lnote">Note: ${esc(l.note)}</div>` : ''}</div>`
-      + `<div class="amt num">${rm(l.unit * l.qty)}</div>`
-      + `<button type="button" class="ledit" data-act="line-edit" data-key="${esc(l.key)}" title="Edit options" aria-label="Edit options for ${esc(it.name)}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></button></div>`;
+    return `<div class="line">`
+      + `<span class="lthumb" aria-hidden="true"><img src="${IMG[l.id]}" alt="" loading="lazy" decoding="async"></span>`
+      + `<div class="lmid"><div class="ln"><span class="lq num">${l.qty}× </span>${esc(it.name)}</div>`
+        + (d ? `<div class="mods">${esc(d)}</div>` : '')
+        + (l.note ? `<div class="mods lnote">Note: ${esc(l.note)}</div>` : '')
+      + `</div>`
+      + `<div class="lside">`
+        + `<button type="button" class="ledit" data-act="line-edit" data-key="${esc(l.key)}" aria-label="Edit options for ${esc(it.name)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg>Edit</button>`
+        + `<div class="amt num">${rm(l.unit * l.qty)}</div>`
+      + `</div></div>`;
   }).join('');
   const t = totals();
   /* Kieu phieu tinh tien: cac dong tach ra thanh mot mang rieng, cat bang
