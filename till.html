@@ -939,7 +939,7 @@ button:disabled{cursor:not-allowed}
 .ochoices{display:flex;flex-wrap:wrap;gap:12px}
 .ochoice{position:relative}
 .ochoice input{position:absolute;opacity:0;pointer-events:none}
-.ochoice > span{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:var(--r-pill);border:0;background:var(--surface-2);font-size:14px;font-weight:600}
+.ochoice > span{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:var(--r-pill);border:0;background:var(--surface-2);font-size:14px;font-weight:500}
 /* VE 36 nhung CHAM 44.
    BAY: inset:-4px KHONG ra 44. inset tinh tu PADDING BOX cua phan tu dinh vi,
    ma span nay co border 1.5 nen padding box chi cao 33 -> vong cham ra 41, do
@@ -952,7 +952,7 @@ button:disabled{cursor:not-allowed}
    --accent-soft-ink: ban dam cua brand, co dinh nghia o CA BON theme. */
 .ochoice > span .num{flex:none;min-height:0;padding:0;border:0;background:none;border-radius:0;font-weight:600;color:var(--accent-soft-ink)}
 .ochoice input:checked + span .num{color:inherit}
-.ochoice input:checked + span{background:var(--warm);color:var(--warm-ink)}
+.ochoice input:checked + span{background:var(--warm);color:var(--warm-ink);font-weight:600}
 .ochoice input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
 .ochoice input:disabled + span{opacity:.45}
 /* Hai nut BANG NHAU va HUG, don ve trai. Mot nut tran het be ngang doc ra
