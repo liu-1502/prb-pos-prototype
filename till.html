@@ -960,7 +960,7 @@ button:disabled{cursor:not-allowed}
    doc lai cho khach truoc khi thu tien thi khong co gi de doc. */
 /* Hai the TRANG tren nen xam, co khe ho — khong phai hai nua dinh lien nhau.
    Cot TRA TIEN nam TRAI (viec dang lam), cot hoa don nam PHAI (thu de doi chieu). */
-.paywrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:16px;margin:-18px -20px;padding:16px;background:#f3f3f3;align-items:stretch}
+.paywrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:16px;margin:0;padding:16px;background:#f3f3f3;align-items:stretch}
 .paysum{order:1;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;background:var(--surface);border-radius:20px}
 .paysum > .psec{order:0}
 .paysum > #sumTot{order:1}
@@ -1012,7 +1012,7 @@ button:disabled{cursor:not-allowed}
    mot chieu cao khac nhau va hop nhay khi doi tab. Cao = man hinh tru 80px
    tren + 80px duoi, chi phan BANG MON cuon. */
 #payDlg .dlg{height:calc(100vh - 160px);max-height:calc(100vh - 160px)}
-#payDlg #payBody{flex:1;min-height:0;overflow:hidden}
+#payDlg #payBody{flex:1;min-height:0;overflow:hidden;padding:0}
 .paywrap{height:100%;min-height:0}
 .paysum{min-height:0;overflow:hidden}
 .paysum .tbl-wrap{flex:1;min-height:0;overflow:auto}
@@ -1173,7 +1173,14 @@ button:disabled{cursor:not-allowed}
    cua the cach tra: nen --warm + vien --accent. */
 /* Chua chon = mang tint brand rat nhat, KHONG vien. Dang chon = mang brand
    DAC. Mot bac mau duy nhat, khong them net ke — it tin hieu hon ma van ro. */
-.paypay .quick .btn{min-height:44px;background:var(--accent-soft);color:var(--ink);box-shadow:none}
+/* Nut tien nhanh: DANG STROKE, khong nen. Hang nay co 4-5 nut canh nhau,
+   to nen ca hang thi cum nay doc ra NANG NGANG cum phuong thuc thanh toan
+   ngay tren — ma no chi la loi tat nhap so, khong phai mot buoc rieng.
+   VE cao 36 nhung VUNG CHAM van 44 nho ::before inset -4: giong cach cac
+   nut 28px khac trong file dang lam. Dung ha thang min-height xuong 36 roi
+   thoi — the la mat 8px vung cham o mot nut dung de nhap TIEN. */
+.paypay .quick .btn{position:relative;min-height:36px;height:36px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.paypay .quick .btn::before{content:"";position:absolute;inset:-4px;border-radius:inherit}
 .paypay .quick .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
 .meths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .meth{min-height:84px;border-radius:var(--r-lg);border:2px solid var(--line-2);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:15px;font-weight:600}
@@ -1577,9 +1584,16 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 .pins.err i{background:var(--bad-line);box-shadow:none}
 .signin .msg{margin:0;min-height:21px;font-size:14px;font-weight:600;color:var(--bad-ink)}
 .signin .keys{width:100%;gap:10px}
-.signin .key{min-height:64px;background:var(--surface);box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--ink) 55%, transparent), var(--card-shadow);font-size:22px}
+/* KHONG stroke. Phim so la the TRANG tren nen hong nhat — da tu tach ra bang
+   do sang roi; them mot duong vien 55% ink nua thi 12 o doc ra nhu mot bang
+   ke chu khong phai 12 nut rieng. Giu do bong de chung van noi len khoi nen. */
+.signin .key{min-height:64px;background:var(--surface);box-shadow:var(--card-shadow);font-size:22px}
 .signin .key.sm{font-size:14px}
-.signin .hint{margin:0;font-size:12px;font-weight:500;color:var(--muted);background:var(--surface-2);border-radius:var(--r-md);padding:8px 12px}
+/* KHONG do bong, va nen chi la mot lop trang MO. Day la ghi chu cua ban
+   demo, khong phai mot nut: do bong dua no len cung tang voi 12 phim so,
+   con nen trang duc thi bien no thanh khoi dac thu ba duoi ban phim.
+   Trang 55% du lam nen sang cho chu 12px ma van de lo mau nen phia sau. */
+.signin .hint{margin:0;font-size:12px;font-weight:500;color:var(--muted);background:rgba(255,255,255,.55);box-shadow:none;border-radius:var(--r-md);padding:8px 12px}
 
 /* man quan ly order */
 /* DANH SACH DON RUT GON. Truoc day moi the xo het tung mon ra, 4 don la phai
@@ -2182,6 +2196,21 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    Track pha tu --ink nen no la xam trung tinh, khong phai kem --surface-2.
    PHAI la .seg.sm button[aria-pressed] (0,5,1): ban modern cung (0,5,1) va
    dung truoc, con .seg button[aria-pressed] chi (0,4,1) nen thua. */
+/* --warm o ban NAU la #fcab00 — mot sac CAM BAO HOA, trong khi ca ba ban
+   kia --warm deu la tint NHAT (#fdeae3 do / #ebedd8 xanh / #fbf6ef vang).
+   Mot token lam hai viec: lam nen badge nho (.count, .qty) thi cam dam la
+   dung, nhung trai ra mot the 84px nhu .meth thi no gat han len, con dam
+   hon ca cum tien ben duoi. Rieng .meth o ban nau lay tint pha tu accent. */
+:root[data-theme="brown"] .meth[aria-pressed="true"]{background:color-mix(in srgb, var(--accent) 14%, var(--surface));color:var(--ink)}
+/* NEN hai man "nhieu khoi doc canh nhau" (Payment confirm va Overview) o ban
+   nau an theo sac nau thay vi xam trung tinh #f3f3f3. Ca man con lai deu am
+   kem, mot mang xam lanh o giua doc ra nhu bi dan tu ban khac sang.
+   Pha 7% accent vao --surface: van DAM hon cac the trang ben tren no nen hai
+   khoi section con noi len, chi la noi trong cung mot ho mau.
+   Sua ca HAI man: ghi chu cua chinh #ovBody noi hai man phai doc ra cung
+   mot he, sua mot cai thi he do vo. */
+:root[data-theme="brown"] .paywrap,
+:root[data-theme="brown"] #ovBody{background:color-mix(in srgb, var(--accent) 7%, var(--surface))}
 :root[data-theme="brown"] .seg.sm{border:0;background:#f1f0ef}
 :root[data-theme="brown"] .seg.sm button[aria-pressed="true"]{background:#1c1917;color:#ffffff}
 
@@ -2531,7 +2560,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
       <button type="button" class="key" data-act="pin" data-v="7">7</button><button type="button" class="key" data-act="pin" data-v="8">8</button><button type="button" class="key" data-act="pin" data-v="9">9</button>
       <button type="button" class="key sm" data-act="pin" data-v="clear">Clear</button><button type="button" class="key" data-act="pin" data-v="0">0</button><button type="button" class="key" data-act="pin" data-v="back" aria-label="Delete last digit"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"></path><path d="m12 9 6 6"></path><path d="m18 9-6 6"></path></svg></button>
     </div>
-    <p class="hint">Prototype only — Aina · Cashier <b>1234</b> · Farid · Manager <b>9999</b></p>
+    <p class="hint">Prototype only: Aina (Cashier - <b>1234</b>); Farid (Manager - <b>9999</b>)</p>
   </div>
 </div>
 
