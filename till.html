@@ -2152,6 +2152,14 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 /* ---- THEME NAU ----------------------------------------------------------
    Rail la mang NAU RAT DAM #43290a, icon trang; o dang mo la mang BRAND.
    Khac ca xanh (rail dam / o sang) lan vang (rail brand / o dam). */
+/* Chip DANG CHON to DEN chu khong phai nau brand — giong cach ban do dang
+   lam. Ca hang chip deu la the TRANG tren nen kem, ma nau #a04f12 chi dam
+   hon kem mot bac nen cai dang chon khong noi han len; den thi tach ra ngay.
+   BAY: var(--ink) o ban NAU la #4a2e20, mot sac NAU DAM chu khong phai den
+   — dung no thi chip van ra nau, chi dam hon. Phai ghi thang #1c1917.
+   O ban DO thi --ink dung la #1c1917 nen rule do xai var(--ink) duoc. */
+:root[data-theme="brown"] .cat[aria-pressed="true"]{background:#1c1917;color:#ffffff;box-shadow:none}
+:root[data-theme="brown"] .cat[aria-pressed="true"] .cc{background:rgba(255,255,255,.2);color:var(--surface);opacity:1}
 :root[data-theme="brown"] .ri,
 :root[data-theme="brown"] .rail .ib{color:#ffffff;border-radius:16px}
 /* O CHUA CHON van co mang nen, chi la rat mo (5%). Khong co no thi icon troi
@@ -2168,7 +2176,14 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 /* Gia tung dong trong COT DON lay mau brand — chi o cot don, khong ap cho
    luoi mon (12 the x mau brand thi thanh on). */
 :root[data-theme="brown"] .line .amt{color:var(--accent);font-size:16px}
-:root[data-theme="brown"] .seg.sm{border:0;background:var(--surface-2)}
+/* Track XAM NHAT, o dang chon to DEN — cung mot luat voi chip danh muc o
+   tren: o ban nau cai dang chon phai tach ra bang DO DAM chu khong bang sac
+   brand, vi nen quanh no cung dang am mau brand roi.
+   Track pha tu --ink nen no la xam trung tinh, khong phai kem --surface-2.
+   PHAI la .seg.sm button[aria-pressed] (0,5,1): ban modern cung (0,5,1) va
+   dung truoc, con .seg button[aria-pressed] chi (0,4,1) nen thua. */
+:root[data-theme="brown"] .seg.sm{border:0;background:#f1f0ef}
+:root[data-theme="brown"] .seg.sm button[aria-pressed="true"]{background:#1c1917;color:#ffffff}
 
 /* ---- THEME VANG ---------------------------------------------------------
    Rail la mang VANG BRAND, o dang mo la mang NAU DAM — nguoc voi ban xanh
