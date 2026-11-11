@@ -2050,11 +2050,9 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="green"] .dish.off{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .cat{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .cat svg{opacity:1;color:var(--accent)}
-/* Chip DANG CHON to den, nhu hai ban nau va do. Mang #ffb22a cu khong phai
-   mau brand cua ban xanh (accent la #015726) — chi la mot sac vang bi bo quen. */
-:root[data-theme="green"] .cat[aria-pressed="true"]{background:#1c1917;color:#ffffff;box-shadow:none}
-:root[data-theme="green"] .cat[aria-pressed="true"] svg{color:#ffffff}
-:root[data-theme="green"] .cat[aria-pressed="true"] .cc{background:rgba(255,255,255,.2);color:#ffffff;opacity:1}
+:root[data-theme="green"] .cat[aria-pressed="true"]{background:var(--pick);color:var(--pick-ink);box-shadow:none}
+:root[data-theme="green"] .cat[aria-pressed="true"] svg{color:var(--pick-ink)}
+:root[data-theme="green"] .cat[aria-pressed="true"] .cc{background:var(--pick-soft);color:var(--pick-ink);opacity:1}
 :root[data-theme="green"] .menu-top .search{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .seg{background:var(--pick-soft);box-shadow:none}
 /* PHAI la .seg.sm: :root[data-layout="modern"] .seg.sm button[aria-pressed]
@@ -2146,13 +2144,9 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    sang ban ve net: no an theo currentColor nen thanh trang cung chu.
    Bon chip mon khong vuong: icon cua chung nhieu mau va sang. */
 :root[data-theme="brown"] .cat[data-v="all"][aria-pressed="true"] .cimg,
-:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cimg,
-:root[data-theme="green"] .cat[data-v="all"][aria-pressed="true"] .cimg,
-:root[data-theme="yellow"] .cat[data-v="all"][aria-pressed="true"] .cimg{display:none}
+:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cimg{display:none}
 :root[data-theme="brown"] .cat[data-v="all"][aria-pressed="true"] .cico,
-:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cico,
-:root[data-theme="green"] .cat[data-v="all"][aria-pressed="true"] .cico,
-:root[data-theme="yellow"] .cat[data-v="all"][aria-pressed="true"] .cico{display:block;width:24px;height:24px}
+:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cico{display:block;width:24px;height:24px}
 
 /* ---- THEME DO ------------------------------------------------------------
    Rail AMBER (khong phai mau brand), o dang mo moi la DO brand. Icon o cac o
@@ -2319,12 +2313,8 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .unav{background:#ebebeb}
 /* Chip KHONG dung vien: nen kem am. Day la cho ban vang khac han ban xanh. */
 :root[data-theme="yellow"] .cat{background:var(--surface-2);box-shadow:none;color:var(--accent-ink)}
-/* Chip DANG CHON to den. O ban vang day la cho lo ro nhat: nen chip cu
-   (#ffb22a) TRUNG Y HET mau nut Charge — mot bo LOC va nut CHOT TIEN khong
-   duoc nhin giong nhau. */
-:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:#1c1917;color:#ffffff}
-:root[data-theme="yellow"] .cat[aria-pressed="true"] svg{color:#ffffff}
-:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:rgba(255,255,255,.2);color:#ffffff;opacity:1}
+:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:var(--surface-2);color:var(--accent-ink);opacity:1}
 :root[data-theme="yellow"] .ri,
 :root[data-theme="yellow"] .rail .ib{color:#ffffff;border-radius:16px}
 /* Cung cach, nhung 15% — rail vang sang hon rail nau nhieu nen 5% se mat hut. */
@@ -2925,7 +2915,7 @@ const THEMES = {brown:'Brown theme', red:'Red theme', green:'Green theme', yello
 const LAYOUT = {brown:'modern', red:'modern', green:'modern', yellow:'modern'};
 function setTheme(t){
   if (t === 'peach') t = 'red';   // gia tri cu con luu tu ban truoc
-  if (!THEMES[t]) t = 'red';
+  if (!THEMES[t]) t = 'yellow';
   document.documentElement.setAttribute('data-theme', t);
   document.documentElement.setAttribute('data-layout', LAYOUT[t]);
   document.querySelectorAll('[data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === t)));
@@ -4179,7 +4169,7 @@ document.addEventListener('click', e => {
   }
   const a = el.dataset.act, v = el.dataset.v;
   switch (a) {
-    case 'theme': setTheme(v); toast(THEMES[v] || THEMES.brown); break;
+    case 'theme': setTheme(v); toast(THEMES[v] || THEMES.yellow); break;
     case 'cat': S.cat = v; renderCats(); renderGrid(); break;
     case 'type': S.type = v; render(); break;
     case 'dish': openOpts(el.dataset.id); break;
@@ -4392,7 +4382,7 @@ document.addEventListener('keydown', e => {
 /* Mo len luon la theme DO — day la theme mac dinh cua san pham. Khong khoi
    phuc lua chon cu tu localStorage nua: hai o chon theme tren top bar la cong
    cu DEMO, khong phai cai dat that cua thu ngan. */
-setTheme('red');
+setTheme('yellow');
 /* Chi nhan chu so. S.table van la chuoi vi day la ma dinh danh, khong phai so dem. */
 /* Roi khoi o ma van de trong thi luc do moi la loi that. */
 $('#standNo').addEventListener('blur', () => { S.standTouched = true; renderCart(); });
