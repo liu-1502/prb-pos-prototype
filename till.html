@@ -935,7 +935,11 @@ button:disabled{cursor:not-allowed}
 .otot .k{font-size:12px;font-weight:500;color:var(--muted)}
 /* 22px. Thu 17 (chim qua) roi 26 (bu qua) moi chot o day. Van phai thang
    so luong, nen ha so luong xuong 20 de giu khoang cach. */
-.otot .v{font-size:22px;font-weight:600;line-height:1.15;color:var(--price)}
+/* MAU DEN, khong phai brand. Trong sheet nay sac brand dang danh cho chip
+   DANG CHON (vien + mang tint); to them con so o chan sheet nua la mot mau
+   noi hai viec khac nhau tren cung mot man.
+   AMOUNT o man thanh toan thi GIU brand — man do chi co mot con so duy nhat. */
+.otot .v{font-size:22px;font-weight:600;line-height:1.15;color:var(--ink)}
 /* Ten nhom + nhan Required/Optional nam cung mot hang. "one" = buoc chon mot
    (va luon co san mot lua chon mac dinh) nen la Required; "many" la Optional. */
 .og h3{margin:0 0 10px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
