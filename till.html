@@ -568,8 +568,6 @@ button:disabled{cursor:not-allowed}
 .row.total span:last-child{font-size:16px;font-weight:600;line-height:1.1}
 .btns{display:flex;gap:8px}
 /* khung cho thao tác giả lập — không phải UI sản phẩm */
-.sim{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;border:0;border-radius:var(--r-md);background:var(--bg)}
-.sim .lbl{flex:1;min-width:120px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .sim .btn{min-height:36px;padding:0 12px;font-size:13px}
 /* Outline — kiểu mặc định: bg_light + border_neutral + text_dark, không inner shadow */
 .btn{min-height:48px;padding:0 16px;border-radius:var(--r-pill);border:0;background:var(--surface-2);color:var(--ink);font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
@@ -4164,7 +4162,7 @@ function poListHTML(){
     if (o.status === 'rejected') hq = `<div class="note" style="color:var(--bad-ink);font-weight:600">Rejected by ${esc(o.hqBy)} at ${hhmmOf(o.hqAt)}: “${esc(o.hqNote)}”</div>`;
     if (o.status === 'received') hq += `<div class="note">Delivered ${hhmmOf(o.recAt)} · stock added</div>`;
     let act = '';
-    if (o.status === 'pending') act = `<div class="btns"><button type="button" class="btn" data-act="po-withdraw" data-v="${o.id}">Withdraw this order</button></div><div class="sim"><span class="lbl">Prototype only</span><button type="button" class="btn" data-act="po-sim-ok" data-v="${o.id}">Simulate HQ approval</button><button type="button" class="btn" data-act="po-sim-no" data-v="${o.id}">Simulate rejection</button></div>`;
+    if (o.status === 'pending') act = `<div class="btns"><button type="button" class="btn" data-act="po-withdraw" data-v="${o.id}">Withdraw this order</button></div>`;
     if (o.status === 'ordered') act = `<div class="btns"><button type="button" class="btn primary grow" data-act="po-recv" data-v="${o.id}">Delivery received</button></div>`;
     /* GOP LAI: mot don chi hien dau de cho toi khi cham. Danh sach nay dai dan
        theo ngay, ma phan lon thoi gian quan ly chi can liec "don nao con cho
@@ -4340,11 +4338,13 @@ document.addEventListener('click', e => {
     case 'po-open': if (!PO_ON) break; S.poOpen = null; openLayer('#poDlg'); renderPO(); break;
     case 'po-toggle': S.poOpen = S.poOpen === v ? null : v; renderPO(); break;
     case 'po-close': closeLayer('#poDlg'); break;
-    case 'po-withdraw': case 'po-sim-ok': case 'po-sim-no': case 'po-recv': {
+    /* CHI hai hanh dong co that cua cua hang: rut don da gui, va nhan hang.
+       Duyet / tu choi la viec cua HQ — khong bao gio hien tren may cua hang,
+       nen hai nut gia lap cu da bo han. Du lieu mau van co san don o ca bon
+       trang thai nen man nay van xem du duoc. */
+    case 'po-withdraw': case 'po-recv': {
       const o = S.po.find(x => x.id === v); if (!o) break;
       if (a === 'po-withdraw') { o.status = 'withdrawn'; toast(`${o.id} withdrawn`); }
-      if (a === 'po-sim-ok') { o.status = 'ordered'; o.hqBy = 'Nadia'; o.hqAt = new Date(); o.hqNote = 'by email'; toast(`HQ approved ${o.id} · sent to ${SUPN[o.sup]}`); }
-      if (a === 'po-sim-no') { o.status = 'rejected'; o.hqBy = 'Nadia'; o.hqAt = new Date(); o.hqNote = 'Stock on hand covers the next few days. Resubmit later in the week.'; toast(`HQ rejected ${o.id}`); }
       if (a === 'po-recv') { o.status = 'received'; o.recAt = new Date(); o.lines.forEach(l => { S.stock[l.id] = r3(S.stock[l.id] + l.qty); }); toast(`${o.id} received · ${o.lines.map(l => INGR[l.id].name + ' +' + fmtQ(l.id, l.qty)).join(', ')}`); }
       render(); renderPO(); break; }
     case 'close-open': if (S.user !== 'manager') { toast('Close register is for managers only'); break; } openClose(); break;
