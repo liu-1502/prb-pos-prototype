@@ -1391,11 +1391,13 @@ button:disabled{cursor:not-allowed}
    DOC. Dau cham thi hai cai doc ra nhu mot cum tu lien; vach doc noi ro day
    la hai thong tin khac loai.
    De tang mot chi con MA DON + trang thai: don nao, dang o buoc nao. */
-.posup{flex:none;padding-right:10px;border-right:1px solid var(--line-2);font-size:14px;font-weight:500;color:var(--muted);max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.posup{position:relative;flex:1;min-width:0;padding-left:10px;font-size:14px;font-weight:500;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Vach ngan cao 14 can giua dong, khong phai border chay het chieu cao: border
+   dai bang ca dong thi no doc ra nhu duong chia COT cua mot bang. */
+.posup::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:1px;height:14px;background:var(--line-2)}
 .poh1 .badge{flex:none;margin-left:auto}
-.pocard .poh2 .posup + .note{flex:1;min-width:0}
 .poh2{display:flex;align-items:center;gap:10px}
-.pocard .poh2 .note{flex:1;min-width:0;font-size:14px}
+.pocard .poh2 .note{flex:none;font-size:14px}
 /* Tong tien nam ngay tren dau de: khong phai mo tung don ra moi biet no bao
    nhieu tien. */
 .potot{flex:none;font-size:15px;font-weight:600;color:var(--price)}
@@ -4246,7 +4248,7 @@ function poListHTML(){
     return `<div class="card pocard${open ? ' open' : ''}">` +
       `<button type="button" class="pohead" data-act="po-toggle" data-v="${o.id}" aria-expanded="${open}">` +
         `<span class="poh1"><b class="poid num">${o.id}</b><span class="badge ${st[0]}">${st[1]}</span></span>` +
-        `<span class="poh2"><span class="posup">${esc(SUPN[o.sup])}</span><span class="note">Needed by ${esc(dshort(o.needed))}</span><span class="potot num">${rm(o.total)}</span><svg class="pochev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>` +
+        `<span class="poh2"><span class="note">Needed by ${esc(dshort(o.needed))}</span><span class="posup">${esc(SUPN[o.sup])}</span><span class="potot num">${rm(o.total)}</span><svg class="pochev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>` +
       `</button>` +
       (open ? `<div class="pobody"><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>` : '') +
     `</div>`;
