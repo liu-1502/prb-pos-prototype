@@ -3900,7 +3900,12 @@ function renderOverview(){
 /* ---------- assistant ---------- */
 /* Dat hang nha cung cap & nhan hang: nghiep vu chua chot nen TAM AN.
    Code van con nguyen; bat lai bang cach doi co nay thanh true. */
-const PO_ON = false;
+/* BAT LAI 2026-11-11 theo yeu cau cua nguoi dung.
+   LUU Y cho lan sau doc lai: GAP-PO-SPEC.md ghi la PO da xac nhan phan nay
+   CHUA LAM, va no bi tat ngay 2026-11-08 chinh vi the. Bat lai la mot quyet
+   dinh nghiep vu, khong phai sua giao dien — neu PO van chua chot thi doi
+   ve false la tat sach (nut rail, tab Assistant, cau goi y, cau lenh go tay). */
+const PO_ON = true;
 const PO_OFF = 'Supplier ordering isn’t part of the till yet.';
 const SUGG_ALL = ['order 20kg rice and 60 eggs for tomorrow', 'order what’s running low', 'status of my supplier orders', 'stock count: chicken 4.2kg, eggs 60, rice 25kg', 'write off 0.5kg prawns, spoiled', 'teh tarik price 3.80', 'what’s selling today?', 'less sweet for table 7'];
 const SUGG = PO_ON ? SUGG_ALL : SUGG_ALL.filter(s => !/order/.test(s));
