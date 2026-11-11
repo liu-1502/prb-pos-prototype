@@ -541,11 +541,10 @@ button:disabled{cursor:not-allowed}
 .ln{font-size:15px;font-weight:500}
 .mods{font-size:13px;color:var(--muted);margin-top:3px}
 .amt{font-size:15px;font-weight:600;text-align:right}
-/* Tien TUNG DONG lui ve --muted o ca bon ban mau. No la so TINH RA tu so
-   luong x don gia, va duoc cong lai ngay o dong Total ben duoi — khong phai
-   so thu ngan phai soi. Thu phai soi la SO LUONG: no go tay nen de sai, va
-   doc lai don cho khach chinh la de bat cai sai do. */
-.line .amt{color:var(--price)}
+/* Tien TUNG DONG: 14/600, DONG NHAT ca bon ban mau. Truoc do moi ban mot co
+   (do 14, xanh/vang 15, nau 16) — cung mot con so ma ba co khac nhau.
+   14 nam vua duoi ten mon (15/500) nen no doc ra la thong tin phu cua dong. */
+.line .amt{color:var(--price);font-size:14px}
 .cart-f{padding:14px 18px 18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
 .row.total{color:var(--ink);align-items:baseline;margin:0}
@@ -2237,7 +2236,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="red"] .tpanel{background:transparent;padding:12px 0 0}
 :root[data-theme="red"] .cart-f{border-top:1px solid var(--line-2)}
 /* Gia tung dong trong cot don lay mau brand, giong ban nau. */
-:root[data-theme="red"] .line .amt{color:var(--price);font-size:14px}
+:root[data-theme="red"] .line .amt{color:var(--price)}
 
 /* ---- THEME NAU ----------------------------------------------------------
    Rail la mang NAU RAT DAM #43290a, icon trang; o dang mo la mang BRAND.
@@ -2265,7 +2264,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="brown"] .who{background:#ffffff;border:1.5px solid var(--line-2)}
 /* Gia tung dong trong COT DON lay mau brand — chi o cot don, khong ap cho
    luoi mon (12 the x mau brand thi thanh on). */
-:root[data-theme="brown"] .line .amt{color:var(--price);font-size:16px}
+:root[data-theme="brown"] .line .amt{color:var(--price)}
 /* Track XAM NHAT, o dang chon to DEN — cung mot luat voi chip danh muc o
    tren: o ban nau cai dang chon phai tach ra bang DO DAM chu khong bang sac
    brand, vi nen quanh no cung dang am mau brand roi.
