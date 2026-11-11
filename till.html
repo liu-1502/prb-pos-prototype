@@ -177,8 +177,12 @@
   --accent:#ffb22a; --accent-ink:#000000; --accent-soft:#fff1d8; --accent-soft-ink:#8a5600;
   --accent-hover:#f0a111; --ink-hover:#000000;
   /* --accent-fg: ban DAM cua brand, danh cho luc brand lam MAU CHU hoac VIEN
-     tren nen sang. #ffb12a tren trang chi 1.81; #8a5600 duoc 6.16. */
-  --accent-fg:#8a5600;
+     tren nen sang. #ffb12a tren trang chi 1.81; #8a5600 duoc 6.16; ban nay
+     #6e4400 duoc 8.43.
+     Doi o DAY chu khong doi rieng --price: --accent-fg la nguon chung cua
+     ca gia tren the mon, gia trong gio, mau bieu do, vien tab dang mo va
+     vien focus. Doi mot cho thi tien o hai man ra hai sac nau khac nhau. */
+  --accent-fg:#6e4400;
   --warm:#fbf6ef; --warm-ink:#000000;
   --ok-soft:#e3f0e3; --ok-ink:#2d6b2d; --ok-line:#2d6b2d;
   /* "Cho xu ly" KHONG duoc dung vang nua — brand da chiem sac vang roi, dung
@@ -931,6 +935,10 @@ button:disabled{cursor:not-allowed}
    nguoi dung dang chinh truc tiep. */
 #optDlg .dlg-f .step{margin-left:auto;gap:8px;padding-right:16px;border-right:1.5px solid var(--line)}
 #optDlg .dlg-f .step button{width:36px;height:36px;font-size:19px}
+/* Nut + o day phai GIONG nut + tren the mon ngoai luoi — cung mot viec thi
+   cung mot kieu. The mon da lay --ink; rieng chan sheet con lay --accent nen
+   o ban vang no ra mang amber trung voi nut "Add to order" ngay canh. */
+#optDlg .dlg-f .step button[data-act$="-inc"]{background:var(--ink);color:var(--surface)}
 #optDlg .dlg-f .step span{min-width:26px;font-size:20px}
 .otot .k{font-size:12px;font-weight:500;color:var(--muted)}
 /* 22px. Thu 17 (chim qua) roi 26 (bu qua) moi chot o day. Van phai thang
@@ -2042,9 +2050,11 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="green"] .dish.off{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .cat{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .cat svg{opacity:1;color:var(--accent)}
-:root[data-theme="green"] .cat[aria-pressed="true"]{background:var(--pick);color:var(--pick-ink);box-shadow:none}
-:root[data-theme="green"] .cat[aria-pressed="true"] svg{color:var(--pick-ink)}
-:root[data-theme="green"] .cat[aria-pressed="true"] .cc{background:var(--pick-soft);color:var(--pick-ink);opacity:1}
+/* Chip DANG CHON to den, nhu hai ban nau va do. Mang #ffb22a cu khong phai
+   mau brand cua ban xanh (accent la #015726) — chi la mot sac vang bi bo quen. */
+:root[data-theme="green"] .cat[aria-pressed="true"]{background:#1c1917;color:#ffffff;box-shadow:none}
+:root[data-theme="green"] .cat[aria-pressed="true"] svg{color:#ffffff}
+:root[data-theme="green"] .cat[aria-pressed="true"] .cc{background:rgba(255,255,255,.2);color:#ffffff;opacity:1}
 :root[data-theme="green"] .menu-top .search{background:var(--surface);box-shadow:none}
 :root[data-theme="green"] .seg{background:var(--pick-soft);box-shadow:none}
 /* PHAI la .seg.sm: :root[data-layout="modern"] .seg.sm button[aria-pressed]
@@ -2136,9 +2146,13 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    sang ban ve net: no an theo currentColor nen thanh trang cung chu.
    Bon chip mon khong vuong: icon cua chung nhieu mau va sang. */
 :root[data-theme="brown"] .cat[data-v="all"][aria-pressed="true"] .cimg,
-:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cimg{display:none}
+:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cimg,
+:root[data-theme="green"] .cat[data-v="all"][aria-pressed="true"] .cimg,
+:root[data-theme="yellow"] .cat[data-v="all"][aria-pressed="true"] .cimg{display:none}
 :root[data-theme="brown"] .cat[data-v="all"][aria-pressed="true"] .cico,
-:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cico{display:block;width:24px;height:24px}
+:root[data-theme="red"] .cat[data-v="all"][aria-pressed="true"] .cico,
+:root[data-theme="green"] .cat[data-v="all"][aria-pressed="true"] .cico,
+:root[data-theme="yellow"] .cat[data-v="all"][aria-pressed="true"] .cico{display:block;width:24px;height:24px}
 
 /* ---- THEME DO ------------------------------------------------------------
    Rail AMBER (khong phai mau brand), o dang mo moi la DO brand. Icon o cac o
@@ -2305,8 +2319,12 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .unav{background:#ebebeb}
 /* Chip KHONG dung vien: nen kem am. Day la cho ban vang khac han ban xanh. */
 :root[data-theme="yellow"] .cat{background:var(--surface-2);box-shadow:none;color:var(--accent-ink)}
-:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:var(--surface-2);color:var(--accent-ink);opacity:1}
+/* Chip DANG CHON to den. O ban vang day la cho lo ro nhat: nen chip cu
+   (#ffb22a) TRUNG Y HET mau nut Charge — mot bo LOC va nut CHOT TIEN khong
+   duoc nhin giong nhau. */
+:root[data-theme="yellow"] .cat[aria-pressed="true"]{background:#1c1917;color:#ffffff}
+:root[data-theme="yellow"] .cat[aria-pressed="true"] svg{color:#ffffff}
+:root[data-theme="yellow"] .cat[aria-pressed="true"] .cc{background:rgba(255,255,255,.2);color:#ffffff;opacity:1}
 :root[data-theme="yellow"] .ri,
 :root[data-theme="yellow"] .rail .ib{color:#ffffff;border-radius:16px}
 /* Cung cach, nhung 15% — rail vang sang hon rail nau nhieu nen 5% se mat hut. */
