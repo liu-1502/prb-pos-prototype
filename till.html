@@ -627,9 +627,14 @@ button:disabled{cursor:not-allowed}
    giua man. Bon muc rail la bon dich den ngang hang — de ba cai truot ra canh
    con cai thu tu nhay ra giua man thi rail khong con doan truoc duoc. Va sheet
    thi giu nguyen cot don ben phai, dung ly do da dung sheet cho Orders.
-   640: the don co bang BA cot (nguyen lieu / so luong / thanh tien). Stock la
-   bang nam cot nen can 680; Orders chi la the doc nen 320 du. */
-#poDlg.sheet .dlg{width:min(640px, 100%)}
+   560 — do, khong doan: sheet bat dau o x=76 con cot don bat dau o x=695, nen
+   be rong toi da ma KHONG de len cot don la 603. Do tung thanh phan can bao
+   nhieu: hang sau tab 495 (do o be rong TU NHIEN, khong phai 640 nhu khi bi
+   flex:1 keo gian), bang nguyen lieu min-content 202, tang hai dau de ~320.
+   Chot 560: du cho thu rong nhat (hang tab) va con 59px ho truoc cot don.
+   640 cu lam sheet ket thuc o x=716, DE LEN cot don 21px — mat dung cai ly do
+   da chon sheet thay vi dialog. */
+#poDlg.sheet .dlg{width:min(560px, 100%)}
 /* MAN TONG QUAN LA MAN CHINH CUA QUAN LY, khong phai mot panel phu — nen no
    phu HET vung lam viec. Chi chua lai dung thanh rail: do la duong sang Till
    va Orders, che no di thi quan ly khong con loi ra. */
@@ -698,7 +703,7 @@ button:disabled{cursor:not-allowed}
   /* Man hep khong co rail doc nen sheet ap sat mep, va chiem gan het be ngang. */
   .scrim.sheet .dlg{margin-left:0;width:min(320px, 100%)}
   #stockDlg.sheet .dlg{width:min(680px, 100%)}
-  #poDlg.sheet .dlg{width:min(640px, 100%)}
+  #poDlg.sheet .dlg{width:min(560px, 100%)}
 }
 
 /* ---- OVERVIEW (manager) --------------------------------------------------
@@ -1403,7 +1408,7 @@ button:disabled{cursor:not-allowed}
 .pocard .poh2 .note{flex:1;min-width:0;font-size:14px}
 /* Tong tien nam ngay tren dau de: khong phai mo tung don ra moi biet no bao
    nhieu tien. */
-.potot{flex:none;font-size:15px;font-weight:600;color:var(--price)}
+.potot{flex:none;font-size:15px;font-weight:600;color:var(--ink)}
 .pochev{flex:none;color:var(--muted);transition:transform .15s}
 .pocard.open .pochev{transform:rotate(180deg)}
 .pobody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
