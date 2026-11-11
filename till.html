@@ -894,7 +894,7 @@ button:disabled{cursor:not-allowed}
    mot khung thi doc ra nhu mot lua chon nua. Nam ngoai #optBody nen no
    khong bi renderOpts() dung lai moi khi doi option. */
 .onote{flex:none;padding:0 20px 14px;display:flex;flex-direction:column;gap:8px}
-.onote label{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+.onote label{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
 #optNote{width:100%;height:48px;padding:0 16px;border:1.5px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);color:var(--ink);font-size:15px;font-weight:500}
 #optNote::placeholder{color:var(--muted);font-weight:400}
 /* Ghi chu khi da nam tren dong: in nghieng va co dau nhay de phan biet NGAY
@@ -915,11 +915,12 @@ button:disabled{cursor:not-allowed}
 .otot .v{font-size:22px;font-weight:600;line-height:1.15}
 /* Ten nhom + nhan Required/Optional nam cung mot hang. "one" = buoc chon mot
    (va luon co san mot lua chon mac dinh) nen la Required; "many" la Optional. */
-.og h3{margin:0 0 10px;display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
-/* Hai muc ro rang: Required la badge to mau brand (phai chon), Optional la
-   badge xam (co the bo qua). Truoc day ca hai la mot dong chu xam 11px
-   opacity .75 — doc luot khong phan biet duoc cai nao bat buoc. */
-.oreq{flex:none;font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;padding:3px 10px;border-radius:var(--r-pill);opacity:1}
+.og h3{margin:0 0 10px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+/* KHONG con la badge. Chi con DUY NHAT mot nhan o day (xem ghi chu ben
+   duoi), ma mot badge don doc tren ca sheet thi nang hon thong tin no mang:
+   no chi noi "bo qua cung duoc". Chu phu trong ngoac don dung la trong so do
+   — doc duoc khi can, khong keo mat khi khong can. */
+.oreq{flex:none;font-size:13px;font-weight:400;letter-spacing:0;text-transform:none;padding:0;border-radius:0;background:none;opacity:1}
 /* Nen TRUNG TINH cho ca hai, khong dung --accent-soft: mang brand o day lan
    voi chip dang chon va nut Charge, doc ra nhu mot thu bam duoc.
    Phan biet bang DO DAM cua nen + mau chu, khong bang sac mau:
@@ -929,7 +930,7 @@ button:disabled{cursor:not-allowed}
    Chon giu "Optional" chu khong giu "Required" vi no la thong tin HANH DONG
    duoc: no noi thu ngan "bo qua cung duoc". Mot badge "Required" dat tren nhom
    da co san cau tra loi thi khong bao ai phai lam gi. */
-.oreq.opt{background:color-mix(in srgb, #000000 5%, var(--surface));color:var(--muted)}
+.oreq.opt{background:none;color:var(--muted)}
 /* Add-on gia 0 ghi "Free" chu khong de trong — de trong thi doc nhu chua co gia. */
 /* Xanh la co dinh o ca bon theme. KHONG dung --ok-*: theme xanh dat --ok la
    mau XANH LAM (vi xanh la da la brand o do), badge se ra xanh lam.
@@ -2403,7 +2404,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="optTitle" style="max-width:560px">
     <div class="dlg-h"><div style="display:flex;gap:12px;align-items:center;min-width:0"><span class="othumb"><img id="optImg" alt=""></span><div style="min-width:0"><h2 id="optTitle">Dish</h2><p id="optSub"></p></div></div><button type="button" class="x" data-act="opt-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
     <div class="dlg-b" id="optBody"></div>
-    <div class="onote"><label for="optNote">Note for the kitchen<span class="oreq opt">Optional</span></label><input type="text" id="optNote" maxlength="60" autocomplete="off" placeholder="e.g. no peanuts, cut in half"></div>
+    <div class="onote"><label for="optNote">Note for the kitchen<span class="oreq opt">(Optional)</span></label><input type="text" id="optNote" maxlength="60" autocomplete="off" placeholder="e.g. no peanuts, cut in half"></div>
     <div class="dlg-f">
       <div class="otot"><span class="k">Item total</span><span class="v num" id="optTotal">RM 0.00</span></div>
       <div class="step"><button type="button" data-act="opt-dec" aria-label="One fewer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button><span class="num" id="optQty">1</span><button type="button" data-act="opt-inc" aria-label="One more"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button></div>
@@ -3192,7 +3193,7 @@ function renderOpts(){
   }
   const base = lineNeed(o.id, [], o.qty);
   Object.keys(base).forEach(k => res[k] = r3((res[k] || 0) + base[k]));
-  $('#optBody').innerHTML = it.opts.map((g, gi) => `<div class="og" role="group" aria-label="${esc(g.group)}"><h3>${esc(g.group)}${g.type === 'many' ? '<span class="oreq opt">Optional</span>' : ''}</h3><div class="ochoices">` + g.choices.map(c => {
+  $('#optBody').innerHTML = it.opts.map((g, gi) => `<div class="og" role="group" aria-label="${esc(g.group)}"><h3>${esc(g.group)}${g.type === 'many' ? '<span class="oreq opt">(Optional)</span>' : ''}</h3><div class="ochoices">` + g.choices.map(c => {
     const need = {}; addNeed(need, c.recipe, o.qty);
     const short = c.recipe && !o.mods.includes(c.id) ? shortOf(need, res) : null;
     return `<label class="ochoice"><input type="${g.type === 'one' ? 'radio' : 'checkbox'}" name="g${gi}" value="${c.id}" data-act-change="opt" data-type="${g.type}" data-g="${gi}" ${o.mods.includes(c.id) ? 'checked' : ''} ${short ? 'disabled' : ''}><span>${esc(c.label)}${c.price ? ` <span class="num">+${rm(c.price)}</span>` : (c.price === 0 ? ` <span class="ofree">Free</span>` : '')}${short ? ' · out' : ''}</span></label>`;
