@@ -1850,7 +1850,12 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 
 /* man dang nhap PIN — phu kin, khong cham duoc gi phia sau */
 .signin{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
-.signin-card{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.signin-card{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+/* Illus chua san 23px trong o day khung 256 — cho chuong nap bay len,
+   khong co gi ve vao do. Do la ly do khoang illus -> "Till 1" do duoc
+   43px muc-toi-muc trong khi cac khoang khac chi 19-23. Margin am bu
+   dung phan trong do chu khong phai bop spacing that. */
+.signin-card .cloche{margin-bottom:-18px}
 .signin h1{margin:0;font-size:22px;font-weight:600}
 .signin .sub{margin:0;font-size:14px;color:var(--muted)}
 .pins{display:flex;gap:14px}
