@@ -622,6 +622,13 @@ button:disabled{cursor:not-allowed}
    Stock thi nguoc lai — bang 5 cot, cang rong cang de doc, nen cho han 680.
    Gio hang bat dau o x=850 con sheet o x=90, nen 680 van khong cham vao. */
 #stockDlg.sheet .dlg{width:min(680px, 100%)}
+/* Supplier orders cung la SHEET TRAI nhu Orders va Stock, khong phai dialog
+   giua man. Bon muc rail la bon dich den ngang hang — de ba cai truot ra canh
+   con cai thu tu nhay ra giua man thi rail khong con doan truoc duoc. Va sheet
+   thi giu nguyen cot don ben phai, dung ly do da dung sheet cho Orders.
+   640: the don co bang BA cot (nguyen lieu / so luong / thanh tien). Stock la
+   bang nam cot nen can 680; Orders chi la the doc nen 320 du. */
+#poDlg.sheet .dlg{width:min(640px, 100%)}
 /* MAN TONG QUAN LA MAN CHINH CUA QUAN LY, khong phai mot panel phu — nen no
    phu HET vung lam viec. Chi chua lai dung thanh rail: do la duong sang Till
    va Orders, che no di thi quan ly khong con loi ra. */
@@ -690,6 +697,7 @@ button:disabled{cursor:not-allowed}
   /* Man hep khong co rail doc nen sheet ap sat mep, va chiem gan het be ngang. */
   .scrim.sheet .dlg{margin-left:0;width:min(320px, 100%)}
   #stockDlg.sheet .dlg{width:min(680px, 100%)}
+  #poDlg.sheet .dlg{width:min(640px, 100%)}
 }
 
 /* ---- OVERVIEW (manager) --------------------------------------------------
@@ -1386,6 +1394,12 @@ button:disabled{cursor:not-allowed}
 .pocard.open .pochev{transform:rotate(180deg)}
 .pobody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
 .pobody > :first-child{margin-top:10px}
+/* "Withdraw this order" dang VIEN, khong to nen: no la hanh dong rut lai mot
+   don DA GUI di, nen phai doc ra la viec can can nhac chu khong phai nut bam
+   tiep. Rieng .primary ("Delivery received") giu nen dac — do la buoc tien
+   toi binh thuong. */
+.pobody .btns .btn:not(.primary){background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.pobody .btns .btn:not(.primary):hover{background:color-mix(in srgb, var(--ink) 5%, transparent)}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-h b{font-size:16px;font-weight:600}
 .badge{font-size:12px;font-weight:600;border-radius:var(--r-sm);padding:4px 8px;white-space:nowrap}
@@ -2641,7 +2655,7 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 </div>
 
 <!-- supplier orders -->
-<div class="scrim" id="poDlg" hidden data-scrim="po">
+<div class="scrim sheet" id="poDlg" hidden data-scrim="po">
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="poTitle" style="max-width:640px">
     <div class="dlg-h"><div><h2 id="poTitle">Supplier orders</h2><p>Orders raised from this outlet. HQ approves each one before it goes to the supplier.</p></div><button type="button" class="x" data-act="po-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
     <div class="dlg-b" id="poBody"></div>
