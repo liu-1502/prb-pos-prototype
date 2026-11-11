@@ -1384,9 +1384,12 @@ button:disabled{cursor:not-allowed}
 .pohead:hover{background:color-mix(in srgb, var(--ink) 4%, transparent)}
 .poh1{display:flex;align-items:center;gap:10px;min-width:0}
 .poh1 b{font-size:15px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Ma don: ma TRA CUU, khong phai tieu de. Nho hon, mau phu, chu dang bang so
+   co do rong deu — doc ra la mot ma chu khong phai mot cai ten. */
+.poid{flex:none;font-size:12px;font-weight:500;color:var(--muted)}
 .poh1 .badge{flex:none;margin-left:auto}
 .poh2{display:flex;align-items:center;gap:10px}
-.poh2 .note{flex:1;min-width:0}
+.poh2 .note{flex:1;min-width:0;font-size:13px}
 /* Tong tien nam ngay tren dau de: khong phai mo tung don ra moi biet no bao
    nhieu tien. */
 .potot{flex:none;font-size:15px;font-weight:600;color:var(--price)}
@@ -1394,6 +1397,11 @@ button:disabled{cursor:not-allowed}
 .pocard.open .pochev{transform:rotate(180deg)}
 .pobody{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
 .pobody > :first-child{margin-top:10px}
+/* Dong thoi gian cua don. Muon nguyen .ovl cua nhat ky o Overview nen hai man
+   doc giong het nhau; chi them mot duong ke tren de tach khoi bang. */
+.potl{margin-top:2px}
+.potl .ovl:first-child{border-top:0}
+.potl .l .bad{color:var(--bad-ink);font-weight:600}
 /* "Withdraw this order" dang VIEN, khong to nen: no la hanh dong rut lai mot
    don DA GUI di, nen phai doc ra la viec can can nhac chu khong phai nut bam
    tiep. Rieng .primary ("Delivery received") giu nen dac — do la buoc tien
@@ -1403,10 +1411,18 @@ button:disabled{cursor:not-allowed}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .card-h b{font-size:16px;font-weight:600}
 .badge{font-size:12px;font-weight:600;border-radius:var(--r-sm);padding:4px 8px;white-space:nowrap}
-.badge.pend{background:var(--warn-soft);color:var(--warn-line)}
-.badge.ok{background:var(--ok-soft);color:var(--ok-ink)}
-.badge.mute{background:var(--surface-2);color:var(--muted)}
-.badge.bad{background:var(--bad-soft);color:var(--bad-ink)}
+/* BON badge dung CUNG MOT CONG THUC: nen la chinh mau chu pha 10% vao
+   --surface. Truoc day moi badge lay mot token --*-soft rieng, bon token do
+   duoc chon tay o bon ban mau nen do dam khong deu nhau — xep canh nhau trong
+   mot danh sach thi doc ra lung tung. Pha tu mau chu thi nen va chu luon cung
+   mot sac, va bon badge luon cung mot do nhat.
+   Chua luon mot loi cu: .badge.pend o ban nau/do lay nen #fbd24e (vang dac)
+   voi chu #9a6a00 — do duoc chi 3.25, duoi nguong 4.5 cho chu 11px. Nen nhat
+   di thi chu giu nguyen ma ty le len han. */
+.badge.pend{background:color-mix(in srgb, var(--warn-line) 10%, var(--surface));color:var(--warn-line)}
+.badge.ok{background:color-mix(in srgb, var(--ok-ink) 10%, var(--surface));color:var(--ok-ink)}
+.badge.bad{background:color-mix(in srgb, var(--bad-ink) 10%, var(--surface));color:var(--bad-ink)}
+.badge.mute{background:color-mix(in srgb, var(--ink) 6%, var(--surface));color:var(--muted)}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
 th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
@@ -4133,7 +4149,7 @@ function dshort(d){ return d.toLocaleDateString('en-GB', {weekday:'short', day:'
 function hhmmOf(d){ return d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}); }
 function poLine(id, packs){ const b = BUY[id]; return {id, packs, qty:r3(packs * b.pack), price:r2(packs * b.price)}; }
 function mkPO(sup, lines, extra){ return Object.assign({id:'PO-' + String(S.poNext++).padStart(4, '0'), sup, lines, total:r2(lines.reduce((s,l) => s + l.price, 0))}, extra); }
-const PO_ST = {pending:['pend','Waiting for HQ'], ordered:['ok','Approved · sent to supplier'], rejected:['bad','Rejected by HQ'], received:['ok','Delivered'], withdrawn:['mute','Withdrawn']};
+const PO_ST = {pending:['pend','Waiting for HQ'], ordered:['ok','Approved by HQ'], rejected:['bad','Rejected by HQ'], received:['ok','Delivered'], withdrawn:['mute','Withdrawn']};
 function buildPO(d, ok){
   const groups = {}, notes = [];
   ok.forEach(i => {
@@ -4171,10 +4187,21 @@ function poListHTML(){
   if (!S.po.length) return '<div class="empty">No supplier orders yet. Ask the assistant, e.g. “order 20kg rice for tomorrow”.</div>';
   return S.po.slice().sort((a,b) => b.at - a.at).map(o => {
     const st = PO_ST[o.status];
-    let hq = '';
-    if (o.status === 'ordered' || o.status === 'received') hq = `<div class="note">Approved by ${esc(o.hqBy)} at ${hhmmOf(o.hqAt)} · sent to supplier${o.hqNote ? ' ' + esc(o.hqNote) : ''}</div>`;
-    if (o.status === 'rejected') hq = `<div class="note" style="color:var(--bad-ink);font-weight:600">Rejected by ${esc(o.hqBy)} at ${hhmmOf(o.hqAt)}: “${esc(o.hqNote)}”</div>`;
-    if (o.status === 'received') hq += `<div class="note">Delivered ${hhmmOf(o.recAt)} · stock added</div>`;
+    /* MOT dong thoi gian duy nhat, thay cho ba cum chu roi rac truoc day
+       (mot cum tren bang, hai cum duoi bang). Doi cua don la mot chuoi viec
+       xay ra theo thu tu, ma bang nguyen lieu lai chen vao giua — doc thanh
+       ra nhay coc. Gom lai mot cho thi doc mot mach tu tren xuong.
+       Dung dung ngu phap cua nhat ky o man Overview (.ovl): cot trai la
+       "gio · nguoi", cot phai la viec. Hai man cung mot cach doc. */
+    const tl = [];
+    tl.push([hhmmOf(o.at) + ' · ' + esc(o.by), 'Created via ' + esc(o.via)]);
+    if (o.status === 'ordered' || o.status === 'received')
+      tl.push([hhmmOf(o.hqAt) + ' · ' + esc(o.hqBy), 'Approved · sent to supplier' + (o.hqNote ? ' ' + esc(o.hqNote) : '')]);
+    if (o.status === 'rejected')
+      tl.push([hhmmOf(o.hqAt) + ' · ' + esc(o.hqBy), '<span class="bad">Rejected</span> · “' + esc(o.hqNote) + '”']);
+    if (o.status === 'received') tl.push([hhmmOf(o.recAt), 'Delivery received · stock added']);
+    if (o.status === 'withdrawn') tl.push([o.wdAt ? hhmmOf(o.wdAt) : '', 'Withdrawn by the outlet']);
+    const hq = `<div class="potl">` + tl.map(r => `<div class="ovl"><span class="w">${r[0]}</span><span class="l">${r[1]}</span></div>`).join('') + `</div>`;
     let act = '';
     if (o.status === 'pending') act = `<div class="btns"><button type="button" class="btn" data-act="po-withdraw" data-v="${o.id}">Withdraw this order</button></div>`;
     if (o.status === 'ordered') act = `<div class="btns"><button type="button" class="btn primary grow" data-act="po-recv" data-v="${o.id}">Delivery received</button></div>`;
@@ -4186,10 +4213,10 @@ function poListHTML(){
     const open = S.poOpen === o.id;
     return `<div class="card pocard${open ? ' open' : ''}">` +
       `<button type="button" class="pohead" data-act="po-toggle" data-v="${o.id}" aria-expanded="${open}">` +
-        `<span class="poh1"><b>${o.id} · ${esc(SUPN[o.sup])}</b><span class="badge ${st[0]}">${st[1]}</span></span>` +
+        `<span class="poh1"><b>${esc(SUPN[o.sup])}</b><span class="poid num">${o.id}</span><span class="badge ${st[0]}">${st[1]}</span></span>` +
         `<span class="poh2"><span class="note">Needed by ${esc(dshort(o.needed))}</span><span class="potot num">${rm(o.total)}</span><svg class="pochev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></span>` +
       `</button>` +
-      (open ? `<div class="pobody"><div class="note">Created ${hhmmOf(o.at)} by ${esc(o.by)} via ${esc(o.via)}</div><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>` : '') +
+      (open ? `<div class="pobody"><div class="tbl-wrap"><table><thead><tr><th>Ingredient</th><th class="r">Qty</th><th class="r">Est. cost</th></tr></thead><tbody>${o.lines.map(l => `<tr><td>${esc(INGR[l.id].name)}</td><td class="r">${fmtQ(l.id, l.qty)}</td><td class="r">${rm(l.price)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${rm(o.total)}</b></td></tr></tbody></table></div>${hq}${act}</div>` : '') +
     `</div>`;
   }).join('');
 }
@@ -4358,7 +4385,7 @@ document.addEventListener('click', e => {
        trang thai nen man nay van xem du duoc. */
     case 'po-withdraw': case 'po-recv': {
       const o = S.po.find(x => x.id === v); if (!o) break;
-      if (a === 'po-withdraw') { o.status = 'withdrawn'; toast(`${o.id} withdrawn`); }
+      if (a === 'po-withdraw') { o.status = 'withdrawn'; o.wdAt = new Date(); toast(`${o.id} withdrawn`); }
       if (a === 'po-recv') { o.status = 'received'; o.recAt = new Date(); o.lines.forEach(l => { S.stock[l.id] = r3(S.stock[l.id] + l.qty); }); toast(`${o.id} received · ${o.lines.map(l => INGR[l.id].name + ' +' + fmtQ(l.id, l.qty)).join(', ')}`); }
       render(); renderPO(); break; }
     case 'close-open': if (S.user !== 'manager') { toast('Close register is for managers only'); break; } openClose(); break;
