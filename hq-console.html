@@ -107,7 +107,7 @@ button:disabled{cursor:not-allowed;opacity:.5}
    this delivery") va mot minh no keo ca menu ra 442px. 182px = 127px cho
    option dai nhat cua Role + ~20px mui ten native + 28px padding + 3px vien.
    Khi bung ra, danh sach van hien du chu. */
-.wrow select{margin-left:auto;width:182px}
+.wrow .dd{margin-left:auto;width:182px}
 .wlbl{margin:6px 10px 4px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .wsep{height:1px;margin:6px 8px;background:var(--line)}
 
@@ -198,6 +198,32 @@ tr.sel td{background:var(--accent-soft)}
 .field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}
 .field input,.field select,.field textarea{min-height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);padding:8px 16px;font-weight:500}
 .field textarea{border-radius:var(--r-md);padding:10px 14px;resize:vertical}
+/* ---- DROPDOWN TU DUNG ------------------------------------------------------
+   <select> cua he dieu hanh mo ra MENU CUA macOS: khi may dang o che do toi,
+   menu do la mang xam dam chu khong theo token cua san pham. `color-scheme:
+   light` khong voi toi duoc no — CSS khong restyle duoc popup native tren
+   macOS. Till da gap va da bo <select> vi dung ly do nay.
+   Day la NANG CAP TIEN BO: the <select> van nam nguyen trong DOM lam nguon du
+   lieu va van ban su kien `change`, nen khong mot handler nghiep vu nao phai
+   sua. Neu JS hong thi select native (da duoc style) hien lai nhu cu. */
+.dd{position:relative;display:inline-flex;max-width:100%;vertical-align:middle}
+.dd>select{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+.field .dd{width:100%}
+.ddb{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:40px;padding:0 12px 0 16px;border:1.5px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;text-align:left}
+.dd.sm .ddb{min-height:36px;padding:0 10px 0 12px}
+.ddb:hover:not(:disabled){border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
+.ddb .ddt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ddb .ddc{flex:none;color:var(--muted);transition:transform .15s}
+.ddb[aria-expanded="true"] .ddc{transform:rotate(180deg)}
+.ddm{position:absolute;top:calc(100% + 6px);left:0;z-index:60;min-width:100%;max-height:276px;overflow:auto;padding:6px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line-2)}
+/* Mo nguoc len khi gan day man hinh. */
+.ddm.up{top:auto;bottom:calc(100% + 6px)}
+.ddo{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;padding:0 10px;border:0;border-radius:var(--r-sm);background:transparent;color:var(--ink);font-size:13px;font-weight:600;text-align:left;white-space:nowrap}
+.ddo:hover:not(:disabled){background:var(--surface-2)}
+.ddo[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
+.ddo:disabled{color:var(--disabled-ink);cursor:not-allowed}
+.ddo .ddk{flex:none;color:var(--accent-fg)}
+.ddo[aria-selected="false"] .ddk,.ddo:disabled .ddk{visibility:hidden}
 /* Select nho nam trong bang. Truoc day ba cho nay deu mang style noi tuyen
    bo 8px vien 1px — tuc nam NGOAI he token, trong khac moi control con lai. */
 .sel-sm,.inp-sm{min-height:36px;max-width:100%;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;font-weight:600}
@@ -245,36 +271,21 @@ svg .bar.cur{fill:var(--chart)}
 svg .grid{stroke:var(--line)}
 svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 /* ---- TODAY'S DIGEST --------------------------------------------------------
-   Truoc day bay dong giong het nhau, moi dong mot cham mau o dau. Cham do ma
-   hoa MUC NGHIEM TRONG — nhung o ban vang "canh bao" la xanh lam xam, nen NAM
-   trong bay cham cung mot mau, mot cham xam, mot cham do. No khong con phan
-   biet duoc gi, chi con la nhieu. Da bo han .dot va bo bon lop .d-*.
-   Thay bang hai nhom: viec DANG CHO MINH (co so luong, co noi de den) va thu
-   chi can BIET. Trong moi nhom xep nang truoc nhe sau. */
-.dig{display:flex;flex-direction:column}
-.dglbl{margin:18px 0 6px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.dglbl:first-of-type{margin-top:0}
-.dgact,.dgnote{margin:0;padding:0;list-style:none}
-/* Ca HANG la vung bam, khong phai mot chu "Review" be xiu o cuoi cau. Van
-   dung dung mot duong dan nhu cu, chi la vung cham to hon. */
-.dgact a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 8px;margin:0 -8px;border-radius:var(--r-md);color:var(--ink);text-decoration:none}
-.dgact a:hover{background:color-mix(in srgb, var(--ink) 5%, transparent)}
-.dgact .n{min-width:32px;height:32px;padding:0 8px;border-radius:var(--r-sm);background:var(--accent-soft);color:var(--accent-soft-ink);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
-/* So 0 khong duoc to mau thuong hieu: "khong con viec nao" la tin TOT, to len
-   thi no doi cho chu y ngang voi mot hang dang co 7 viec cho. */
-.dgact .n.zero{background:var(--surface-2);color:var(--muted)}
-.dgact b{display:block;font-size:14px;font-weight:600}
-.dgact small{display:block;font-size:12px;color:var(--muted)}
-.dgact svg{flex:none;color:var(--muted)}
-.dgnote li{padding:10px 0;border-top:1px solid var(--line)}
-.dgnote li:first-child{border-top:0}
-.dgnote b{display:block;font-size:13px;font-weight:600}
-.dgnote small{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
-/* Link trong noi dung phai an theo he, khong de mau mac dinh cua trinh duyet.
-   Truoc day ba link "Review"/"Open"/"Details" trong digest deu la #0000ee —
-   mau xanh mac dinh — vi chung khong mang class nao. */
-.dgnote a{color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.dgnote a:hover{text-decoration-thickness:2px}
+   Mot dong mot muc, tat ca cung mot kieu hang — khong chia nhom, khong co hang
+   nao trong khac hang nao.
+   Dau dong KHONG con la cham mau. Cham cu ma hoa muc nghiem trong, ma o ban
+   vang "canh bao" la xanh lam xam nen NAM trong bay cham cung mot mau: no
+   khong noi duoc gi. Gio dau dong la ICON noi muc do la CHUYEN GI:
+     - icon cua chinh muc tren rail  -> viec thuoc khu vuc do (bam vao den do)
+     - tam giac canh bao             -> mot bat thuong can nguoi nhin
+     - dau tick xanh                 -> khu vuc do dang sach, khong con viec
+   Khong to mau theo muc nghiem trong nua: thu do chua bao gio doc duoc. */
+.dig ul{margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.dig li{list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;font-size:13px}
+.dig .di{flex:none;margin-top:1px;color:var(--muted)}
+.dig .di.ok{color:var(--ok-ink)}
+.dig a{color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.dig a:hover{text-decoration-thickness:2px}
 .switch{position:relative;width:44px;height:26px;border-radius:var(--r-pill);border:0;background:var(--line-2);flex:none}
 .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:var(--r-pill);background:#ffffff;transition:left .15s}
 .switch[aria-checked="true"]{background:var(--accent)}
@@ -673,6 +684,7 @@ function render(){
   const v = route();
   const html = ({dashboard:vDash, approvals:vApprovals, purchases:vPurchases, menu:vMenu, ingredients:vIng, suppliers:vSupp, promotions:vPromos, closes:vCloses, users:vUsers, assistant:vAI, audit:vAudit})[v]();
   $('#view').innerHTML = html;
+  enhanceSelects();
   const th = $('#hqThread'); if (th) th.scrollTop = th.scrollHeight;
 }
 
@@ -700,10 +712,14 @@ function vDash(){
      dong chu tran — doc duoc truoc khi kip doc con so. Mui ten lay Lucide
      arrow-up-right / arrow-down-right chu khong phai ky tu ▲▼. */
   const dpill = (a, b) => { const c = b ? (a - b) / b : 0; return `<span class="pill ${c >= 0 ? 'up' : 'down'}">${svgi(c >= 0 ? 'up' : 'down', 13)}${pct(Math.abs(c))}</span>`; };
-  /* Mot hang viec dang cho: SO LUONG dung dau vi do moi la thu can liec,
-     roi nhan, roi chi tiet mo. Ca hang la mot duong dan. */
-  const CHEVR = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>';
-  const dgAct = (count, label, sub, href) => `<li><a href="${href}"><span class="n${count ? '' : ' zero'}">${count}</span><span class="t"><b>${esc(label)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span>${CHEVR}</a></li>`;
+  /* Dau dong cua digest. ALERT lay tu till.html — `triangle-alert` cua Lucide;
+     path tren kho Lucide gio tra 404 vi icon da doi ten, nen lay ban da duoc
+     xac minh trong till.html thay vi viet lai theo tri nho. */
+  const ALERT = '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>';
+  const TICK = '<path d="M20 6 9 17l-5-5"></path>';
+  const di = (path, ok) => `<span class="di${ok ? ' ok' : ''}" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg></span>`;
+  /* Khu vuc con viec -> icon cua chinh muc do tren rail; het viec -> dau tick. */
+  const dgRow = (n, area, html) => `<li>${n ? di(ICON[area]) : di(TICK, true)}<span>${html}</span></li>`;
   const kpi = (i, k, v, pill, sub, cls) => `<div class="kpi${cls ? ' ' + cls : ''}"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
   let chart, chartTitle;
   if (S.period === 'today') {
@@ -726,20 +742,15 @@ function vDash(){
   <div class="grid g2">
     <section class="card"><div class="ch-h"><h2>${ico('chart')}${chartTitle}</h2></div>
       <p class="ch-sub">${dpill(rev, prev_rev)}<span>${rm0(Math.abs(rev - prev_rev))} ${rev >= prev_rev ? 'more' : 'less'} than the previous ${S.period === 'today' ? 'day' : n + ' days'}</span></p>${chart}</section>
-    <section class="card dig"><div class="ch-h"><h2>${ico('digest')}Today’s digest</h2></div>
-      <p class="dglbl">Needs action</p>
-      <ul class="dgact">
-        ${dgAct(pend.length, 'Stock requests pending', stale ? `${stale} older than 4 h` : '', '#approvals')}
-        ${dgAct(poP.length, `Supplier order${poP.length === 1 ? '' : 's'} waiting`, `${rm(poSum)} in total`, '#purchases')}
-        ${dgAct(short.length, `Register close${short.length === 1 ? '' : 's'} with over/short`, 'To review', '#closes')}
-      </ul>
-      <p class="dglbl">Worth knowing</p>
-      <ul class="dgnote">
-        <li><b>Chicken leg drawdown 18% above recorded sales</b><small>On Sunday. Check portioning or unrecorded waste.</small></li>
-        <li><b>Waste spike: prawns</b><small>1.2 kg written off this week vs 0.3 kg weekly average.</small></li>
-        <li><b>Low stock</b><small>${lowIng.length ? lowIng.map(i => esc(i.name)).join(', ') : 'Nothing at or below its low mark.'}</small></li>
-        <li><b>Assistant</b><small>${AI.act.length} commands today, 1 undone, 1 declined. <a href="#assistant">Details</a></small></li>
-      </ul></section>
+    <section class="card dig"><div class="ch-h"><h2>${ico('digest')}Today’s digest</h2></div><ul>
+      ${dgRow(pend.length, 'approvals', `<b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a>`)}
+      ${dgRow(poP.length, 'purchases', `<b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a>`)}
+      <li>${di(ALERT)}<span><b>Chicken leg drawdown 18% above recorded sales</b> on Sunday. Check portioning or unrecorded waste.</span></li>
+      <li>${di(ALERT)}<span><b>Waste spike: prawns</b> 1.2 kg written off this week vs 0.3 kg weekly average.</span></li>
+      ${dgRow(short.length, 'closes', `<b>${short.length} register close${short.length === 1 ? '' : 's'} with over/short</b> to review. <a href="#closes">Open</a>`)}
+      ${dgRow(lowIng.length, 'ingredients', `<b>Low stock:</b> ${lowIng.length ? lowIng.map(i => esc(i.name)).join(', ') : 'none'}.`)}
+      <li>${di(ICON.assistant)}<span><b>Assistant:</b> ${AI.act.length} commands today, 1 undone, 1 declined. <a href="#assistant">Details</a></span></li>
+    </ul></section>
   </div>
   <div class="grid g3">
     <section class="card"><div class="ch-h"><h2>${ico('pie')}Sales by category</h2></div>${Object.keys(cats).map(k => `<div class="hbar"><span>${CAT[k]}</span><span class="track"><span class="fill" style="display:block;width:${(cats[k] / catTot * 100).toFixed(1)}%"></span></span><span class="r num">${pct(cats[k] / catTot)}</span></div>`).join('')}</section>
@@ -982,6 +993,9 @@ function renderDish(){
     <div><b>Recipe per portion</b><div class="tbl" style="margin-top:8px"><table><thead><tr><th>Ingredient</th><th class="r">Quantity</th><th>Unit</th><th class="r">Unit cost</th><th class="r">Line cost</th><th></th></tr></thead><tbody>
     ${draft.recipe.map(([id, q], k) => `<tr><td><select aria-label="Ingredient" data-dchg="ing" data-k="${k}" class="sel-sm">${ING.map(i => `<option value="${i.id}" ${i.id === id ? 'selected' : ''}>${esc(i.name)}</option>`).join('')}</select></td><td class="r"><input type="number" step="0.01" min="0" value="${q}" aria-label="Quantity" data-dchg="qty" data-k="${k}" class="inp-sm"></td><td>${IB(id).unit}</td><td class="r">${rm(unitCost(id))}</td><td class="r">${rm((Number(q) || 0) * unitCost(id))}</td><td class="r"><button type="button" class="btn sm" data-act="rmline" data-k="${k}" aria-label="Remove ${esc(IB(id).name)}">Remove</button></td></tr>`).join('')}
     </tbody></table></div><button type="button" class="btn sm" style="margin-top:8px" data-act="addline">+ Add ingredient</button></div>`;
+  /* Than hop thoai nay duoc dung SAU openDlg() nen enhanceSelects trong do
+     chua thay cac <select> cong thuc. Phai goi lai o day. */
+  enhanceSelects($('#dishBody'));
 }
 
 /* ingredients */
@@ -1268,8 +1282,104 @@ function auditBody(){ const rows = auditRows(); return rows.map(a => `<tr><td>${
 /* ---------------- dialogs ---------------- */
 let opener = null;
 const xBtn = () => `<button type="button" class="x" data-act="dlg-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>`;
-function openDlg(html){ opener = document.activeElement; $('#dlgBox').innerHTML = html; $('#dlg').hidden = false; const f = $('#dlgBox').querySelector('input:not([readonly]), select, button.primary'); if (f) f.focus(); }
+function openDlg(html){ opener = document.activeElement; $('#dlgBox').innerHTML = html; $('#dlg').hidden = false; enhanceSelects($('#dlgBox')); const f = $('#dlgBox').querySelector('input:not([readonly]), .ddb, button.primary'); if (f) f.focus(); }
 function closeDlg(){ $('#dlg').hidden = true; draft = null; if (opener && document.body.contains(opener)) opener.focus(); }
+
+/* ---------------- dropdown tu dung ---------------- */
+const DDC = '<svg class="ddc" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+const DDK = '<svg class="ddk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
+function paintDD(sel){
+  const wrap = sel.closest('.dd'), btn = wrap.querySelector('.ddb'), menu = wrap.querySelector('.ddm');
+  const cur = sel.options[sel.selectedIndex];
+  btn.innerHTML = `<span class="ddt">${esc(cur ? cur.text : '')}</span>${DDC}`;
+  btn.disabled = sel.disabled;
+  menu.innerHTML = [...sel.options].map((o, i) =>
+    `<button type="button" class="ddo" role="option" aria-selected="${i === sel.selectedIndex}" data-i="${i}"${o.disabled ? ' disabled' : ''}>${DDK}<span>${esc(o.text)}</span></button>`).join('');
+}
+/* Khoa nhan dang mot <select> de lay lai focus sau khi DOM bi dung lai.
+   Khong dung chi id: nhieu select sinh ra trong bang khong co id, chi phan
+   biet nhau bang aria-label + data-k. */
+let ddFocus = null;
+const ddKey = s => [s.id, s.getAttribute('aria-label') || '', s.dataset.chg || '', s.dataset.dchg || '', s.dataset.k || ''].join('|');
+function enhanceSelects(root){
+  (root || document).querySelectorAll('select').forEach(sel => {
+    if (!sel.closest('.dd')) {
+      const wrap = document.createElement('div');
+      wrap.className = 'dd' + (sel.classList.contains('sel-sm') ? ' sm' : '');
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel);
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'ddb';
+      btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false');
+      const lbl = sel.getAttribute('aria-label'); if (lbl) btn.setAttribute('aria-label', lbl);
+      const menu = document.createElement('div');
+      menu.className = 'ddm'; menu.setAttribute('role', 'listbox'); menu.hidden = true;
+      if (lbl) menu.setAttribute('aria-label', lbl);
+      wrap.appendChild(btn); wrap.appendChild(menu);
+    }
+    paintDD(sel);
+  });
+  /* Lay lai focus sau render(). Bo qua nut dang nam trong khoi bi an —
+     vi du o Role trong menu tai khoan, vi menu da dong ngay truoc do. */
+  if (ddFocus) {
+    const t = [...document.querySelectorAll('.dd > select')].find(s => ddKey(s) === ddFocus);
+    ddFocus = null;
+    if (t) { const b = t.closest('.dd').querySelector('.ddb'); if (b && !b.disabled && b.offsetParent) b.focus(); }
+  }
+}
+function closeDD(wrap){
+  const m = wrap.querySelector('.ddm');
+  if (m.hidden) return;
+  m.hidden = true; m.classList.remove('up');
+  wrap.querySelector('.ddb').setAttribute('aria-expanded', 'false');
+}
+function closeAllDD(except){ document.querySelectorAll('.dd').forEach(w => { if (w !== except) closeDD(w); }); }
+function openDD(wrap){
+  closeAllDD(wrap);
+  const btn = wrap.querySelector('.ddb'), m = wrap.querySelector('.ddm');
+  m.hidden = false; btn.setAttribute('aria-expanded', 'true');
+  /* Khong du cho ben duoi thi lat nguoc len — menu 8 muc cao ~340px, o cuoi
+     mot bang dai thi no se tran khoi man hinh. */
+  const r = m.getBoundingClientRect();
+  if (r.bottom > window.innerHeight - 8 && wrap.getBoundingClientRect().top > r.height) m.classList.add('up');
+  const on = m.querySelector('[aria-selected="true"]') || m.querySelector('.ddo:not(:disabled)');
+  if (on) on.focus();
+}
+function pickDD(wrap, i){
+  const sel = wrap.querySelector('select');
+  if (sel.options[i] && sel.options[i].disabled) return;
+  const changed = sel.selectedIndex !== i;
+  sel.selectedIndex = i;
+  paintDD(sel);
+  closeDD(wrap);
+  ddFocus = ddKey(sel);
+  if (changed) sel.dispatchEvent(new Event('change', {bubbles: true}));
+  /* Neu handler goi render() thi nut vua bam DA bi thay the va enhanceSelects
+     lay lai focus giup. Neu khong render lai thi ddFocus van con — tu focus. */
+  if (ddFocus) { ddFocus = null; const b = wrap.querySelector('.ddb'); if (b) b.focus(); }
+}
+document.addEventListener('click', e => {
+  const wrap = e.target.closest('.dd');
+  if (!wrap) { closeAllDD(); return; }
+  const o = e.target.closest('.ddo');
+  if (o) { pickDD(wrap, Number(o.dataset.i)); return; }
+  if (e.target.closest('.ddb')) { wrap.querySelector('.ddm').hidden ? openDD(wrap) : closeDD(wrap); }
+});
+document.addEventListener('keydown', e => {
+  const wrap = e.target.closest('.dd'); if (!wrap) return;
+  const m = wrap.querySelector('.ddm'), open = !m.hidden;
+  if (e.key === 'Escape' && open) { e.stopPropagation(); closeDD(wrap); wrap.querySelector('.ddb').focus(); return; }
+  if (!open && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') && e.target.closest('.ddb')) { e.preventDefault(); openDD(wrap); return; }
+  if (!open) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Home' || e.key === 'End') {
+    e.preventDefault();
+    const items = [...m.querySelectorAll('.ddo:not(:disabled)')];
+    const at = items.indexOf(document.activeElement);
+    const to = e.key === 'Home' ? 0 : e.key === 'End' ? items.length - 1
+      : e.key === 'ArrowDown' ? Math.min(items.length - 1, at + 1) : Math.max(0, at - 1);
+    if (items[to]) items[to].focus();
+  }
+}, true);
 
 /* ---------------- events ---------------- */
 document.addEventListener('click', e => {
@@ -1396,7 +1506,7 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('change', e => {
   const t = e.target;
-  if (t.id === 'roleSel') { S.user = t.value; toggleWho(false); render(); toast('Signed in as ' + me().name + ' (' + ROLES[me().role] + ')'); return; }
+  if (t.id === 'roleSel') { S.user = t.value; toggleWho(false); render(); $('#whoBtn').focus(); toast('Signed in as ' + me().name + ' (' + ROLES[me().role] + ')'); return; }
   if (t.dataset.chg === 'route') { const q = QUOTES.find(x => x.id === t.value); QUOTES.forEach(x => { if (x.ing === q.ing) x.route = x.id === q.id; }); audit('Supplier', `Route for ${IB(q.ing).name} → ${supName(q.sup)}`); render(); toast(`${IB(q.ing).name} orders now go to ${supName(q.sup)} by default`); return; }
   if (t.dataset.chg === 'poline') { const o = PO.find(x => x.id === S.poSel); if (!o) return; getRoute(o)[Number(t.dataset.k)] = t.value; render(); return; }
   if (t.dataset.chg === 'poall') { const o = PO.find(x => x.id === S.poSel); if (!o || !t.value) return; const r = routesVia(o, t.value); if (r.err) { toast(r.err); render(); return; } getRoute(o); S.poRoute.q = r.q; render(); toast(`Whole order routed to ${supName(t.value)}`); return; }
