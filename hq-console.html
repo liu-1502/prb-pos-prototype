@@ -28,11 +28,12 @@
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
   /* Thanh tren gio NAM TRONG cot noi dung va cung mau voi nen trang. */
   --bar:#ffffff; --bar-2:#fbf6ef; --bar-ink:#171717; --bar-muted:#5c5c5c;
-  /* Rail la mang DEN NAU chay suot chieu cao. Sac 26 do — nam trong dai am
-     20-44 do ma design system quy dinh — bao hoa 36%, sang 12%: nau ro nhung
-     van doc ra gan den. Chu trang tren no 16.17:1, brand vang 8.97:1,
-     chu phu am #b5a99b 7.02:1. */
-  --rail-bg:#2b1e14; --rail-ink:#ffffff; --rail-muted:#b5a99b;
+  /* Rail la mang DEN chay suot chieu cao — dung ma --rail-bg cua ban vang
+     trong till.html, nen hai file khop nhau o cho nay.
+     Chu phu van la xam AM #b5a99b chu khong phai xam trung tinh: quy tac cua
+     design system la toan bo giao dien nam trong dai am 20-44 do.
+     Do tren nen den: chu trang 21:1, chu phu 9.11:1, mang brand 11.65:1. */
+  --rail-bg:#000000; --rail-ink:#ffffff; --rail-muted:#b5a99b;
   --accent:#ffb22a; --accent-ink:#000000; --accent-soft:#fff1d8; --accent-soft-ink:#8a5600;
   --accent-hover:#f0a111; --ink-hover:#000000;
   --accent-fg:#8a5600;
@@ -119,12 +120,12 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .col{min-width:0;display:flex;flex-direction:column;padding-bottom:24px}
 .nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);padding:16px 12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--rail-muted);text-decoration:none;font-weight:600;font-size:14px}
-.nav a:hover{background:color-mix(in srgb, #ffffff 9%, transparent);color:var(--rail-ink)}
+.nav a:hover{background:color-mix(in srgb, #ffffff 12%, transparent);color:var(--rail-ink)}
 /* Tren rail toi, muc dang mo la mang BRAND dac voi chu den (11.65:1) — mang
    mau duy nhat tren ca rail, nen khong the nham no voi gi khac. */
 .nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
 .nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 16%, transparent);color:var(--accent-ink)}
-.nav .sep{background:color-mix(in srgb, #ffffff 14%, transparent)}
+.nav .sep{background:color-mix(in srgb, #ffffff 16%, transparent)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
 main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1}
