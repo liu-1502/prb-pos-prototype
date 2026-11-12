@@ -2584,8 +2584,12 @@ table.tbl tr.his-d .ord-l{font-size:14px}
    no la mot track dac). Truoc day gop chung mot rule nen vien o nhap bi xoa
    theo, o so ban troi lo lung khong co khung. */
 :root[data-theme="yellow"] .cart-t #standNo,
-:root[data-theme="yellow"] .cart-t .notebtn,
 :root[data-theme="yellow"] .signin{background:#fff6e6}
+/* Nut Note tach khoi nhom tren: no lay nen TRANG chu khong phai mau kem cua
+   gio. Can ca dong .has vi rule modern cua .has co (0,5,0), cao hon
+   (0,4,0) cua dong nay nen khong bi dong nay de len. */
+:root[data-theme="yellow"] .cart-t .notebtn,
+:root[data-theme="yellow"] .cart-t .notebtn.has{background:var(--surface)}
 :root[data-theme="yellow"] #noteIn{background:var(--surface);border:1.5px solid var(--line-2);box-shadow:none}
 /* Nen TRANG: :root[data-layout="modern"] .seg.sm (0,4,0) dat background:transparent
    va thang rule .seg cua theme (0,3,0), nen phai khai bao ngay tai .seg.sm. */
