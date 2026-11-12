@@ -75,7 +75,6 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .brand{display:flex;align-items:center;gap:10px}
 .brand b{font-size:15px;display:block}.brand small{font-size:12px;color:var(--bar-muted);display:block}
 .spacer{flex:1}
-.bar select{height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 14px;font-size:13px;font-weight:600}
 .bar label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bar-muted)}
 /* ---- CHIP TAI KHOAN -------------------------------------------------------
    Chep nguyen cach lam cua till.html: avatar + ten + vai + chevron, bam ra
@@ -197,6 +196,15 @@ tr.sel td{background:var(--accent-soft)}
    bo 8px vien 1px — tuc nam NGOAI he token, trong khac moi control con lai. */
 .sel-sm,.inp-sm{min-height:36px;max-width:100%;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;font-weight:600}
 .inp-sm{width:90px;text-align:right}
+/* Moi <select> bo mui ten cua HE DIEU HANH, thay bang chevron-down cua Lucide
+   nhung thang vao CSS. Truoc day mui ten do la do trinh duyet ve: net mong
+   hon, hinh khac, va moi he dieu hanh mot kieu — no la icon DUY NHAT tren
+   trang khong thuoc bo Lucide.
+   ⚠️ Rule nay PHAI nam SAU .field input/.sel-sm/.inp-sm. Lan dau toi dat no
+   o tren va chevron khong hien ra: `background:var(--surface)` dang SHORTHAND
+   trong hai rule do xoa sach background-image, con `padding` shorthand xoa
+   padding-right. Cung do uu tien thi rule DUNG SAU thang. */
+.field select,.sel-sm,.wrow select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c5c5c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 16px;padding-right:34px}
 .frow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .note{font-size:12px;color:var(--muted)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
@@ -302,7 +310,7 @@ tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transpa
     <div class="brand"><span class="logo">PRB</span><span><b>HQ Console</b><small id="today"></small></span></div>
     <div class="spacer"></div>
     <div class="who-wrap">
-      <button type="button" class="who" id="whoBtn" data-act="who-menu" aria-haspopup="menu" aria-expanded="false"><span class="av" id="whoAv" aria-hidden="true">N</span><span class="wt"><span class="sr">Signed in as</span><b id="whoName">Nadia</b><small id="whoRole">HQ approver</small></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+      <button type="button" class="who" id="whoBtn" data-act="who-menu" aria-haspopup="menu" aria-expanded="false"><span class="av" id="whoAv" aria-hidden="true">N</span><span class="wt"><span class="sr">Signed in as</span><b id="whoName">Nadia</b><small id="whoRole">HQ approver</small></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
       <div class="wmenu" id="whoMenu" role="menu" aria-label="Account" hidden>
         <p class="wlbl">Demo</p>
         <div class="wmi wrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>Role</span><select id="roleSel" class="sel-sm" aria-label="Demo: role to sign in as"></select></div>
@@ -1218,7 +1226,7 @@ function auditBody(){ const rows = auditRows(); return rows.map(a => `<tr><td>${
 
 /* ---------------- dialogs ---------------- */
 let opener = null;
-const xBtn = () => `<button type="button" class="x" data-act="dlg-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>`;
+const xBtn = () => `<button type="button" class="x" data-act="dlg-close" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>`;
 function openDlg(html){ opener = document.activeElement; $('#dlgBox').innerHTML = html; $('#dlg').hidden = false; const f = $('#dlgBox').querySelector('input:not([readonly]), select, button.primary'); if (f) f.focus(); }
 function closeDlg(){ $('#dlg').hidden = true; draft = null; if (opener && document.body.contains(opener)) opener.focus(); }
 
