@@ -108,20 +108,27 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
 .nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
-.nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
+/* Muc dang mo la mang DAC mau muc, chu trang — khong phai tint nhat cua
+   brand. Cung cach voi .seg va .chip khi duoc chon, nen ca app chi co MOT
+   cach bieu dat "dang chon". */
+.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #ffffff 22%, transparent);color:var(--surface)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
 main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
 .ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--card-shadow);padding:20px;min-width:0}
+/* KHONG dung vien ngoai cho section. The tach khoi nen bang chinh mang mau
+   (the trang tren nen kem) cong mot lop bong rat mong — dung cach cua bo cuc
+   tham chieu. Cac phan tu BEN TRONG (nut, chip, o nhap, badge) van giu vien. */
+.card{background:var(--surface);border:0;border-radius:18px;box-shadow:var(--card-shadow);padding:20px;min-width:0}
 .card h2{margin:0 0 12px;font-size:13px;font-weight:600}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--card-shadow);padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
+.kpi{background:var(--surface);border:0;border-radius:18px;box-shadow:var(--card-shadow);padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
 /* ---- THE SO LIEU theo bo cuc tham chieu -----------------------------------
    Mot hang "icon + nhan", roi so lon dung canh mot PILL chenh lech, roi mot
    dong phu mo. Truoc day nhan la chu HOA gian chu va chenh lech la chu tran —
@@ -138,14 +145,24 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .pill{display:inline-flex;align-items:center;gap:2px;padding:3px 8px 3px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:600;white-space:nowrap}
 .pill.up{background:var(--ok-soft);color:var(--ok-ink)}
 .pill.down{background:var(--bad-soft);color:var(--bad-ink)}
+/* The so lieu DAU TIEN to kin mau brand, giong the "My balance" ben tham
+   chieu. Chu tren no la DEN chu khong phai trang: #ffb22a sang qua, chu trang
+   chi dat 1.80 con chu den dat 11.65. Pill doi sang mang TRANG de no con tach
+   duoc khoi nen vang. */
+.kpi.lead{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.kpi.lead .k{color:var(--accent-ink)}
+.kpi.lead .ico{background:color-mix(in srgb, #000000 12%, transparent);color:var(--accent-ink)}
+.kpi.lead .d{color:color-mix(in srgb, #000000 72%, transparent)}
+.kpi.lead .pill{background:var(--surface)}
 /* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
 .card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
 .card h2 .ico{width:28px;height:28px}
 .ch-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px}
 .ch-h h2{margin:0}
-.ch-lead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 2px}
-.ch-lead .v{font-size:26px;font-weight:600;letter-spacing:-.02em}
-.ch-sub{margin:0 0 14px;font-size:12px;color:var(--muted)}
+/* The bieu do KHONG lap lai con so tong: no da nam ngay tren o the Revenue to
+   kin mau brand. Chi giu pill + mot dong phu, vi "RM 814 nhieu hon ky truoc"
+   la thong tin chua xuat hien o cho nao khac. */
+.ch-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;font-size:12px;color:var(--muted)}
 .up{color:var(--ok-ink)}.down{color:var(--bad-ink)}
 .seg{display:inline-flex;background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-pill);padding:3px;gap:3px}
 .seg button{min-height:34px;padding:0 14px;border-radius:var(--r-pill);border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted)}
@@ -155,7 +172,7 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .btn.danger{background:var(--bad-soft);border-color:transparent;color:var(--bad-ink)}
 .btn.sm{min-height:36px;padding:0 12px;font-size:13px}
 .link{border:0;background:none;padding:0;color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+.tbl{overflow-x:auto;border:0;border-radius:18px;background:var(--surface);box-shadow:var(--card-shadow)}
 table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
 th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
 td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -183,7 +200,7 @@ tr.sel td{background:var(--accent-soft)}
 .note{font-size:12px;color:var(--muted)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
 .kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:600;text-align:right}
-.math{border:1px solid var(--line);border-radius:var(--r-md);padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;font-size:13px}
+.math{border:0;border-radius:var(--r-md);padding:12px 14px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;font-size:13px}
 .math .r{display:flex;justify-content:space-between;gap:12px}
 .math .t{border-top:1px solid var(--line);padding-top:6px;font-weight:600}
 .lock{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:var(--r-md);background:var(--warn-soft);color:var(--warn-ink);font-size:13px;font-weight:600}
@@ -195,8 +212,8 @@ tr.sel td{background:var(--accent-soft)}
    hop-trong-hop. Trong bang thi bo mang nen, de no doc nhu mot dong rong. */
 td .empty{background:transparent;border-radius:0;padding:28px 12px}
 .hbar{display:grid;grid-template-columns:110px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
-.hbar .track{height:12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.hbar .fill{height:100%;background:var(--chart);border-radius:6px}
+.hbar .track{height:12px;border-radius:var(--r-pill);background:color-mix(in srgb, var(--ink) 7%, transparent);border:0;overflow:hidden}
+.hbar .fill{height:100%;background:var(--chart);border-radius:var(--r-pill)}
 .hbar.mute .fill{background:var(--line-2)}
 .heat{display:grid;grid-template-columns:44px repeat(16,minmax(0,1fr));gap:3px;font-size:11px;color:var(--muted)}
 .heat .c{height:22px;border-radius:4px}
@@ -220,7 +237,7 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .promo{display:flex;flex-direction:column;gap:10px}
 .promo-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .promo-h b{font-size:15px}
-.meter{height:12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.meter{height:12px;border-radius:var(--r-pill);background:color-mix(in srgb, var(--ink) 7%, transparent);border:0;overflow:hidden}
 .meter i{display:block;height:100%;background:var(--chart)}
 .qrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
 .qrow:last-child{border-bottom:0}
@@ -228,10 +245,10 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 
 .thread{flex:1;min-height:300px;max-height:560px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px 2px}
 .me{align-self:flex-end;max-width:82%;background:var(--ink);color:var(--bg);border-radius:16px 16px 4px 16px;padding:9px 13px;white-space:pre-wrap;overflow-wrap:anywhere}
-.bot{align-self:flex-start;max-width:92%;background:var(--surface-2);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 13px}
+.bot{align-self:flex-start;max-width:92%;background:var(--surface-2);border:0;border-radius:16px 16px 16px 4px;padding:10px 13px}
 .bot ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
 .bot .chips{margin-top:8px}
-.dcard{align-self:stretch;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.dcard{align-self:stretch;border:0;border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface);box-shadow:var(--card-shadow)}
 .sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
 .sugg button{flex:none;min-height:36px;padding:0 14px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:600}
 .comp{display:flex;gap:10px;align-items:flex-end}
@@ -621,7 +638,7 @@ function barChart(vals, labels, every, cur){
   const bw = (W - L - 8) / n, ticks = [0, .25, .5, .75, 1].map(f => f * max);
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Revenue chart">`;
   ticks.forEach(t => { const y = T + (H - T - B) * (1 - t / max); s += `<line class="grid" x1="${L}" x2="${W - 4}" y1="${y}" y2="${y}"></line><text x="${L - 8}" y="${y + 4}" text-anchor="end">${t >= 1000 ? (t / 1000).toLocaleString('en-MY', {maximumFractionDigits:1}) + 'k' : Math.round(t)}</text>`; });
-  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="4"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
+  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="6"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
   return s + '</svg>';
 }
 function vDash(){
@@ -638,7 +655,7 @@ function vDash(){
      dong chu tran — doc duoc truoc khi kip doc con so. Mui ten lay Lucide
      arrow-up-right / arrow-down-right chu khong phai ky tu ▲▼. */
   const dpill = (a, b) => { const c = b ? (a - b) / b : 0; return `<span class="pill ${c >= 0 ? 'up' : 'down'}">${svgi(c >= 0 ? 'up' : 'down', 13)}${pct(Math.abs(c))}</span>`; };
-  const kpi = (i, k, v, pill, sub) => `<div class="kpi"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
+  const kpi = (i, k, v, pill, sub, cls) => `<div class="kpi${cls ? ' ' + cls : ''}"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
   let chart, chartTitle;
   if (S.period === 'today') {
     const d = cur[0]; const vals = d.hourly.map((v, i) => HOURS[i] <= hourNow ? v : 0);
@@ -656,11 +673,10 @@ function vDash(){
   const lowIng = ING.filter(i => i.onHand <= i.low);
   return `<div class="ph"><div><h1>Dashboard</h1><p>[Pilot outlet] · computed from sales, recipes and stock. Sample data for the prototype.</p></div>
   <div class="seg" role="group" aria-label="Period">${[['today','Today'],['7','7 days'],['30','30 days']].map(([v,l]) => `<button type="button" data-act="period" data-v="${v}" aria-pressed="${S.period === v}">${l}</button>`).join('')}</div></div>
-  <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt)}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
+  <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt, 'lead')}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
   <div class="grid g2">
     <section class="card"><div class="ch-h"><h2>${ico('chart')}${chartTitle}</h2></div>
-      <div class="ch-lead"><span class="v num">${rm0(rev)}</span>${dpill(rev, prev_rev)}</div>
-      <p class="ch-sub">${rm0(Math.abs(rev - prev_rev))} ${rev >= prev_rev ? 'more' : 'less'} than the previous ${S.period === 'today' ? 'day' : n + ' days'}</p>${chart}</section>
+      <p class="ch-sub">${dpill(rev, prev_rev)}<span>${rm0(Math.abs(rev - prev_rev))} ${rev >= prev_rev ? 'more' : 'less'} than the previous ${S.period === 'today' ? 'day' : n + ' days'}</span></p>${chart}</section>
     <section class="card dig"><div class="ch-h"><h2>${ico('digest')}Today’s digest</h2></div><ul>
       <li><span class="dot ${pend.length ? 'd-warn' : 'd-ok'}"></span><span><b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a></span></li>
       <li><span class="dot ${poP.length ? 'd-warn' : 'd-ok'}"></span><span><b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a></span></li>
