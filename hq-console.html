@@ -751,6 +751,15 @@ function vDash(){
   const poP = PO.filter(o => o.status === 'pending'), poSum = r2(poP.reduce((s, o) => s + o.total, 0));
   const short = CLOSES.filter(c => c.cnt !== c.exp && !c.reviewed);
   const lowIng = ING.filter(i => i.onHand <= i.low);
+  /* Ba con so nay truoc day la CHU CUNG trong digest. Gio dem that:
+     - write-off lay thang tu REQ (REQ chi phu ~28 gio nen day dung nghia la
+       "hom nay", khong phai "tuan nay" — khong co du lieu tuan de so sanh).
+     - undone/declined doc tu truong `out` cua AI.act. */
+  /* Bo write-off DA BI TU CHOI: no khong bao gio vao so kho nen khong phai
+     la hang da bo. Van tinh ca cai dang cho duyet. */
+  const wo = REQ.filter(r => r.type === 'writeoff' && r.status !== 'rejected');
+  const aiUndone = AI.act.filter(a => /^Undone/i.test(a.out)).length;
+  const aiDeclined = AI.act.filter(a => /^Declined/i.test(a.out)).length;
   return `<div class="ph"><div><h1>Dashboard</h1><p>[Pilot outlet] · computed from sales, recipes and stock. Sample data for the prototype.</p></div>
   <div class="seg" role="group" aria-label="Period">${[['today','Today'],['7','7 days'],['30','30 days']].map(([v,l]) => `<button type="button" data-act="period" data-v="${v}" aria-pressed="${S.period === v}">${l}</button>`).join('')}</div></div>
   <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt, 'lead')}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
@@ -761,10 +770,10 @@ function vDash(){
       ${dgRow(pend.length, 'approvals', `<b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a>`)}
       ${dgRow(poP.length, 'purchases', `<b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a>`)}
       <li>${di(ALERT)}<span><b>Chicken leg drawdown 18% above recorded sales</b> on Sunday. Check portioning or unrecorded waste.</span></li>
-      <li>${di(ALERT)}<span><b>Waste spike: prawns</b> 1.2 kg written off this week vs 0.3 kg weekly average.</span></li>
+      <li>${di(wo.length ? ALERT : TICK, !wo.length)}<span><b>Write-offs today:</b> ${wo.length ? wo.map(r => `${esc(IB(r.ing).name.toLowerCase())} ${r.qty} ${esc(IB(r.ing).unit)}`).join(', ') + (wo.length === 1 ? ` — ${esc(String(wo[0].reason).replace(/\s*—\s*/, ', ').toLowerCase())}` : '') : 'none'}.</span></li>
       ${dgRow(short.length, 'closes', `<b>${short.length} register close${short.length === 1 ? '' : 's'} with over/short</b> to review. <a href="#closes">Open</a>`)}
       ${dgRow(lowIng.length, 'ingredients', `<b>Low stock:</b> ${lowIng.length ? lowIng.map(i => esc(i.name)).join(', ') : 'none'}.`)}
-      <li>${di(ICON.assistant)}<span><b>Assistant:</b> ${AI.act.length} commands today, 1 undone, 1 declined. <a href="#assistant">Details</a></span></li>
+      <li>${di(ICON.assistant)}<span><b>Assistant:</b> ${AI.act.length} command${AI.act.length === 1 ? '' : 's'} today${aiUndone ? `, ${aiUndone} undone` : ''}${aiDeclined ? `, ${aiDeclined} declined` : ''}. <a href="#assistant">Details</a></span></li>
     </ul></section>
   </div>
   <div class="grid g3">
