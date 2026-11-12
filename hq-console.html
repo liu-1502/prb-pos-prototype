@@ -24,7 +24,10 @@
   --line:#e5e5e5; --line-2:#d4d4d4;
   --ink:#171717; --muted:#5c5c5c;
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
-  --bar:#ffffff; --bar-2:#f4e3cd; --bar-ink:#171717; --bar-muted:#5c5c5c;
+  /* Thanh tren DEN — cung ma voi --rail-bg cua ban vang trong till.html, tuc
+     chrome o day lui han xuong thay vi la mot mang trang nua. Chu phu #a3a3a3
+     tren den dat 8.33:1; chu trang 21:1; logo vang #ffb22a tren den 11.65:1. */
+  --bar:#000000; --bar-2:#1a1a1a; --bar-ink:#ffffff; --bar-muted:#a3a3a3;
   --accent:#ffb22a; --accent-ink:#000000; --accent-soft:#fff1d8; --accent-soft-ink:#8a5600;
   --accent-hover:#f0a111; --ink-hover:#000000;
   --accent-fg:#8a5600;
@@ -61,19 +64,19 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 
-.bar{background:var(--bar);color:var(--bar-ink);border-bottom:1px solid var(--line)}
+.bar{background:var(--bar);color:var(--bar-ink)}
 .bar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:10px}
 .logo{width:36px;height:36px;border-radius:var(--r-md);background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;letter-spacing:.04em}
 .brand{display:flex;align-items:center;gap:10px}
 .brand b{font-size:15px;display:block}.brand small{font-size:12px;color:var(--bar-muted);display:block}
 .spacer{flex:1}
-.bar select{height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--bar-ink);padding:0 14px;font-size:13px;font-weight:600}
+.bar select{height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 14px;font-size:13px;font-weight:600}
 .bar label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bar-muted)}
 
 .shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding-block:20px;align-items:start}
 .nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
-.nav a:hover{background:var(--surface-2)}
+.nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
 .nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
@@ -120,6 +123,10 @@ tr.sel td{background:var(--accent-soft)}
 .field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}
 .field input,.field select,.field textarea{min-height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);padding:8px 16px;font-weight:500}
 .field textarea{border-radius:var(--r-md);padding:10px 14px;resize:vertical}
+/* Select nho nam trong bang. Truoc day ba cho nay deu mang style noi tuyen
+   bo 8px vien 1px — tuc nam NGOAI he token, trong khac moi control con lai. */
+.sel-sm,.inp-sm{min-height:36px;max-width:100%;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;font-weight:600}
+.inp-sm{width:90px;text-align:right}
 .frow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .note{font-size:12px;color:var(--muted)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
@@ -131,6 +138,10 @@ tr.sel td{background:var(--accent-soft)}
 .split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
 .panel{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:0;background:var(--surface-2);border-radius:var(--r-lg)}
+/* Hai cho dat .empty BEN TRONG mot <td colspan> (Menu & recipes, Audit log).
+   O do no nam LONG trong khung bang, nen mang kem + bo goc 16px tao ra canh
+   hop-trong-hop. Trong bang thi bo mang nen, de no doc nhu mot dong rong. */
+td .empty{background:transparent;border-radius:0;padding:28px 12px}
 .hbar{display:grid;grid-template-columns:110px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
 .hbar .track{height:12px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .hbar .fill{height:100%;background:var(--chart);border-radius:6px}
@@ -179,6 +190,23 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .dlg-f{padding:14px 20px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .x{width:36px;height:36px;flex:none;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);display:flex;align-items:center;justify-content:center}
 .toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom, 0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:var(--r-md);font-size:14px;font-weight:600;box-shadow:var(--shadow);max-width:min(560px, calc(100% - 32px))}
+
+/* ---- HOVER ----------------------------------------------------------------
+   Truoc day CA FILE chi co dung mot rule :hover (.nav a). Nut, chip, segment,
+   hang bang deu khong co phan hoi nao khi ro chuot.
+   Quy uoc lay tu till.html: hover la DUONG VIEN, khong phai do bong, va mau
+   vien hover la XAM TRUNG TINH (26% ink) chu khong phai mau brand — neu dung
+   mau brand thi ro chuot qua se trong y het nhu da chon.
+   Vien doi mau chu khong doi be day, nen chu khong nhay mot pixel nao. */
+.btn:hover:not(:disabled){border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
+.btn.primary:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.danger:hover:not(:disabled){background:color-mix(in srgb, var(--bad-ink) 16%, var(--surface));border-color:transparent}
+.chip:hover:not([aria-pressed="true"]),.sugg button:hover,.x:hover,.sel-sm:hover:not(:disabled),.inp-sm:hover{border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
+.seg button:hover:not([aria-pressed="true"]){background:color-mix(in srgb, var(--ink) 6%, transparent)}
+/* Hang bang: rat nhe, va PHAI tru hang dang chon ra — neu khong, ro chuot len
+   dung hang dang chon se xoa mat mang mau "dang chon" cua no. */
+tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transparent)}
+.link:hover{text-decoration-thickness:2px}
 
 @media (max-width: 1100px){ .kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .panel{position:static} .g2,.g3{grid-template-columns:minmax(0,1fr)} }
 @media (max-width: 860px){
@@ -722,7 +750,7 @@ function poDetail(){
   const allSup = Object.keys(SUPP).filter(k => SUPINFO[k].active && o.lines.every(l => QUOTES.some(q => q.sup === k && q.ing === l.ing)));
   const lineRows = plan.map((p, k) => {
     const opts = QUOTES.filter(q => q.ing === p.ing && (SUPINFO[q.sup].active || q.id === p.qid)).sort((a, b) => a.price / a.pack - b.price / b.pack);
-    const cell = edit ? `<select aria-label="Supplier for ${esc(IB(p.ing).name)}" data-chg="poline" data-k="${k}" style="min-height:36px;max-width:100%;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${opts.map(q => `<option value="${q.id}" ${q.id === p.qid ? 'selected' : ''}>${esc(supName(q.sup))} · ${rm(q.price / q.pack)}/${unitLabel(p.ing)} · ${fq(p.ing, q.pack)} pack · ${dshort(nextDelivery(q.sup))}</option>`).join('')}</select>` : `<b>${esc(supName(p.sup))}</b>`;
+    const cell = edit ? `<select aria-label="Supplier for ${esc(IB(p.ing).name)}" data-chg="poline" data-k="${k}" class="sel-sm">${opts.map(q => `<option value="${q.id}" ${q.id === p.qid ? 'selected' : ''}>${esc(supName(q.sup))} · ${rm(q.price / q.pack)}/${unitLabel(p.ing)} · ${fq(p.ing, q.pack)} pack · ${dshort(nextDelivery(q.sup))}</option>`).join('')}</select>` : `<b>${esc(supName(p.sup))}</b>`;
     return `<tr><td>${esc(IB(p.ing).name)}<br><span class="note">asked ${fq(p.ing, p.req)}</span></td><td>${cell}</td><td class="r">${p.packs} × ${fq(p.ing, p.pack)}</td><td class="r">${rm(p.cost)}</td></tr>`;
   }).join('');
   const groupRows = groups.map(g => `<div class="r" style="flex-wrap:wrap"><span><b>${esc(supName(g.sup))}</b> · ${g.lines.length} line${g.lines.length > 1 ? 's' : ''} · sends by ${esc(SUPINFO[g.sup].via.toLowerCase())}</span><b class="num">${rm(g.total)}</b></div><div style="display:flex;gap:6px;flex-wrap:wrap">${pending ? (g.onTime ? `<span class="badge b-ok">Arrives ${dshort(g.next)} · on time</span>` : `<span class="badge b-bad">Arrives ${dshort(g.next)} · after ${dshort(o.needed)}</span>`) : `<span class="badge b-mute">ETA ${o.eta ? dshort(o.eta) : '—'}</span>`}${pending && SUPINFO[g.sup].min ? (g.belowMin ? `<span class="badge b-warn">Below ${rm(SUPINFO[g.sup].min)} minimum</span>` : `<span class="badge b-mute">Min ${rm(SUPINFO[g.sup].min)} met</span>`) : ''}</div>`).join('');
@@ -779,7 +807,7 @@ function renderDish(){
     <div class="frow"><label class="field">GrabFood price (RM) <span class="badge b-info" style="align-self:flex-start">Phase B</span><input type="number" step="0.10" min="0" placeholder="Same as dine-in" value="${draft.grab ? draft.grab.toFixed(2) : ''}" data-dchg="grab"></label>
     <label class="field">Foodpanda price (RM) <span class="badge b-info" style="align-self:flex-start">Phase B</span><input type="number" step="0.10" min="0" placeholder="Same as dine-in" value="${draft.fp ? draft.fp.toFixed(2) : ''}" data-dchg="fp"></label></div>
     <div><b>Recipe per portion</b><div class="tbl" style="margin-top:8px"><table><thead><tr><th>Ingredient</th><th class="r">Quantity</th><th>Unit</th><th class="r">Unit cost</th><th class="r">Line cost</th><th></th></tr></thead><tbody>
-    ${draft.recipe.map(([id, q], k) => `<tr><td><select aria-label="Ingredient" data-dchg="ing" data-k="${k}" style="min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${ING.map(i => `<option value="${i.id}" ${i.id === id ? 'selected' : ''}>${esc(i.name)}</option>`).join('')}</select></td><td class="r"><input type="number" step="0.01" min="0" value="${q}" aria-label="Quantity" data-dchg="qty" data-k="${k}" style="width:90px;min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px;text-align:right"></td><td>${IB(id).unit}</td><td class="r">${rm(unitCost(id))}</td><td class="r">${rm((Number(q) || 0) * unitCost(id))}</td><td class="r"><button type="button" class="btn sm" data-act="rmline" data-k="${k}" aria-label="Remove ${esc(IB(id).name)}">Remove</button></td></tr>`).join('')}
+    ${draft.recipe.map(([id, q], k) => `<tr><td><select aria-label="Ingredient" data-dchg="ing" data-k="${k}" class="sel-sm">${ING.map(i => `<option value="${i.id}" ${i.id === id ? 'selected' : ''}>${esc(i.name)}</option>`).join('')}</select></td><td class="r"><input type="number" step="0.01" min="0" value="${q}" aria-label="Quantity" data-dchg="qty" data-k="${k}" class="inp-sm"></td><td>${IB(id).unit}</td><td class="r">${rm(unitCost(id))}</td><td class="r">${rm((Number(q) || 0) * unitCost(id))}</td><td class="r"><button type="button" class="btn sm" data-act="rmline" data-k="${k}" aria-label="Remove ${esc(IB(id).name)}">Remove</button></td></tr>`).join('')}
     </tbody></table></div><button type="button" class="btn sm" style="margin-top:8px" data-act="addline">+ Add ingredient</button></div>`;
 }
 
@@ -853,8 +881,8 @@ function quoteForm(){
   <div class="dlg-b"><div class="frow"><label class="field">Supplier<select id="q_sup">${Object.keys(SUPP).filter(k => SUPINFO[k].active).map(k => `<option value="${k}">${esc(SUPP[k])}</option>`).join('')}</select></label>
   <label class="field">Ingredient<select id="q_ing">${ING.map(i => `<option value="${i.id}">${esc(i.name)} (${i.unit})</option>`).join('')}</select></label></div>
   <div class="frow"><label class="field">Pack size (in stock unit)<input id="q_pack" type="number" step="0.1" min="0.1" value="10"></label><label class="field">Pack price (RM)<input id="q_price" type="number" step="0.01" min="0" value="100.00"></label></div>
-  <label style="display:flex;gap:8px;align-items:center;font-weight:700"><input type="checkbox" id="q_route" style="width:18px;height:18px"> Route outlet orders for this ingredient here</label>
-  <label style="display:flex;gap:8px;align-items:center;font-weight:700"><input type="checkbox" id="q_tag" style="width:18px;height:18px"> Use as cost basis</label></div>
+  <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="q_route" style="width:18px;height:18px"> Route outlet orders for this ingredient here</label>
+  <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="q_tag" style="width:18px;height:18px"> Use as cost basis</label></div>
   <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn primary" data-act="savequote">Add quote</button></div>`);
 }
 
@@ -888,7 +916,7 @@ function promoForm(){
 function vCloses(){
   const list = CLOSES.filter(c => !S.closeOnly || c.cnt !== c.exp);
   return `<div class="ph"><div><h1>Register closes</h1><p>Every end-of-day close from the outlet, with counted vs expected cash. Over/short needs a reason from the outlet and a review at HQ.</p></div>
-    <label style="display:flex;align-items:center;gap:8px;font-weight:700"><button type="button" class="switch" role="switch" aria-checked="${S.closeOnly}" data-act="closeonly" aria-label="Only over or short"></button>Only over/short</label></div>
+    <label style="display:flex;align-items:center;gap:8px;font-weight:600"><button type="button" class="switch" role="switch" aria-checked="${S.closeOnly}" data-act="closeonly" aria-label="Only over or short"></button>Only over/short</label></div>
   ${lockNote('Review register closes')}
   <div class="tbl"><table><thead><tr><th>Date</th><th>Till</th><th>Closed by</th><th class="r">Expected</th><th class="r">Counted</th><th class="r">Over / short</th><th>Reason</th><th>HQ review</th></tr></thead><tbody>
   ${list.map((c, k) => { const d = r2(c.cnt - c.exp); return `<tr><td>${c.day.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})}</td><td>${c.till}</td><td>${c.by}</td><td class="r">${rm(c.exp)}</td><td class="r">${rm(c.cnt)}</td><td class="r">${d === 0 ? '<span class="badge b-ok">Balanced</span>' : `<span class="badge ${d < 0 ? 'b-bad' : 'b-warn'}">${d > 0 ? '+' : ''}${rm(d)}</span>`}</td><td>${esc(c.reason) || '<span class="note">—</span>'}</td><td>${d === 0 ? '<span class="note">Not needed</span>' : c.reviewed ? `<span class="badge b-ok">Reviewed${c.rBy ? ' · ' + esc(c.rBy) : ''}</span>` : `<button type="button" class="btn sm" data-act="review" data-v="${CLOSES.indexOf(c)}" ${can('Review register closes') ? '' : 'disabled'}>Mark reviewed</button>`}</td></tr>`; }).join('')}
@@ -901,7 +929,7 @@ function vUsers(){
   return `<div class="ph"><div><h1>Users & roles</h1><p>Permissions are checked on the server for every action. Outlet users only see their own outlet.</p></div></div>
   ${lockNote('Manage users & roles')}
   <div class="tbl"><table><thead><tr><th>Name</th><th>Where</th><th>Role</th><th>Active</th><th></th></tr></thead><tbody>
-  ${USERS.map(u => `<tr><td><b>${esc(u.name)}</b>${u.id === S.user ? ' <span class="badge b-info">You</span>' : ''}</td><td>${esc(u.outlet)}</td><td><select aria-label="Role for ${esc(u.name)}" data-chg="role" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'} style="min-height:36px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);padding:0 8px">${roles.map(r => `<option value="${r}" ${r === u.role ? 'selected' : ''}>${ROLES[r]}</option>`).join('')}</select></td><td><button type="button" class="switch" role="switch" aria-checked="${u.active}" aria-label="${esc(u.name)} active" data-act="toguser" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'}></button></td><td class="r"><button type="button" class="btn sm" data-act="pin" data-v="${u.id}" ${can('Manage users & roles') ? '' : 'disabled'}>Reset PIN</button></td></tr>`).join('')}
+  ${USERS.map(u => `<tr><td><b>${esc(u.name)}</b>${u.id === S.user ? ' <span class="badge b-info">You</span>' : ''}</td><td>${esc(u.outlet)}</td><td><select aria-label="Role for ${esc(u.name)}" data-chg="role" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'} class="sel-sm">${roles.map(r => `<option value="${r}" ${r === u.role ? 'selected' : ''}>${ROLES[r]}</option>`).join('')}</select></td><td><button type="button" class="switch" role="switch" aria-checked="${u.active}" aria-label="${esc(u.name)} active" data-act="toguser" data-v="${u.id}" ${can('Manage users & roles') && u.id !== S.user ? '' : 'disabled'}></button></td><td class="r"><button type="button" class="btn sm" data-act="pin" data-v="${u.id}" ${can('Manage users & roles') ? '' : 'disabled'}>Reset PIN</button></td></tr>`).join('')}
   </tbody></table></div>
   <section class="card"><h2>What each role can do</h2><div class="tbl" style="border:0"><table><thead><tr><th>Action</th>${roles.map(r => `<th style="text-align:center">${ROLES[r]}</th>`).join('')}</tr></thead><tbody>
   ${PERMS.map(([p, rs]) => `<tr><td>${esc(p)}</td>${roles.map(r => `<td style="text-align:center">${rs.includes(r) ? '<span class="up" aria-label="Allowed">✓</span>' : '<span class="note" aria-label="Not allowed">—</span>'}</td>`).join('')}</tr>`).join('')}
@@ -920,7 +948,7 @@ function vAI(){
     </section>
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
     <section class="card" style="display:flex;flex-direction:column;gap:12px"><h2 style="margin:0">Usage this month</h2>
-      <div class="num" style="font-size:22px;font-weight:800">${rm(AI.spend)} <span class="note" style="font-size:13px">of ${rm(AI.cap)} cap</span></div>
+      <div class="num" style="font-size:22px;font-weight:600">${rm(AI.spend)} <span class="note" style="font-size:13px">of ${rm(AI.cap)} cap</span></div>
       <div class="meter" role="img" aria-label="${pct(used)} of the monthly cap used"><i style="width:${Math.min(100, used * 100).toFixed(1)}%"></i></div>
       <div class="note">${AI.callsToday} model calls today. At the cap the assistant stops and tells users to try later; the till keeps working.</div>
       <label class="field">Monthly cap (RM)<input id="capIn" type="number" step="10" min="0" value="${AI.cap}" ${can('Manage users & roles') ? '' : 'disabled'}></label>
