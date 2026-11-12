@@ -20,7 +20,11 @@
      Vang #ffb22a la mau SANG: chu den tren no dat 11.65:1, chu trang chi 1.80.
      Vi vay --accent-ink o day la DEN, khong phai trang — va moi cho brand dong
      vai CHU hoac NET phai lay --accent-fg (#8a5600, 6.16:1 tren trang). */
-  --bg:#ffffff; --surface:#ffffff; --surface-2:#fbf6ef;
+  /* Nen trang la KEM, the la TRANG. Ban vang cua Till de ca hai cung trang va
+     tach nhau bang vien 1.5px; o day man dashboard co nhieu the nam canh nhau
+     nen can tach bang NEN, giong bo cuc tham chieu. Kem #fbf6ef van la mot ma
+     co san trong bo token (chinh la --surface-2 cu), khong them sac moi. */
+  --bg:#fbf6ef; --surface:#ffffff; --surface-2:#f6efe4;
   --line:#e5e5e5; --line-2:#d4d4d4;
   --ink:#171717; --muted:#5c5c5c;
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
@@ -100,27 +104,48 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .wlbl{margin:6px 10px 4px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .wsep{height:1px;margin:6px 8px;background:var(--line)}
 
-.shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding-block:20px;align-items:start}
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;padding-block:24px;align-items:start}
 .nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
 .nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent)}
 .nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
-main{min-width:0;display:flex;flex-direction:column;gap:16px}
+main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
 .ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px 18px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--card-shadow);padding:20px;min-width:0}
 .card h2{margin:0 0 12px;font-size:13px;font-weight:600}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.kpi .k{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
-.kpi .v{font-size:30px;font-weight:600;letter-spacing:-.01em;margin-top:6px}
-.kpi .d{font-size:12px;font-weight:600;margin-top:4px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--card-shadow);padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
+/* ---- THE SO LIEU theo bo cuc tham chieu -----------------------------------
+   Mot hang "icon + nhan", roi so lon dung canh mot PILL chenh lech, roi mot
+   dong phu mo. Truoc day nhan la chu HOA gian chu va chenh lech la chu tran —
+   pill doc nhanh hon vi no co mang mau rieng cho tang/giam. */
+.kpi .kh{display:flex;align-items:center;gap:8px;min-width:0}
+.kpi .k{font-size:13px;font-weight:600;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.kpi .v{font-size:28px;font-weight:600;letter-spacing:-.02em}
+/* Pill nam cung dong voi chu phu chu KHONG dung canh con so: the KPI chi rong
+   223px o 1440, ma "RM 29,151" da chiem 145px — dat canh nhau thi pill bi day
+   xuong dong rieng, nam le loi. Ban tham chieu cung dat pill canh chu phu o
+   the bieu do lon. */
+.kpi .d{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--muted);margin:0;min-height:22px}
+.ico{width:30px;height:30px;flex:none;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--accent-fg)}
+.pill{display:inline-flex;align-items:center;gap:2px;padding:3px 8px 3px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:600;white-space:nowrap}
+.pill.up{background:var(--ok-soft);color:var(--ok-ink)}
+.pill.down{background:var(--bad-soft);color:var(--bad-ink)}
+/* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
+.card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
+.card h2 .ico{width:28px;height:28px}
+.ch-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px}
+.ch-h h2{margin:0}
+.ch-lead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 2px}
+.ch-lead .v{font-size:26px;font-weight:600;letter-spacing:-.02em}
+.ch-sub{margin:0 0 14px;font-size:12px;color:var(--muted)}
 .up{color:var(--ok-ink)}.down{color:var(--bad-ink)}
 .seg{display:inline-flex;background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-pill);padding:3px;gap:3px}
 .seg button{min-height:34px;padding:0 14px;border-radius:var(--r-pill);border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted)}
@@ -177,8 +202,10 @@ td .empty{background:transparent;border-radius:0;padding:28px 12px}
 .heat .c{height:22px;border-radius:4px}
 .heat .lbl{display:flex;align-items:center}
 .heat .hh{text-align:center}
-svg .bar{fill:var(--chart)}
-svg .bar.cur{fill:var(--ink)}
+/* Theo bo cuc tham chieu: MOI cot deu nhat, dung MOT cot duoc to dam. Truoc
+   day nguoc lai — ca day dam va cot hien tai mau den, nen khong cot nao noi. */
+svg .bar{fill:var(--c2)}
+svg .bar.cur{fill:var(--chart)}
 svg .grid{stroke:var(--line)}
 svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .dig{display:flex;flex-direction:column;gap:10px}
@@ -536,6 +563,23 @@ const ICON = {
   audit:'<path d="M15 12h-5"></path><path d="M15 8h-5"></path><path d="M19 17V5a2 2 0 0 0-2-2H4"></path><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"></path>',   /* scroll-text */
 };
 
+/* Icon cho man Dashboard — cung nguon Lucide, cung quy uoc net 2px. */
+const DICON = {
+  revenue:'<rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path>',
+  profit:'<path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>',
+  margin:'<line x1="19" x2="5" y1="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle>',
+  orders:'<path d="M13 16H8"></path><path d="M14 8H8"></path><path d="M16 12H8"></path><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"></path>',
+  avg:'<path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path>',
+  chart:'<path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path>',
+  digest:'<path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path>',
+  pie:'<path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>',
+  channel:'<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>',
+  clock:'<circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path>',
+  up:'<path d="M7 7h10v10"></path><path d="M7 17 17 7"></path>',
+  down:'<path d="m7 7 10 10"></path><path d="M17 7v10H7"></path>',
+};
+const svgi = (k, sz) => `<svg width="${sz||18}" height="${sz||18}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DICON[k]}</svg>`;
+const ico = k => `<span class="ico">${svgi(k)}</span>`;
 const ROUTES = ['dashboard','approvals','purchases','menu','ingredients','suppliers','promotions','closes','users','assistant','audit'];
 const route = () => { const h = location.hash.replace('#',''); return ROUTES.includes(h) ? h : 'dashboard'; };
 /* Chip tai khoan. HQ_USERS giu DUNG danh sach ma o <select> cu liet ke —
@@ -577,7 +621,7 @@ function barChart(vals, labels, every, cur){
   const bw = (W - L - 8) / n, ticks = [0, .25, .5, .75, 1].map(f => f * max);
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Revenue chart">`;
   ticks.forEach(t => { const y = T + (H - T - B) * (1 - t / max); s += `<line class="grid" x1="${L}" x2="${W - 4}" y1="${y}" y2="${y}"></line><text x="${L - 8}" y="${y + 4}" text-anchor="end">${t >= 1000 ? (t / 1000).toLocaleString('en-MY', {maximumFractionDigits:1}) + 'k' : Math.round(t)}</text>`; });
-  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="2"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
+  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="4"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
   return s + '</svg>';
 }
 function vDash(){
@@ -589,8 +633,12 @@ function vDash(){
   const rev = sum(cur, d => d.rev), gp = sum(cur, d => d.gp), ord = Math.round(sum(cur, d => d.orders));
   const prevF = d => S.period === 'today' ? frac(cur[0]) : 1;
   const prev_rev = prev.reduce((s, d) => s + d.rev * prevF(d), 0), prev_gp = prev.reduce((s, d) => s + d.gp * prevF(d), 0), prev_ord = prev.reduce((s, d) => s + d.orders * prevF(d), 0);
-  const dl = (a, b) => { const c = b ? (a - b) / b : 0; return `<div class="d ${c >= 0 ? 'up' : 'down'}">${c >= 0 ? '▲' : '▼'} ${pct(Math.abs(c))} vs previous ${S.period === 'today' ? 'day' : n + ' days'}</div>`; };
-  const kpi = (k, v, d) => `<div class="kpi"><div class="k">${k}</div><div class="v num">${v}</div>${d}</div>`;
+  const vsTxt = `vs previous ${S.period === 'today' ? 'day' : n + ' days'}`;
+  /* Chenh lech thanh PILL co mang mau rieng (xanh tang / do giam) thay vi mot
+     dong chu tran — doc duoc truoc khi kip doc con so. Mui ten lay Lucide
+     arrow-up-right / arrow-down-right chu khong phai ky tu ▲▼. */
+  const dpill = (a, b) => { const c = b ? (a - b) / b : 0; return `<span class="pill ${c >= 0 ? 'up' : 'down'}">${svgi(c >= 0 ? 'up' : 'down', 13)}${pct(Math.abs(c))}</span>`; };
+  const kpi = (i, k, v, pill, sub) => `<div class="kpi"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
   let chart, chartTitle;
   if (S.period === 'today') {
     const d = cur[0]; const vals = d.hourly.map((v, i) => HOURS[i] <= hourNow ? v : 0);
@@ -608,10 +656,12 @@ function vDash(){
   const lowIng = ING.filter(i => i.onHand <= i.low);
   return `<div class="ph"><div><h1>Dashboard</h1><p>[Pilot outlet] · computed from sales, recipes and stock. Sample data for the prototype.</p></div>
   <div class="seg" role="group" aria-label="Period">${[['today','Today'],['7','7 days'],['30','30 days']].map(([v,l]) => `<button type="button" data-act="period" data-v="${v}" aria-pressed="${S.period === v}">${l}</button>`).join('')}</div></div>
-  <div class="kpis">${kpi('Revenue', rm0(rev), dl(rev, prev_rev))}${kpi('Gross profit', rm0(gp), dl(gp, prev_gp))}${kpi('Gross margin', pct(gp / rev), `<div class="d note">Food cost ${pct(1 - gp / rev)}</div>`)}${kpi('Orders', ord.toLocaleString('en-MY'), dl(ord, prev_ord))}${kpi('Avg order', rm(rev / Math.max(1, ord)), '<div class="d note">incl. SST & service</div>')}</div>
+  <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt)}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
   <div class="grid g2">
-    <section class="card"><h2>${chartTitle}</h2>${chart}</section>
-    <section class="card dig"><h2>Today’s digest</h2><ul>
+    <section class="card"><div class="ch-h"><h2>${ico('chart')}${chartTitle}</h2></div>
+      <div class="ch-lead"><span class="v num">${rm0(rev)}</span>${dpill(rev, prev_rev)}</div>
+      <p class="ch-sub">${rm0(Math.abs(rev - prev_rev))} ${rev >= prev_rev ? 'more' : 'less'} than the previous ${S.period === 'today' ? 'day' : n + ' days'}</p>${chart}</section>
+    <section class="card dig"><div class="ch-h"><h2>${ico('digest')}Today’s digest</h2></div><ul>
       <li><span class="dot ${pend.length ? 'd-warn' : 'd-ok'}"></span><span><b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a></span></li>
       <li><span class="dot ${poP.length ? 'd-warn' : 'd-ok'}"></span><span><b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a></span></li>
       <li><span class="dot d-bad"></span><span><b>Chicken leg drawdown 18% above recorded sales</b> on Sunday. Check portioning or unrecorded waste.</span></li>
@@ -622,14 +672,14 @@ function vDash(){
     </ul></section>
   </div>
   <div class="grid g3">
-    <section class="card"><h2>Sales by category</h2>${Object.keys(cats).map(k => `<div class="hbar"><span>${CAT[k]}</span><span class="track"><span class="fill" style="display:block;width:${(cats[k] / catTot * 100).toFixed(1)}%"></span></span><span class="r num">${pct(cats[k] / catTot)}</span></div>`).join('')}</section>
-    <section class="card"><h2>Sales by channel</h2>
+    <section class="card"><div class="ch-h"><h2>${ico('pie')}Sales by category</h2></div>${Object.keys(cats).map(k => `<div class="hbar"><span>${CAT[k]}</span><span class="track"><span class="fill" style="display:block;width:${(cats[k] / catTot * 100).toFixed(1)}%"></span></span><span class="r num">${pct(cats[k] / catTot)}</span></div>`).join('')}</section>
+    <section class="card"><div class="ch-h"><h2>${ico('channel')}Sales by channel</h2></div>
       <div class="hbar"><span>Dine-in</span><span class="track"><span class="fill" style="display:block;width:${(dine / rev * 100).toFixed(1)}%"></span></span><span class="r num">${pct(dine / rev)}</span></div>
       <div class="hbar"><span>Takeaway</span><span class="track"><span class="fill" style="display:block;width:${((rev - dine) / rev * 100).toFixed(1)}%"></span></span><span class="r num">${pct((rev - dine) / rev)}</span></div>
       <div class="hbar mute"><span>GrabFood</span><span class="track"></span><span class="r note">Phase B</span></div>
       <div class="hbar mute"><span>Foodpanda</span><span class="track"></span><span class="r note">Phase B</span></div>
     </section>
-    <section class="card"><h2>Busy hours, last 7 days</h2><div class="heat" role="img" aria-label="Revenue heatmap by day and hour">
+    <section class="card"><div class="ch-h"><h2>${ico('clock')}Busy hours, last 7 days</h2></div><div class="heat" role="img" aria-label="Revenue heatmap by day and hour">
       <span></span>${HOURS.map((h, i) => `<span class="hh">${i % 3 === 0 ? h : ''}</span>`).join('')}
       ${heatDays.map(d => `<span class="lbl">${d.day.toLocaleDateString('en-GB', {weekday:'short'})}</span>` + d.hourly.map((v, i) => `<span class="c" title="${HOURS[i]}:00 ${rm0(v)}" style="background:color-mix(in srgb, var(--chart) ${Math.round(8 + v / heatMax * 92)}%, var(--surface))"></span>`).join('')).join('')}
     </div><p class="note" style="margin:10px 0 0">Darker = more revenue in that hour.</p></section>
