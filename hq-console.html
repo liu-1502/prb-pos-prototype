@@ -16,10 +16,9 @@
 /* Layout: HQ back office — dark command bar, left nav, content column of cards and tables; side detail panel on approvals; one shared dialog */
 :root{
   color-scheme:light;   /* luon sang: khong theo che do toi cua he dieu hanh */
-  /* Bo mau lay NGUYEN VAN tu :root[data-theme="yellow"] cua till.html — ban VANG.
-     Vang #ffb22a la mau SANG: chu den tren no dat 11.65:1, chu trang chi 1.80.
-     Vi vay --accent-ink o day la DEN, khong phai trang — va moi cho brand dong
-     vai CHU hoac NET phai lay --accent-fg (#8a5600, 6.16:1 tren trang). */
+  /* Bo mau lay tu :root[data-theme="red"] cua till.html — ban DO.
+     Chi lay phan THUONG HIEU va cac mau semantic; nen trang, the trang va bo
+     mau rail/thanh tren giu nguyen theo lua chon cua nguoi dung. */
   /* Nen trang va the deu TRANG; the tach ra bang VIEN, khong bang do cao.
      Dung dung cach cua :root[data-theme="yellow"] trong till.html. */
   --bg:#ffffff; --surface:#ffffff; --surface-2:#fbf6ef;
@@ -31,17 +30,26 @@
   /* Rail TRANG, cung mau voi nen trang — tach ra bang mot duong ke ben phai,
      dung cach thanh tren dang lam voi duong ke ben duoi. */
   --rail-bg:#ffffff; --rail-ink:#171717; --rail-muted:#5c5c5c;
-  --accent:#ffb22a; --accent-ink:#000000; --accent-soft:#fff1d8; --accent-soft-ink:#8a5600;
-  --accent-hover:#f0a111; --ink-hover:#000000;
-  --accent-fg:#8a5600;
-  --warm:#fbf6ef; --warm-ink:#000000;
-  --ok-soft:#e3f0e3; --ok-ink:#2d6b2d; --ok-line:#2d6b2d;
-  /* "Cho xu ly" KHONG duoc dung vang nua — brand da chiem sac vang roi. Xanh lam
-     xam van doc ra la "dang cho" ma khong doi mat voi nut thuong hieu. Day cung
-     la o ma ban cu dung cho --info-*: bo token info di, hai vai tro gop lam mot. */
-  --warn-soft:#e4e9f0; --warn-ink:#1f2937; --warn-line:#3c5068;
-  --bad-soft:#fbe0dd; --bad-ink:#9b1c1c; --bad-line:#9b1c1c;
-  --danger:#9b1c1c; --danger-hover:#7f1515;
+  /* Brand DO, lay nguyen bo cua :root[data-theme="red"] trong till.html.
+     Do la mau TOI nen --accent-ink la TRANG (5.12:1) — nguoc han ban vang,
+     noi brand sang den muc chu tren no phai la den. */
+  --accent:#d62302; --accent-ink:#ffffff; --accent-soft:#fdeae3; --accent-soft-ink:#a81c02;
+  --accent-hover:#b81d02; --ink-hover:#0f0d0c;
+  /* Ban vang can --accent-fg vi #ffb22a lam chu chi dat 1.81. Do khong can:
+     #d62302 tren trang da dat 5.12. Giu bien lai (bang chinh --accent) de moi
+     rule dang dung no khong phai sua, va de doi theme sau nay van chay. */
+  --accent-fg:#d62302;
+  --warm:#fdeae3; --warm-ink:#a81c02;
+  --ok-soft:#e9f3e2; --ok-ink:#2f6b1f; --ok-line:#4a9a2f;
+  /* Brand khong con chiem sac vang nua nen "cho xu ly" lay lai duoc mau ho
+     phach that. Vang DAC chu khong phai mang nhat — mang vang nhat se chim
+     vao nen trang. Chu gan den tren no dat 10.4:1. */
+  --warn-soft:#fbd24e; --warn-ink:#262626; --warn-line:#9a6a00;
+  /* Loi phai dung MAROON dam han brand. Van chi tach brand duoc 2.35:1 — do la
+     gia phai tra khi thuong hieu la mau do. Bu lai bang chu va vi tri; dung bao
+     gio de mau do la tin hieu loi DUY NHAT. */
+  --bad-soft:#fde0da; --bad-ink:#6e0f1a; --bad-line:#6e0f1a;
+  --danger:#6e0f1a; --danger-hover:#570b14;
   --font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
   /* KHONG do bong o bat ky dau. Moi thu tach nhau bang VIEN va bang mang mau.
@@ -50,8 +58,9 @@
   --card-shadow:none; --shadow:none;
   --scrim:rgba(42,30,15,.5);
   /* Chart: MOT sac, dam nhat dan, pha voi --surface chu khong voi trang.
-     Ban vang lay --accent-fg chu khong --accent: mang mau lon phai dat 3:1 voi
-     nen trang ma #ffb22a chi dat 1.80. Khong lay --accent-ink vi den qua. */
+     Voi brand do: --c1 5.12, --c2 3.61, --c3 2.55, --c4 1.91, --c5 1.51
+     (deu so voi the trang). Cot nhat dung --c2 vi no la cap thap nhat con dat
+     nguong 3:1 cho hinh mang nghia. */
   --chart:var(--accent-fg);
   --c1:var(--chart);
   --c2:color-mix(in srgb, var(--chart) 74%, var(--surface));
@@ -161,13 +170,15 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
 .pill.up{background:var(--ok-soft);color:var(--ok-ink)}
 .pill.down{background:var(--bad-soft);color:var(--bad-ink)}
 /* The so lieu DAU TIEN to kin mau brand, giong the "My balance" ben tham
-   chieu. Chu tren no la DEN chu khong phai trang: #ffb22a sang qua, chu trang
-   chi dat 1.80 con chu den dat 11.65. Pill doi sang mang TRANG de no con tach
-   duoc khoi nen vang. */
+   chieu. Brand do la mau TOI nen chu tren no la TRANG (5.12:1). Pill van la
+   mang TRANG de no tach duoc khoi nen do. */
 .kpi.lead{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .kpi.lead .k{color:var(--accent-ink)}
 .kpi.lead .ico{background:color-mix(in srgb, #000000 12%, transparent);color:var(--accent-ink)}
-.kpi.lead .d{color:color-mix(in srgb, #000000 72%, transparent)}
+/* Nen the dan dat gio la mau TOI nen chu phu phai SANG. Khong ha duoc do mo:
+   tren #d62302, trang 90% chi con 4.37 — duoi nguong. Dung trang dac (5.12),
+   thu bac van con nho co chu (28px so 12px). */
+.kpi.lead .d{color:var(--accent-ink)}
 .kpi.lead .pill{background:var(--surface)}
 /* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
 .card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
