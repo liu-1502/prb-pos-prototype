@@ -19,9 +19,12 @@
   /* Bo mau lay tu :root[data-theme="red"] cua till.html — ban DO.
      Chi lay phan THUONG HIEU va cac mau semantic; nen trang, the trang va bo
      mau rail/thanh tren giu nguyen theo lua chon cua nguoi dung. */
-  /* Nen trang va the deu TRANG; the tach ra bang VIEN, khong bang do cao.
-     Dung dung cach cua :root[data-theme="yellow"] trong till.html. */
-  --bg:#ffffff; --surface:#ffffff; --surface-2:#fbf6ef;
+  /* Vung noi dung la mang XAM TRUNG TINH, the la TRANG. The tach ra bang
+     chinh MANG MAU chu khong bang vien — day la cach cua anh tham chieu, va
+     la ly do khong con section nao co stroke.
+     #ececec giai ma tu anh tham chieu (vung sau cac the). Rail va thanh tren
+     van trang nen chung tu tach khoi vung noi dung, khong can duong ke. */
+  --bg:#ececec; --surface:#ffffff; --surface-2:#f4f4f5;
   --line:#e5e5e5; --line-2:#d4d4d4;
   --ink:#171717; --muted:#5c5c5c;
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
@@ -30,30 +33,23 @@
   /* Rail TRANG, cung mau voi nen trang — tach ra bang mot duong ke ben phai,
      dung cach thanh tren dang lam voi duong ke ben duoi. */
   --rail-bg:#ffffff; --rail-ink:#171717; --rail-muted:#5c5c5c;
-  /* Brand CAM #fd764d — GIAI MA tu anh tham chieu bang canvas, khong uoc
-     luong bang mat: ba vung phang (pill nav, nut tron, cot bieu do) cho
-     #ff7954 / #fe774d / #fb7346, hoi tu ve #fd764d. Sac 13 do, bao hoa 97%,
-     sang 64%.
-     ⚠️ Chinh ban tham chieu dat CHU TRANG tren cam nay = 2.67:1, truot AA.
-     O day ap quy tac cua PRB cho brand SANG (da ghi trong CURRENT-STATE o ban
-     vang): brand sang thi chu tren no phai DAM — chu den dat 7.88 — va moi
-     cho brand dong vai CHU hoac NET lay ban dam --accent-fg.
-     Muon giong y ban tham chieu thi doi --accent-ink ve #ffffff, nhung phai
-     chap nhan 2.67. */
-  --accent:#fd764d; --accent-ink:#000000; --accent-soft:#ffece6; --accent-soft-ink:#b03e07;
-  --accent-hover:#f4601f; --ink-hover:#000000;
-  /* Cam dam cung he (sac 19 do) danh cho luc brand lam CHU hoac VIEN tren nen
-     sang: 5.94 tren trang, 5.20 tren tint. Cung cach till.html lam voi ban
-     vang (#ffb22a -> #8a5600). */
-  --accent-fg:#b03e07;
-  --warm:#ffece6; --warm-ink:#b03e07;
+  /* Brand DO #d62302, lay tu :root[data-theme="red"] cua till.html.
+     Do la mau TOI nen --accent-ink la TRANG (5.12:1). Do cung du dam de lam
+     CHU tren nen sang (5.12) nen --accent-fg bang chinh --accent; giu bien lai
+     de cac rule dang dung no khong phai sua. */
+  --accent:#d62302; --accent-ink:#ffffff; --accent-soft:#fdeae3; --accent-soft-ink:#a81c02;
+  --accent-hover:#b81d02; --ink-hover:#0f0d0c;
+  --accent-fg:#d62302;
+  --warm:#fdeae3; --warm-ink:#a81c02;
   /* Xanh lay theo badge "Paid" cua anh tham chieu. */
   --ok-soft:#ddf5d8; --ok-ink:#1a6b1a; --ok-line:#1a6b1a;
   /* Vang NHAT theo badge "Due" cua anh tham chieu (truoc do la vang dac).
      Chu nau vang tren no dat 6.11:1. */
   --warn-soft:#fbefb0; --warn-ink:#6b5600; --warn-line:#8a6a00;
-  /* Loi van la MAROON. Brand doi tu do sang cam nen no tach khoi brand duoc
-     4.51:1 — hoi brand con la do thi chi duoc 2.35. Cai danh doi do da het. */
+  /* Loi van la MAROON dam han brand. Brand tro lai mau do nen no chi tach
+     khoi brand duoc 2.35:1 — gia phai tra khi thuong hieu la mau do, da ghi
+     trong CURRENT-STATE. Bu lai bang chu va vi tri; dung bao gio de mau do la
+     tin hieu loi DUY NHAT. */
   --bad-soft:#fde0da; --bad-ink:#6e0f1a; --bad-line:#6e0f1a;
   --danger:#6e0f1a; --danger-hover:#570b14;
   --font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -85,8 +81,8 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .gut{padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
 
-/* Thanh tren cung mau nen voi body nen phai co duong ke moi tach ra duoc. */
-.bar{background:var(--bar);color:var(--bar-ink);border-bottom:1px solid var(--line)}
+/* Thanh tren trang tren vung noi dung xam — tu tach ra, khong can duong ke. */
+.bar{background:var(--bar);color:var(--bar-ink)}
 .bar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:16px}
 /* Dau thuong hieu la anh PNG nhung thang vao file (base64) nen prototype van
    tu chua. Khong con mang nen amber nua: ban than hinh da la mau amber, dat
@@ -135,7 +131,7 @@ button:disabled{cursor:not-allowed;opacity:.5}
    tran duoc het be ngang cot va duong ke duoi no chay suot, con noi dung van
    thut vao 24px. */
 .col{min-width:0;display:flex;flex-direction:column}
-.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);border-right:1px solid var(--line);padding:16px 12px}
+.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);padding:16px 12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--rail-muted);text-decoration:none;font-weight:600;font-size:14px}
 .nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--rail-ink)}
 /* Muc dang mo tren rail dung mang BRAND, theo dung anh tham chieu (pill cam
@@ -143,22 +139,25 @@ button:disabled{cursor:not-allowed;opacity:.5}
    chieu cung tach hai muc do: dieu huong dung brand, dieu khien trong the
    dung den. */
 .nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
-.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 14%, transparent);color:var(--accent-ink)}
+/* Lop phu phai TOI chu khong sang: phu trang 24% lam nen do sang len
+   (#e0583f) va chu trang tren no chi con 3.73. Den 18% cho #af1d02, chu
+   trang dat 7.00. */
+.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 18%, transparent);color:var(--accent-ink)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
 main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-block:24px}
 .ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
 .ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
-/* The trang tren nen trang: thu DUY NHAT tach chung ra la duong vien. Khong
-   do bong — mot the vua co vien vua co bong se doc ra nhu hai duong vien. */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+/* KHONG section nao co stroke. The trang noi len khoi vung noi dung xam bang
+   chinh mang mau (1.17:1) — dung cach cua anh tham chieu. Van khong do bong. */
+.card{background:var(--surface);border:0;border-radius:18px;padding:20px;min-width:0}
 .card h2{margin:0 0 12px;font-size:13px;font-weight:600}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
+.kpi{background:var(--surface);border:0;border-radius:18px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
 /* ---- THE SO LIEU theo bo cuc tham chieu -----------------------------------
    Mot hang "icon + nhan", roi so lon dung canh mot PILL chenh lech, roi mot
    dong phu mo. Truoc day nhan la chu HOA gian chu va chenh lech la chu tran —
@@ -180,11 +179,11 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
    mang TRANG de no tach duoc khoi nen do. */
 .kpi.lead{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .kpi.lead .k{color:var(--accent-ink)}
-.kpi.lead .ico{background:color-mix(in srgb, #000000 12%, transparent);color:var(--accent-ink)}
-/* Brand cam la mau SANG nen chu tren the dan dat la DEN, va ha duoc do mo de
-   lay lai thu bac: den 72% dat 5.26 (so lon den dac dat 7.88). Hoi brand con
-   la do — mau toi — thi khong ha duoc: trang 90% chi con 4.37. */
-.kpi.lead .d{color:color-mix(in srgb, #000000 72%, transparent)}
+.kpi.lead .ico{background:color-mix(in srgb, #000000 18%, transparent);color:var(--accent-ink)}
+/* Brand do la mau TOI nen chu tren the dan dat la TRANG, va KHONG ha duoc do
+   mo: tren #d62302, trang 90% chi con 4.37 — duoi nguong. Dung trang dac
+   (5.12); thu bac con nho co chu 28px so 12px. */
+.kpi.lead .d{color:var(--accent-ink)}
 .kpi.lead .pill{background:var(--surface)}
 /* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
 .card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
@@ -204,7 +203,7 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
 .btn.danger{background:var(--bad-soft);border-color:transparent;color:var(--bad-ink)}
 .btn.sm{min-height:36px;padding:0 12px;font-size:13px}
 .link{border:0;background:none;padding:0;color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.tbl{overflow-x:auto;border:0;border-radius:18px;background:var(--surface)}
 table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
 th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
 td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -290,11 +289,8 @@ td .empty{background:transparent;border-radius:0;padding:28px 12px}
 .heat .c{height:22px;border-radius:4px}
 .heat .lbl{display:flex;align-items:center}
 .heat .hh{text-align:center}
-/* Theo bo cuc tham chieu: MOI cot deu nhat, dung MOT cot duoc to dam. Truoc
-   day nguoc lai — ca day dam va cot hien tai mau den, nen khong cot nao noi. */
-svg .bar{fill:var(--c2)}
-svg .bar.cur{fill:var(--chart)}
-svg .grid{stroke:var(--line)}
+/* Cot bieu do gio to bang <pattern> dat thang tren tung <rect>, va khong con
+   luoi ke ngang — xem barChart(). */
 svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 /* ---- TODAY'S DIGEST --------------------------------------------------------
    Mot dong mot muc, tat ca cung mot kieu hang — khong chia nhom, khong co hang
@@ -330,7 +326,7 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .bot{align-self:flex-start;max-width:92%;background:var(--surface-2);border:0;border-radius:16px 16px 16px 4px;padding:10px 13px}
 .bot ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
 .bot .chips{margin-top:8px}
-.dcard{align-self:stretch;border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.dcard{align-self:stretch;border:0;border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
 .sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
 .sugg button{flex:none;min-height:36px;padding:0 14px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:600}
 .comp{display:flex;gap:10px;align-items:flex-end}
@@ -367,7 +363,7 @@ tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transpa
      giu nen den nau. */
   .app{grid-template-columns:minmax(0,1fr)}
   /* Thanh dai ngang thi duong ke phai doi sang canh DUOI. */
-  .nav{flex-direction:row;overflow-x:auto;position:static;height:auto;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line)}
+  .nav{flex-direction:row;overflow-x:auto;position:static;height:auto;padding:10px 16px}
   .nav a{flex:none}
   .nav .sep{display:none}
   .gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
@@ -721,12 +717,21 @@ function render(){
 
 /* dashboard */
 function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); const n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
+/* Bieu do cot theo anh tham chieu: cot co VAN SOC CHEO, mot cot duoc to dam
+   bang mau brand, va mot DUONG NET DUT o muc trung binh ky — khong con luoi
+   ke ngang. Nhan truc van giu de con doc duoc gia tri.
+   Van ve bang <pattern> cua SVG nen van tu chua, khong can anh.
+   Mau lay tu token nen no theo theme, khong ghim cung. */
 function barChart(vals, labels, every, cur){
   const W = 720, H = 230, L = 52, B = 26, T = 10, max = niceMax(Math.max(...vals) || 1), n = vals.length;
   const bw = (W - L - 8) / n, ticks = [0, .25, .5, .75, 1].map(f => f * max);
+  const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+  const hatch = (id, base, stripe) => `<pattern id="${id}" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="${base}"></rect><line x1="0" y1="0" x2="0" y2="7" stroke="${stripe}" stroke-width="3.5"></line></pattern>`;
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Revenue chart">`;
-  ticks.forEach(t => { const y = T + (H - T - B) * (1 - t / max); s += `<line class="grid" x1="${L}" x2="${W - 4}" y1="${y}" y2="${y}"></line><text x="${L - 8}" y="${y + 4}" text-anchor="end">${t >= 1000 ? (t / 1000).toLocaleString('en-MY', {maximumFractionDigits:1}) + 'k' : Math.round(t)}</text>`; });
-  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect class="bar${cur === i ? ' cur' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="6"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
+  s += `<defs>${hatch('hq-h0', 'var(--surface-2)', 'var(--line-2)')}${hatch('hq-h1', 'var(--accent)', 'var(--accent-hover)')}</defs>`;
+  ticks.forEach(t => { const y = T + (H - T - B) * (1 - t / max); s += `<text x="${L - 8}" y="${y + 4}" text-anchor="end">${t >= 1000 ? (t / 1000).toLocaleString('en-MY', {maximumFractionDigits:1}) + 'k' : Math.round(t)}</text>`; });
+  vals.forEach((v, i) => { const h = (H - T - B) * v / max, x = L + i * bw + bw * 0.15, y = H - B - h; s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="6" fill="url(#hq-h${cur === i ? 1 : 0})"><title>${esc(labels[i])}: ${rm0(v)}</title></rect>`; if (i % every === 0) s += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(labels[i])}</text>`; });
+  if (avg > 0) { const ya = T + (H - T - B) * (1 - avg / max); s += `<line x1="${L}" x2="${W - 4}" y1="${ya.toFixed(1)}" y2="${ya.toFixed(1)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 5"><title>Average ${rm0(avg)}</title></line>`; }
   return s + '</svg>';
 }
 function vDash(){
