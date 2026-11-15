@@ -28,12 +28,9 @@
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
   /* Thanh tren gio NAM TRONG cot noi dung va cung mau voi nen trang. */
   --bar:#ffffff; --bar-2:#fbf6ef; --bar-ink:#171717; --bar-muted:#5c5c5c;
-  /* Rail la mang DEN chay suot chieu cao — dung ma --rail-bg cua ban vang
-     trong till.html, nen hai file khop nhau o cho nay.
-     Chu phu van la xam AM #b5a99b chu khong phai xam trung tinh: quy tac cua
-     design system la toan bo giao dien nam trong dai am 20-44 do.
-     Do tren nen den: chu trang 21:1, chu phu 9.11:1, mang brand 11.65:1. */
-  --rail-bg:#000000; --rail-ink:#ffffff; --rail-muted:#b5a99b;
+  /* Rail TRANG, cung mau voi nen trang — tach ra bang mot duong ke ben phai,
+     dung cach thanh tren dang lam voi duong ke ben duoi. */
+  --rail-bg:#ffffff; --rail-ink:#171717; --rail-muted:#5c5c5c;
   --accent:#ffb22a; --accent-ink:#000000; --accent-soft:#fff1d8; --accent-soft-ink:#8a5600;
   --accent-hover:#f0a111; --ink-hover:#000000;
   --accent-fg:#8a5600;
@@ -123,14 +120,15 @@ button:disabled{cursor:not-allowed;opacity:.5}
    tran duoc het be ngang cot va duong ke duoi no chay suot, con noi dung van
    thut vao 24px. */
 .col{min-width:0;display:flex;flex-direction:column}
-.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);padding:16px 12px}
+.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);border-right:1px solid var(--line);padding:16px 12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--rail-muted);text-decoration:none;font-weight:600;font-size:14px}
-.nav a:hover{background:color-mix(in srgb, #ffffff 12%, transparent);color:var(--rail-ink)}
-/* Tren rail toi, muc dang mo la mang BRAND dac voi chu den (11.65:1) — mang
-   mau duy nhat tren ca rail, nen khong the nham no voi gi khac. */
-.nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
-.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 16%, transparent);color:var(--accent-ink)}
-.nav .sep{background:color-mix(in srgb, #ffffff 16%, transparent)}
+.nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--rail-ink)}
+/* Rail tro lai trang thi muc dang mo tro lai mang MUC dac, chu trang — giong
+   .seg va .chip luc duoc chon, nen ca app chi con MOT cach noi "dang chon".
+   (Mang brand chi dung hoi rail con toi, vi luc do mang muc den khong tach ra
+   duoc khoi nen.) */
+.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #ffffff 22%, transparent);color:var(--surface)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
 main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-block:24px}
@@ -351,7 +349,8 @@ tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transpa
   /* Man hep khong du cho cho rail doc: no thanh mot dai ngang tren cung, van
      giu nen den nau. */
   .app{grid-template-columns:minmax(0,1fr)}
-  .nav{flex-direction:row;overflow-x:auto;position:static;height:auto;padding:10px 16px}
+  /* Thanh dai ngang thi duong ke phai doi sang canh DUOI. */
+  .nav{flex-direction:row;overflow-x:auto;position:static;height:auto;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line)}
   .nav a{flex:none}
   .nav .sep{display:none}
   .gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
