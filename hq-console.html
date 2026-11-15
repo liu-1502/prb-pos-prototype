@@ -30,24 +30,30 @@
   /* Rail TRANG, cung mau voi nen trang — tach ra bang mot duong ke ben phai,
      dung cach thanh tren dang lam voi duong ke ben duoi. */
   --rail-bg:#ffffff; --rail-ink:#171717; --rail-muted:#5c5c5c;
-  /* Brand DO, lay nguyen bo cua :root[data-theme="red"] trong till.html.
-     Do la mau TOI nen --accent-ink la TRANG (5.12:1) — nguoc han ban vang,
-     noi brand sang den muc chu tren no phai la den. */
-  --accent:#d62302; --accent-ink:#ffffff; --accent-soft:#fdeae3; --accent-soft-ink:#a81c02;
-  --accent-hover:#b81d02; --ink-hover:#0f0d0c;
-  /* Ban vang can --accent-fg vi #ffb22a lam chu chi dat 1.81. Do khong can:
-     #d62302 tren trang da dat 5.12. Giu bien lai (bang chinh --accent) de moi
-     rule dang dung no khong phai sua, va de doi theme sau nay van chay. */
-  --accent-fg:#d62302;
-  --warm:#fdeae3; --warm-ink:#a81c02;
-  --ok-soft:#e9f3e2; --ok-ink:#2f6b1f; --ok-line:#4a9a2f;
-  /* Brand khong con chiem sac vang nua nen "cho xu ly" lay lai duoc mau ho
-     phach that. Vang DAC chu khong phai mang nhat — mang vang nhat se chim
-     vao nen trang. Chu gan den tren no dat 10.4:1. */
-  --warn-soft:#fbd24e; --warn-ink:#262626; --warn-line:#9a6a00;
-  /* Loi phai dung MAROON dam han brand. Van chi tach brand duoc 2.35:1 — do la
-     gia phai tra khi thuong hieu la mau do. Bu lai bang chu va vi tri; dung bao
-     gio de mau do la tin hieu loi DUY NHAT. */
+  /* Brand CAM #fd764d — GIAI MA tu anh tham chieu bang canvas, khong uoc
+     luong bang mat: ba vung phang (pill nav, nut tron, cot bieu do) cho
+     #ff7954 / #fe774d / #fb7346, hoi tu ve #fd764d. Sac 13 do, bao hoa 97%,
+     sang 64%.
+     ⚠️ Chinh ban tham chieu dat CHU TRANG tren cam nay = 2.67:1, truot AA.
+     O day ap quy tac cua PRB cho brand SANG (da ghi trong CURRENT-STATE o ban
+     vang): brand sang thi chu tren no phai DAM — chu den dat 7.88 — va moi
+     cho brand dong vai CHU hoac NET lay ban dam --accent-fg.
+     Muon giong y ban tham chieu thi doi --accent-ink ve #ffffff, nhung phai
+     chap nhan 2.67. */
+  --accent:#fd764d; --accent-ink:#000000; --accent-soft:#ffece6; --accent-soft-ink:#b03e07;
+  --accent-hover:#f4601f; --ink-hover:#000000;
+  /* Cam dam cung he (sac 19 do) danh cho luc brand lam CHU hoac VIEN tren nen
+     sang: 5.94 tren trang, 5.20 tren tint. Cung cach till.html lam voi ban
+     vang (#ffb22a -> #8a5600). */
+  --accent-fg:#b03e07;
+  --warm:#ffece6; --warm-ink:#b03e07;
+  /* Xanh lay theo badge "Paid" cua anh tham chieu. */
+  --ok-soft:#ddf5d8; --ok-ink:#1a6b1a; --ok-line:#1a6b1a;
+  /* Vang NHAT theo badge "Due" cua anh tham chieu (truoc do la vang dac).
+     Chu nau vang tren no dat 6.11:1. */
+  --warn-soft:#fbefb0; --warn-ink:#6b5600; --warn-line:#8a6a00;
+  /* Loi van la MAROON. Brand doi tu do sang cam nen no tach khoi brand duoc
+     4.51:1 — hoi brand con la do thi chi duoc 2.35. Cai danh doi do da het. */
   --bad-soft:#fde0da; --bad-ink:#6e0f1a; --bad-line:#6e0f1a;
   --danger:#6e0f1a; --danger-hover:#570b14;
   --font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -132,12 +138,12 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);border-right:1px solid var(--line);padding:16px 12px}
 .nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--rail-muted);text-decoration:none;font-weight:600;font-size:14px}
 .nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--rail-ink)}
-/* Rail tro lai trang thi muc dang mo tro lai mang MUC dac, chu trang — giong
-   .seg va .chip luc duoc chon, nen ca app chi con MOT cach noi "dang chon".
-   (Mang brand chi dung hoi rail con toi, vi luc do mang muc den khong tach ra
-   duoc khoi nen.) */
-.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
-.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #ffffff 22%, transparent);color:var(--surface)}
+/* Muc dang mo tren rail dung mang BRAND, theo dung anh tham chieu (pill cam
+   "Overview"). Ben trong THE thi .seg va .chip van la mang muc den — ban tham
+   chieu cung tach hai muc do: dieu huong dung brand, dieu khien trong the
+   dung den. */
+.nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 14%, transparent);color:var(--accent-ink)}
 .nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .nav .sep{height:1px;background:var(--line);margin:8px 4px}
 main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-block:24px}
@@ -175,10 +181,10 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
 .kpi.lead{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .kpi.lead .k{color:var(--accent-ink)}
 .kpi.lead .ico{background:color-mix(in srgb, #000000 12%, transparent);color:var(--accent-ink)}
-/* Nen the dan dat gio la mau TOI nen chu phu phai SANG. Khong ha duoc do mo:
-   tren #d62302, trang 90% chi con 4.37 — duoi nguong. Dung trang dac (5.12),
-   thu bac van con nho co chu (28px so 12px). */
-.kpi.lead .d{color:var(--accent-ink)}
+/* Brand cam la mau SANG nen chu tren the dan dat la DEN, va ha duoc do mo de
+   lay lai thu bac: den 72% dat 5.26 (so lon den dac dat 7.88). Hoi brand con
+   la do — mau toi — thi khong ha duoc: trang 90% chi con 4.37. */
+.kpi.lead .d{color:color-mix(in srgb, #000000 72%, transparent)}
 .kpi.lead .pill{background:var(--surface)}
 /* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
 .card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
