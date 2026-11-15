@@ -20,11 +20,11 @@
      Chi lay phan THUONG HIEU va cac mau semantic; nen trang, the trang va bo
      mau rail/thanh tren giu nguyen theo lua chon cua nguoi dung. */
   /* Vung noi dung la mang XAM TRUNG TINH, the la TRANG. The tach ra bang
-     chinh MANG MAU chu khong bang vien — day la cach cua anh tham chieu, va
-     la ly do khong con section nao co stroke.
-     #ececec giai ma tu anh tham chieu (vung sau cac the). Rail va thanh tren
-     van trang nen chung tu tach khoi vung noi dung, khong can duong ke. */
-  --bg:#ececec; --surface:#ffffff; --surface-2:#f4f4f5;
+     chinh MANG MAU chu khong bang vien — day la ly do khong con section nao
+     co stroke.
+     ⚠️ #fafafa chi tach khoi the trang duoc 1.03:1 (truoc day #ececec duoc
+     1.17). Xem chu thich o .card. */
+  --bg:#fafafa; --surface:#ffffff; --surface-2:#f4f4f5;
   --line:#e5e5e5; --line-2:#d4d4d4;
   --ink:#171717; --muted:#5c5c5c;
   --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
@@ -149,8 +149,12 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
 .ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
 .ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
-/* KHONG section nao co stroke. The trang noi len khoi vung noi dung xam bang
-   chinh mang mau (1.17:1) — dung cach cua anh tham chieu. Van khong do bong. */
+/* KHONG section nao co stroke: the tach khoi nen bang chinh MANG MAU.
+   ⚠️ Voi nen #fafafa thi do tach chi con 1.044:1 (nen #ececec truoc do duoc
+   1.181). Rail va thanh tren cung trang nen cung chi tach duoc 1.044. Khong
+   co stroke + nen gan trang = ranh gioi gan nhu bien mat; day la danh doi da
+   biet, khong phai nham lan. Muon ro hon thi hoac ha nen xuong (#f1f1f1 cho
+   1.129), hoac tra lai hairline cho .card. */
 .card{background:var(--surface);border:0;border-radius:18px;padding:20px;min-width:0}
 .card h2{margin:0 0 12px;font-size:13px;font-weight:600}
 .grid{display:grid;gap:16px}
