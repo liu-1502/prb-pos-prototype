@@ -3185,10 +3185,10 @@ const THEMES = {brown:'Brown theme', red:'Red theme', green:'Green theme', yello
 /* data-layout tach khoi data-theme: "modern" la BO CUC (rail doc, o tim thu
    gon, hang chip ngang), dung chung cho ca do lan xanh. Them theme moi theo
    bo cuc nay thi chi phai viet bo mau, khong phai chep lai 65 rule CSS. */
-const LAYOUT = {brown:'modern', red:'modern', green:'modern', yellow:'modern'};
+const LAYOUT = {brown:'modern', red:'modern', green:'modern', yellow:'modern', leaf:'modern'};
 function setTheme(t){
   if (t === 'peach') t = 'red';   // gia tri cu con luu tu ban truoc
-  if (!THEMES[t]) t = 'yellow';
+  if (!THEMES[t]) t = 'leaf';
   document.documentElement.setAttribute('data-theme', t);
   document.documentElement.setAttribute('data-layout', LAYOUT[t]);
   document.querySelectorAll('[data-act="theme"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === t)));
@@ -4725,10 +4725,10 @@ document.addEventListener('keydown', e => {
 });
 
 /* ---------- start ---------- */
-/* Mo len luon la theme DO — day la theme mac dinh cua san pham. Khong khoi
-   phuc lua chon cu tu localStorage nua: hai o chon theme tren top bar la cong
+/* Mo len luon la theme LA — day la theme mac dinh cua san pham. Khong khoi
+   phuc lua chon cu tu localStorage nua: o chon theme tren top bar la cong
    cu DEMO, khong phai cai dat that cua thu ngan. */
-setTheme('yellow');
+setTheme('leaf');
 /* Chi nhan chu so. S.table van la chuoi vi day la ma dinh danh, khong phai so dem. */
 /* Roi khoi o ma van de trong thi luc do moi la loi that. */
 $('#standNo').addEventListener('blur', () => { S.standTouched = true; renderCart(); });
