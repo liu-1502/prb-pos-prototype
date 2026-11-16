@@ -1889,11 +1889,11 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 @media (prefers-reduced-motion: reduce){.cl-stage span{animation:none!important}}
 
 /* man dang nhap PIN — phu kin, khong cham duoc gi phia sau */
-/* Noi dung neo TREN voi padding-top 160, khong can giua nua — can giua thi
+/* Noi dung neo TREN voi padding-top 64, khong can giua nua — can giua thi
    cum PIN roi xuong qua thap so voi tam mat.
-   overflow:auto la luoi an toan, khong phai y do bo cuc: 160 + chieu cao the
-   609 = 769, nen man thap hon ~770 se bi cat neu khong co no. */
-.signin{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;align-items:flex-start;justify-content:center;padding:160px 24px 24px;overflow:auto}
+   overflow:auto la luoi an toan, khong phai y do bo cuc: 64 + chieu cao the
+   609 + 24 = 697, nen man thap hon the se bi cat neu khong co no. */
+.signin{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;align-items:flex-start;justify-content:center;padding:64px 24px 24px;overflow:auto}
 .signin-card{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 /* Illus chua san 23px trong o day khung 256 — cho chuong nap bay len,
    khong co gi ve vao do. Do la ly do khoang illus -> "Till 1" do duoc
