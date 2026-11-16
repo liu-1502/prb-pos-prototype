@@ -231,7 +231,10 @@
   --bad-soft:#fbe0dd; --bad-ink:#9b1c1c; --bad-line:#9b1c1c;
   --danger:#9b1c1c; --danger-hover:#7f1515;
   --card-shadow:0 1px 2px rgba(1,42,20,.05), 0 4px 12px rgba(1,42,20,.04);
-  --scrim:rgba(1,42,20,.5); --shadow:0 18px 48px rgba(1,42,20,.16);
+  /* Scrim DEN TRUNG TINH, khong nhuom brand. Ban vang nhuom am
+     rgba(42,30,15,.5) thi khong ai thay vi vang von la sac am nhat. Xanh
+     #015726 nhuom len ca man thi ra mot lop xanh lu, doc het anh mon. */
+  --scrim:rgba(0,0,0,.5); --shadow:0 18px 48px rgba(1,42,20,.16);
 }
 
 /* SAU CHO brand dong vai MAU CHU / VIEN tren nen sang — phai doi sang
@@ -621,7 +624,12 @@ button:disabled{cursor:not-allowed}
 .charge{min-height:60px;justify-content:space-between;font-size:18px;font-weight:600;padding:0 20px}
 
 /* overlays */
-.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+/* San tren/duoi 80px chu khong 16px: hop thoai cham sat mep man nhin nhu bi
+   cat, va o may cao 844 thi hop cao toi 812 — gan het man. Ngang van giu san
+   16px, chi truc doc moi can cho tho.
+   .scrim.sheet (Overview, Orders, Stock, Supplier orders) KHONG dinh: no ghi
+   de ca padding bang var(--shell-pad), vi do la drawer chay suot chieu cao. */
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:max(80px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(80px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
 .dlg{background:var(--surface);color:var(--ink);border-radius:var(--r-lg);box-shadow:var(--shadow);width:100%;max-height:100%;overflow:auto;display:flex;flex-direction:column}
 /* SHEET TRAI — cho cac man den tu rail (Orders, Stock). Khac han dialog giua
    man: o day thu ngan VAN PHAI doc duoc gio hang ben phai trong luc xem don,
