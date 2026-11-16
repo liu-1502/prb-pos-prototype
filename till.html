@@ -536,7 +536,14 @@ button:disabled{cursor:not-allowed}
    nhat noi o nay de lam gi. aria-label van giu rieng cho trinh doc man hinh. */
 /* Placeholder la GOI Y, khong phai gia tri. Ha ve 400 de no khong tranh
    trong luong voi so ban that (600) khi da nhap. */
-.cart-t #standNo::placeholder{color:var(--muted);font-weight:400}
+/* Nhat hon --muted mot bac de doc ra NGAY la placeholder chu khong phai gia
+   tri da nhap. 85% --muted pha voi --surface ra ~#747474, tuong phan 4.61
+   tren trang — van qua AA (4.5). Nhat hon nua thi truot: #808080 chi con
+   3.95, #8a8a8a con 3.45.
+   font-weight GIU 400, khong ha duoc nua: Inter trong file chi nhung ba
+   weight 400/500/600, dat 300 hay 350 deu roi ve 400 (do be rong chuoi
+   "Table / Stand no.": 300/350/400 deu ra 119.88px). */
+.cart-t #standNo::placeholder{color:color-mix(in srgb, var(--muted) 85%, var(--surface));font-weight:400}
 /* Gio da co mon ma chua nhap so the: Charge dang bi chan, nen o nay phai noi
    ro no la thu dang thieu. Gio con trong thi KHONG to do — luc do chua sai gi. */
 .cart-t #standNo.need{border-color:var(--bad-line);background:var(--bad-soft);color:var(--bad-ink);box-shadow:none}
