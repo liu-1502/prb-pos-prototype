@@ -22,48 +22,104 @@
   /* Vung noi dung la mang XAM TRUNG TINH, the la TRANG. The tach ra bang
      chinh MANG MAU chu khong bang vien — day la ly do khong con section nao
      co stroke.
-     ⚠️ #fafafa chi tach khoi the trang duoc 1.03:1 (truoc day #ececec duoc
-     1.17). Xem chu thich o .card. */
-  --bg:#fafafa; --surface:#ffffff; --surface-2:#f4f4f5;
-  --line:#e5e5e5; --line-2:#d4d4d4;
-  --ink:#171717; --muted:#5c5c5c;
-  --disabled-bg:#f5f5f5; --disabled-ink:#a99a85;
+     VO cua app (thanh tren + rail + nen ngoai) la mang XAM trung tinh, va
+     noi dung nam trong mot KHUNG TRANG bo 4 goc noi tren vo do, cach mep
+     16px. Khong mang mau thuong hieu nao o phan vo. */
+  /* ---- THANG MAU GOC (Tailwind) -----------------------------------------
+     Bon ho mau, moi ho bon buoc: 50 (nen nhat), 600 (mang dac), 700 (chu
+     tren nen nhat), 800 (ban dam hon, dung khi chu nam tren nen xam cua
+     hang dang chon).
+     MOI token nghia ben duoi deu tro vao day — khong con hex roi nao, nen
+     doi mot ho mau chi phai sua mot dong. */
+  --red-50:#fef2f2;   --red-500:#ef4444;   --red-600:#dc2626;   --red-700:#b91c1c;   --red-800:#991b1b;
+  --green-50:#f0fdf4; --green-500:#22c55e; --green-600:#16a34a; --green-700:#15803d; --green-800:#166534;
+  --amber-50:#fffbeb; --amber-500:#f59e0b; --amber-600:#d97706; --amber-700:#b45309; --amber-800:#92400e;
+  --blue-50:#eff6ff;  --blue-500:#3b82f6;  --blue-600:#2563eb;  --blue-700:#1d4ed8;  --blue-800:#1e40af;
+  /* ===== Bang mau lay tu TAILWIND (bo mau shadcn dung) =====
+     Xam: thang `neutral`. Do: `red`. Xanh: `green`. Vang: `amber`.
+     Khong con sac pha tay nao — moi gia tri deu la mot buoc co san cua
+     thang, nen sau nay doi ca bo rat de. */
+  --bg:#f5f5f5; --surface:#ffffff; --surface-2:#f5f5f5;        /* neutral-100 */
+  --line:#e5e5e5; --line-2:#d4d4d4;                            /* neutral-200/300 */
+  /* --muted lay neutral-600 chu KHONG phai neutral-500 nhu shadcn: rail o
+     day la #f5f5f5 chu khong phai trang, ma neutral-500 tren nen do chi dat
+     4.35 — truot nguong 4.5. neutral-600 dat 7.17. */
+  /* Hai muc chu phu: --muted (neutral-600) cho chu phu thuong, --muted-2
+     (neutral-500) cho chu phu NHE hon nua — mo ta duoi tieu de, ten nhom
+     dieu huong. Tren the TRANG neutral-500 dat 4.74, qua nguong. */
+  --ink:#171717; --muted:#525252; --muted-2:#737373;           /* neutral-900/600/500 */
+  --disabled-bg:#f5f5f5; --disabled-ink:#a3a3a3;               /* neutral-400 */
   /* Thanh tren gio NAM TRONG cot noi dung va cung mau voi nen trang. */
-  --bar:#ffffff; --bar-2:#fbf6ef; --bar-ink:#171717; --bar-muted:#5c5c5c;
-  /* Rail TRANG, cung mau voi nen trang — tach ra bang mot duong ke ben phai,
-     dung cach thanh tren dang lam voi duong ke ben duoi. */
-  --rail-bg:#ffffff; --rail-ink:#171717; --rail-muted:#5c5c5c;
-  /* Brand DO #d62302, lay tu :root[data-theme="red"] cua till.html.
-     Do la mau TOI nen --accent-ink la TRANG (5.12:1). Do cung du dam de lam
-     CHU tren nen sang (5.12) nen --accent-fg bang chinh --accent; giu bien lai
-     de cac rule dang dung no khong phai sua. */
-  --accent:#d62302; --accent-ink:#ffffff; --accent-soft:#fdeae3; --accent-soft-ink:#a81c02;
-  --accent-hover:#b81d02; --ink-hover:#0f0d0c;
-  --accent-fg:#d62302;
-  --warm:#fdeae3; --warm-ink:#a81c02;
-  /* Xanh lay theo badge "Paid" cua anh tham chieu. */
-  --ok-soft:#ddf5d8; --ok-ink:#1a6b1a; --ok-line:#1a6b1a;
-  /* Vang NHAT theo badge "Due" cua anh tham chieu (truoc do la vang dac).
-     Chu nau vang tren no dat 6.11:1. */
-  --warn-soft:#fbefb0; --warn-ink:#6b5600; --warn-line:#8a6a00;
-  /* Loi van la MAROON dam han brand. Brand tro lai mau do nen no chi tach
-     khoi brand duoc 2.35:1 — gia phai tra khi thuong hieu la mau do, da ghi
-     trong CURRENT-STATE. Bu lai bang chu va vi tri; dung bao gio de mau do la
-     tin hieu loi DUY NHAT. */
-  --bad-soft:#fde0da; --bad-ink:#6e0f1a; --bad-line:#6e0f1a;
-  --danger:#6e0f1a; --danger-hover:#570b14;
+  --bar:#f5f5f5; --bar-2:#f5f5f5; --bar-ink:#171717; --bar-muted:#525252;
+  /* Rail khong co mang mau rieng — no nam tren chinh vo xam. Chu phu
+     neutral-600 tren #f5f5f5 dat 7.17, chu chinh #171717 dat 16.44. */
+  --rail-bg:transparent; --rail-ink:#171717; --rail-muted:#525252;
+  /* Thuong hieu la DO red-600. Trang tren no dat 4.83; chinh no lam CHU
+     tren the trang cung 4.83 (tab dang chon). Hover xuong red-700.
+     ⚠️ Loi (--bad-*) cung o thang `red`, chi khac buoc (700). Hai thu chi
+     tach nhau 1.34 nen MAU KHONG BAO GIO duoc dung mot minh de bao loi —
+     luon phai co chu va vi tri di kem. */
+  --accent:var(--red-600); --accent-ink:#ffffff; --accent-soft:var(--red-50); --accent-soft-ink:var(--red-700);
+  --accent-hover:var(--red-700); --ink-hover:#0a0a0a;          /* neutral-950 */
+  --accent-fg:var(--red-600);
+  --warm:var(--red-50); --warm-ink:var(--red-700);
+  /* Xanh lay thang tu thang mau BRIGHTGREEN: nen la buoc 50 (rat nhat), chu
+     la buoc 600. Buoc 600 chuan cua thang nay (#2e8b0c) chi dat 4.09 tren
+     buoc 50 nen da ha mot nac xuong #2a7e0b: 4.79 tren nen badge va 5.14
+     tren the trang (chu .up "+10 kg" dung thang mau nay tren nen trang). */
+  /* green-50 / green-700: 4.79 tren nen badge, 5.02 tren the trang. Ve lai
+     buoc 700 cho dong bo voi amber-700 va red-700 cua hai badge kia (hoi
+     thuong hieu con la xanh la thi phai day xuong 800 de khoi trung). */
+  --ok-soft:var(--green-50); --ok-ink:var(--green-700); --ok-line:var(--green-700);
+  /* Vang theo cung quy tac voi xanh va do: nen la buoc 50, chu la buoc 600.
+     Buoc 600 chuan cua thang amber (#d97706) chi dat 3.07 tren buoc 50 — truot
+     xa nguong — nen da dam them hai nac xuong #9a5400: 5.44 tren nen badge va
+     5.77 tren the trang.
+     ⚠️ Hai token nay con to ca HOP .alert.warn. Tu khi hop alert cho chu
+     ve mau den, --warn-ink chi con to ICON, nen nguong ap dung la 3 (WCAG
+     1.4.11 cho do hoa) chu khong phai 4.5. Nen 50 van rat nhat: chi tach
+     khoi the trang 1.06. */
+  /* amber-50 / amber-700: 4.84 tren nen badge, 5.02 tren the trang. */
+  --warn-soft:var(--amber-50); --warn-ink:var(--amber-700); --warn-line:var(--amber-700);
+  /* red-50 / red-700: 5.91 tren nen badge; chu trang tren nut danger dac
+     dat 6.47. Dung red-700 chu khong red-600, vi red-600 tren red-50 chi
+     dat 4.41. Loi va thuong hieu gio cung MOT thang do, chi khac buoc
+     (600 vs 700) va tach nhau 1.34 — nen chu va vi tri van phai la tin
+     hieu chinh, mau khong bao gio dung mot minh. */
+  --bad-soft:var(--red-50); --bad-ink:var(--red-700); --bad-line:var(--red-700);
+  --danger:var(--red-700); --danger-hover:var(--red-800);
+  /* XANH DUONG cho thong tin trung tinh — khong phai loi, khong phai xong,
+     khong phai canh bao. Truoc day .b-info muon tam token thuong hieu nen
+     "Your request" trong y het badge loi. blue-700 tren blue-50 dat 6.16,
+     tren the trang 6.70. */
+  --info-soft:var(--blue-50); --info-ink:var(--blue-700);
+  /* Mui ten cuoi hang bam duoc. Ve bang mask nen no AN THEO MAU CHU
+     (background-color), khong ghim cung mau trong file anh. */
+  --chev-r:url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22%23000%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22m9%2018%206-6-6-6%22/%3E%3C/svg%3E");
+  /* Mau icon tro ly chep nguyen tu till.html (ban theme do):
+     --ai-1 la mau VIEN cua icon, --ai-2 la mau MAT, --ai-visor la mi mat.
+     Giu dung so cua till de hai san pham dung CHUNG mot nhan dang AI. */
+  --ai-1:#b45044; --ai-2:#eebfaa; --ai-visor:#6d2821;
   --font:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --r-sm:8px; --r-md:12px; --r-lg:16px; --r-pill:999px;
+  /* Chieu cao thanh tren = 16px padding tren + 48px (chip tai khoan, phan tu
+     cao nhat) + 16px padding duoi = 80px. Khong con duong ke nen khong cong
+     them 1px nhu truoc. Ghim thanh token vi rail phai biet no de bat dau dung
+     duoi thanh va cao dung phan con lai cua man hinh. */
+  --bar-h:80px;
+  /* Be rong rail. Gap lai thi chi con du cho icon va vung cham. */
+  --rail-w:232px;
   /* KHONG do bong o bat ky dau. Moi thu tach nhau bang VIEN va bang mang mau.
      Lop phu (dialog, menu tai khoan) vi the phai co vien that, neu khong no se
      troi tren nen trang ma khong co gi vien lai. */
   --card-shadow:none; --shadow:none;
-  --scrim:rgba(42,30,15,.5);
+  --scrim:rgba(10,10,10,.5);
   /* Chart: MOT sac, dam nhat dan, pha voi --surface chu khong voi trang.
-     Voi brand do: --c1 5.12, --c2 3.61, --c3 2.55, --c4 1.91, --c5 1.51
-     (deu so voi the trang). Cot nhat dung --c2 vi no la cap thap nhat con dat
+     Do PHOI DEN (do 70% + den) de bot do tren man: giu nguyen sac 9 do cua
+     thuong hieu nhung ha do sang tu 42% xuong 29%.
+     #961801 tren the trang dat 8.65; cot nhat --c2 ra #b15443 = 4.98, thua
      nguong 3:1 cho hinh mang nghia. */
-  --chart:var(--accent-fg);
+  --chart:var(--red-800);
   --c1:var(--chart);
   --c2:color-mix(in srgb, var(--chart) 74%, var(--surface));
   --c3:color-mix(in srgb, var(--chart) 54%, var(--surface));
@@ -71,7 +127,7 @@
   --c5:color-mix(in srgb, var(--chart) 25%, var(--surface));
 }
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;overflow:hidden}
 *{box-sizing:border-box}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -81,31 +137,35 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .gut{padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
 
-/* Thanh tren trang tren vung noi dung xam — tu tach ra, khong can duong ke. */
-.bar{background:var(--bar);color:var(--bar-ink)}
-.bar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:16px}
+/* Thanh tren nam BEN PHAI rail, ben trong cot noi dung, va KHONG cuon nua:
+   ca vo trang (rail + thanh tren) dung yen, chi KHUNG TRANG ben duoi moi la
+   vung cuon. Vi the bo `position:sticky` — khong con canh noi dung cuon
+   xuyen qua no nhu truoc. Khong nen trang, khong duong ke: mang dung mau vo. */
+.bar{background:var(--bg);color:var(--bar-ink);flex:none}
+.bar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:48px;padding-block:16px}
 /* Dau thuong hieu la anh PNG nhung thang vao file (base64) nen prototype van
    tu chua. Khong con mang nen amber nua: ban than hinh da la mau amber, dat
    no tren mang amber thi mat hinh. Tren thanh den thi no tu noi.
    Da CAT bot le trong suot cua anh goc: trong khung 128px, phan co pixel chi
    chiem 90x68 — 70% ngang, 53% doc — nen o o 36px cai cloche chi cao 19px,
    nho hon ca chu ben canh. Sau khi cat, dat theo CHIEU CAO 28px. */
-.logo{height:28px;width:auto;flex:none;display:block}
 .brand{display:flex;align-items:center;gap:10px}
-.brand b{font-size:15px;display:block}.brand small{font-size:12px;color:var(--bar-muted);display:block}
+.brand b{font-size:15px;display:block}
 .spacer{flex:1}
 .bar label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bar-muted)}
 /* ---- CHIP TAI KHOAN -------------------------------------------------------
    Chep nguyen cach lam cua till.html: avatar + ten + vai + chevron, bam ra
    menu. Truoc day day la HAI o <select> he dieu hanh nam tran tren thanh,
    chiem gan nua be ngang va trong khong giong bat ky control nao khac.
-   Chip co VIEN 1.5px nhu .who cua ban vang trong till.html — cung quy uoc
-   voi moi control khac trong app. Hover doi MAU VIEN chu khong to nen, dung
-   quy tac "hover la duong vien" da chot. */
+   Chip co VIEN 1px — ca app dung MOT be day vien duy nhat, cho section lan
+   control. Hover doi MAU VIEN chu khong to nen, dung quy tac "hover la duong
+   vien" da chot. */
 .who-wrap{position:relative}
-.who{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 10px 0 6px;border:1.5px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface);color:var(--bar-ink);white-space:nowrap}
+.who{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 10px 0 6px;border:1px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface);color:var(--bar-ink);white-space:nowrap}
 .who:hover,.who[aria-expanded="true"]{border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
-.who .av{width:36px;height:36px;flex:none;border-radius:var(--r-pill);background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}
+/* Avatar tai khoan: y het .tav trong bang, chi lon hon. Mang mau do JS gan
+   tu avHue() nen cung mot nguoi thi hai cho cung mot mau. */
+.who .av{width:36px;height:36px;flex:none;border-radius:var(--r-pill);background:var(--red-500);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
 .who .wt{text-align:left}
 .who b{display:block;font-size:14px;font-weight:600;line-height:1.2}
 .who small{display:block;font-size:11px;font-weight:600;color:var(--bar-muted)}
@@ -124,44 +184,117 @@ button:disabled{cursor:not-allowed;opacity:.5}
 .wlbl{margin:6px 10px 4px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .wsep{height:1px;margin:6px 8px;background:var(--line)}
 
-/* Rail chay SUOT chieu cao man hinh va dinh tai cho khi cuon; thanh tren nam
-   BEN TRONG cot noi dung chu khong chay ngang qua rail nua. */
-.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+/* Rail chay SUOT CHIEU CAO trang, tu mep tren xuong mep duoi; thanh tren nam
+   ben phai no. Luoi cao dung mot man hinh va khong cuon. */
+.app{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);height:100vh;height:100dvh;min-height:0;transition:grid-template-columns .18s}
 /* Le NGANG nam o .bar-in va main chu khong o .col: co the thanh tren moi
    tran duoc het be ngang cot va duong ke duoi no chay suot, con noi dung van
    thut vao 24px. */
-.col{min-width:0;display:flex;flex-direction:column}
-.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail-bg);padding:16px 12px}
-.nav a{display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:var(--r-pill);color:var(--rail-muted);text-decoration:none;font-weight:600;font-size:14px}
+/* 16px bao quanh khung trang: trai (cach rail), phai va duoi. Phia tren la
+   thanh tren, khoang tho da do padding-block cua .bar-in lo ra. */
+.col{min-width:0;min-height:0;display:flex;flex-direction:column;padding:0 16px 16px}
+/* Rail trang tren nen #fafafa chi tach duoc 1.044 — gan nhu khong thay ranh
+   gioi. Mot duong ke mong ben phai lam viec do thay cho chenh lech mau.
+   Day la ngoai le duy nhat voi quy tac "section khong co stroke": no khong
+   vien quanh mot the, no la mep cua mot VUNG. */
+/* .nav la VO (nut gap + danh sach). #nav moi la container xep cac muc —
+   lam sai cho nay thi o man hep dai ngang gay thanh cot. */
+/* Bo duoi 48px chu khong phai 16: cuc tro ly o day rail can nhac len khoi
+   mep duoi, neu khong no dinh sat day trong nhu bi rot xuong. */
+.nav{display:flex;flex-direction:column;min-height:0;overflow:hidden;background:var(--rail-bg);padding:0 12px 48px}
+/* Dau rail: logo + ten + nut gap. Cao dung bang thanh tren ben phai nen hai
+   ben thang hang. */
+.railhead{display:flex;align-items:center;gap:10px;min-height:var(--bar-h);padding:0 2px}
+/* Chi DANH SACH muc moi cuon, dau rail dung yen. */
+#nav{display:flex;flex-direction:column;gap:2px;min-width:0;overflow:auto;flex:1}
+/* Bo goc VUONG (8px) chu khong con vien thuoc: muc dang mo la mot mang
+   trang bo nhe co thanh mau thuong hieu ben trai, ma mot thanh thang dung
+   dat canh goc bo tron 999px thi nhin cong kenh. Hover dung chung bo goc
+   nay de ba trang thai cung mot hinh. */
+.nav a{position:relative;display:flex;align-items:center;gap:10px;min-height:36px;padding:0 14px;border-radius:var(--r-sm);color:var(--rail-muted);text-decoration:none;font-weight:500;font-size:14px}
+.nav a svg{flex:none}
+/* ---- RAIL GAP / MO ---------------------------------------------------------
+   Chi doi HIEN THI: khong them, khong bot, khong doi cho mot loi vao nao.
+   Khi gap, nhan van nam trong DOM (an bang ky thuat .sr) nen trinh doc man
+   hinh van doc duoc ten muc; chuot thi co title. */
+/* Nut gap nam trong DAU RAIL, ben PHAI ten. */
+.railbtn{width:36px;height:36px;flex:none;margin-left:auto;display:flex;align-items:center;justify-content:center;border:0;border-radius:var(--r-sm);background:transparent;color:var(--muted)}
+.railbtn:hover{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--ink)}
+.railbtn .ic-open{display:none}
+:root[data-rail="min"]{--rail-w:76px}
+/* 76px tru 24px le chi con 52px: logo 28 + nut 36 khong the dung canh nhau,
+   nen dau rail xep DOC. 28 + 6 + 36 = 70, van lot trong 80px chieu cao. */
+:root[data-rail="min"] .railhead{flex-direction:column;gap:6px;justify-content:center}
+:root[data-rail="min"] .railbtn{margin-left:0}
+:root[data-rail="min"] .brand span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-rail="min"] .railbtn .ic-close{display:none}
+:root[data-rail="min"] .railbtn .ic-open{display:flex}
+/* Rail gap: moi muc la mot HINH TRON 44px can giua, khong phai vien thuoc
+   keo dai — mang trang cua muc dang mo truoc day deo ra thanh bau duc
+   vi no rong het 52px ma chi cao 42px. */
+:root[data-rail="min"] .nav a{justify-content:center;padding:0;width:44px;height:44px;min-height:44px;margin:0 auto;border-radius:var(--r-pill)}
+:root[data-rail="min"] .nav .nl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* So dem thanh huy hieu nho DAU tren goc phai hinh tron, nam HAN BEN
+   NGOAI vong tron nen khong che icon. Doi sang mang DEN chu trang
+   (17.9:1) vi o co 10px tren nen xam nhat thi mang xam khong con doc
+   ro, ma cho nay la thong tin duy nhat con lai khi da an nhan. */
+:root[data-rail="min"] .nav .cnt{position:absolute;top:-4px;right:-4px;margin:0;min-width:16px;height:16px;padding:0 4px;font-size:10px;background:var(--ink);color:var(--surface)}
+/* Rail gap con 76px thi khong con cho cho ten nhom — thay moi ten bang mot
+   duong ke de ba cum van con nhin ra. */
+:root[data-rail="min"] .navgh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-rail="min"] .navgrp{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+/* Rail gap: cuc tro ly co lai dung 48px — y het nut noi .fab ben till. */
+:root[data-rail="min"] .railai{width:48px;height:48px;padding:0;margin:12px auto 0;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center}
+:root[data-rail="min"] .railai b,:root[data-rail="min"] .railai-q,:root[data-rail="min"] .railai-go{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .nav a:hover{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--rail-ink)}
-/* Muc dang mo tren rail dung mang BRAND, theo dung anh tham chieu (pill cam
-   "Overview"). Ben trong THE thi .seg va .chip van la mang muc den — ban tham
-   chieu cung tach hai muc do: dieu huong dung brand, dieu khien trong the
-   dung den. */
-.nav a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
-/* Lop phu phai TOI chu khong sang: phu trang 24% lam nen do sang len
-   (#e0583f) va chu trang tren no chi con 3.73. Den 18% cho #af1d02, chu
-   trang dat 7.00. */
-.nav a[aria-current="page"] .cnt{background:color-mix(in srgb, #000000 18%, transparent);color:var(--accent-ink)}
-.nav a .cnt{margin-left:auto;min-width:22px;height:22px;border-radius:var(--r-pill);background:var(--bad-soft);color:var(--bad-ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
-.nav .sep{height:1px;background:var(--line);margin:8px 4px}
-main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-block:24px}
+/* Muc dang mo: mang TRANG + mot thanh 3px mau thuong hieu o canh TRAI.
+   Thanh do moi la tin hieu chinh — mang trang tren rail xam chi tach 1.10,
+   mot minh no thi yeu; thanh brand tren trang dat 4.83, qua xa nguong 3:1
+   cho hinh mang nghia.
+   Ve bang box-shadow:inset chu khong phai border-left: vien that se day chu
+   sang phai 3px, lam muc dang mo lech voi cac muc khac.
+   Canh TRAI khong bo goc (0 8px 8px 0): thanh mau phai la mot duong THANG
+   chay het chieu cao, de goc tron thi hai dau no bi vat cong trong nhu bi
+   cat dau. */
+.nav a[aria-current="page"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:inset 3px 0 0 var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0}
+/* So dem la vien XAM chu khong phai mang do: trong rail co toi ba cai cung
+   luc, de do het thi ca cot dieu huong doc ra nhu dang bao dong. Mang xam
+   lay tu chinh mau chu (10% ink) nen no tu hop voi ca nen xam cua rail lan
+   mang trang cua muc dang mo. Chu #171717 tren mang do: 11.5 tren rail,
+   12.6 tren muc dang mo. */
+.nav a .cnt{margin-left:auto;min-width:18px;height:18px;border-radius:var(--r-pill);background:color-mix(in srgb, var(--ink) 10%, transparent);color:var(--ink);font-size:11px;font-weight:600;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}
+/* Nhom muc. Ten nhom khong co icon — icon chi danh cho thu bam duoc. */
+.navgrp{display:flex;flex-direction:column;gap:2px;min-width:0;margin-top:14px}
+/* Ten nhom nhe hon han cac muc: weight 500 va mot sac xam nhat hon chu phu.
+   Mau la neutral-500 #737373 cua Tailwind. ⚠️ Tren nen rail #f5f5f5 no chi
+   dat 4.35 — TRUOT nguong 4.5 mot chut. Giu dung gia tri cua thang theo
+   yeu cau; muon dat chuan thi doi sang neutral-600 (#525252 = 7.17) hoac
+   quay ve #707070 (4.54). */
+.navgh{margin:0 0 4px;padding:0 14px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
+/* Noi dung dong trong mot KHUNG TRANG bo 4 goc. Le trong 24px la cua .gut
+   cong padding-block. */
+main{min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:20px;flex:1;background:var(--surface);border-radius:var(--r-lg);padding-block:24px}
 .ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
-.ph p{margin:4px 0 0;color:var(--muted);max-width:70ch}
-/* KHONG section nao co stroke: the tach khoi nen bang chinh MANG MAU.
-   ⚠️ Voi nen #fafafa thi do tach chi con 1.044:1 (nen #ececec truoc do duoc
-   1.181). Rail va thanh tren cung trang nen cung chi tach duoc 1.044. Khong
-   co stroke + nen gan trang = ranh gioi gan nhu bien mat; day la danh doi da
-   biet, khong phai nham lan. Muon ro hon thi hoac ha nen xuong (#f1f1f1 cho
-   1.129), hoac tra lai hairline cho .card. */
-.card{background:var(--surface);border:0;border-radius:18px;padding:20px;min-width:0}
+/* Dong mo ta duoi tieu de TRAN HET be ngang khung. Truoc day no bi chan o
+   70ch — do la nguong de doc quen thuoc (45-75 ky tu moi dong), nhung o
+   man rong thi no de lai mot mang trong lon ben phai. Da bo theo yeu cau;
+   doi lai dong chu dai hon nguong do quen thuoc. */
+/* Mo ta duoi tieu de: nho hon mot nac (13px), chu thuong, va xam nhe hon
+   chu phu thuong — no la nen, khong phai noi dung. 4.74 tren the trang. */
+.ph p{margin:4px 0 0;font-size:13px;font-weight:400;color:var(--muted-2)}
+.ph > div:first-child{flex:1;min-width:0}
+/* Vung noi dung gio TRANG nen the khong con tach ra duoc bang mang mau —
+   phai co lai duong vien. Day la cach anh tham chieu lam: panel trang tren
+   nen trang, vien mong. (Hoi vung noi dung con xam thi nguoc lai: mang mau
+   du tach, khong can vien.) */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
 .card h2{margin:0 0 12px;font-size:13px;font-weight:600}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.kpi{background:var(--surface);border:0;border-radius:18px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px}
 /* ---- THE SO LIEU theo bo cuc tham chieu -----------------------------------
    Mot hang "icon + nhan", roi so lon dung canh mot PILL chenh lech, roi mot
    dong phu mo. Truoc day nhan la chu HOA gian chu va chenh lech la chu tran —
@@ -174,21 +307,15 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
    xuong dong rieng, nam le loi. Ban tham chieu cung dat pill canh chu phu o
    the bieu do lon. */
 .kpi .d{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--muted);margin:0;min-height:22px}
-.ico{width:30px;height:30px;flex:none;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--accent-fg)}
+/* Icon dau the ve mau phu, khong phai mau thuong hieu — truoc day moi dau
+   the deu co mot chut do, cong lai thanh nhieu. */
+.ico{width:30px;height:30px;flex:none;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;background:var(--surface-2);color:var(--muted)}
 .pill{display:inline-flex;align-items:center;gap:2px;padding:3px 8px 3px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:600;white-space:nowrap}
 .pill.up{background:var(--ok-soft);color:var(--ok-ink)}
 .pill.down{background:var(--bad-soft);color:var(--bad-ink)}
-/* The so lieu DAU TIEN to kin mau brand, giong the "My balance" ben tham
-   chieu. Brand do la mau TOI nen chu tren no la TRANG (5.12:1). Pill van la
-   mang TRANG de no tach duoc khoi nen do. */
-.kpi.lead{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.kpi.lead .k{color:var(--accent-ink)}
-.kpi.lead .ico{background:color-mix(in srgb, #000000 18%, transparent);color:var(--accent-ink)}
-/* Brand do la mau TOI nen chu tren the dan dat la TRANG, va KHONG ha duoc do
-   mo: tren #d62302, trang 90% chi con 4.37 — duoi nguong. Dung trang dac
-   (5.12); thu bac con nho co chu 28px so 12px. */
-.kpi.lead .d{color:var(--accent-ink)}
-.kpi.lead .pill{background:var(--surface)}
+/* The so lieu truoc day co mot the TO KIN mau brand lam diem nhan. Da bo:
+   no la mang do lon nhat tren man, ma yeu cau la han che do. Nam the gio
+   bang nhau, thu bac do CON SO va vi tri lo. */
 /* Dau the: icon + ten, dieu khien (neu co) day sang phai. */
 .card h2{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
 .card h2 .ico{width:28px;height:28px}
@@ -199,33 +326,124 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px;flex:1;padding-bloc
    la thong tin chua xuat hien o cho nao khac. */
 .ch-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;font-size:12px;color:var(--muted)}
 .up{color:var(--ok-ink)}.down{color:var(--bad-ink)}
-.seg{display:inline-flex;background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-pill);padding:3px;gap:3px}
-.seg button{min-height:34px;padding:0 14px;border-radius:var(--r-pill);border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.btn{min-height:40px;padding:0 16px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+/* Tab thuong: mot hang chu tren mot duong ke, muc dang mo duoc GACH CHAN.
+   Khong con vien thuoc bao quanh.
+   Gach chan day 3px va mang MAU THUONG HIEU. Day la NGOAI LE co y voi quy
+   tac "moi stroke deu 1px" — nguoi dung chot rieng cho cho nay.
+   Moi nut deu co san vien 3px trong suot nen luc doi tab khong xe dich
+   mot pixel nao. Nut cao 40px, lai thut xuong 1px, nen thanh 3px nay phu
+   len dung duong ke 1px cua ca hang.
+   Chu mau brand red-600 tren the trang dat 4.83 — qua nguong 4.5.
+   Tab chua chon nhe chu hon (500) — cung quy uoc voi muc dieu huong va
+   chip loc: chua chon 500, dang chon 600. */
+.seg{display:flex;flex-wrap:wrap;gap:4px;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent}
+.seg button{min-height:40px;padding:0 12px;margin-bottom:-1px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;font-size:14px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{color:var(--accent-fg);border-bottom-color:var(--accent-fg);font-weight:600}
+.btn{min-height:40px;padding:0 16px;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.danger{background:var(--bad-soft);border-color:transparent;color:var(--bad-ink)}
+/* Hai nut quyet dinh co TRONG SO NHU NHAU — duyet va tu choi deu la mot
+   lua chon that, khong cai nao la phu. Vi the ca hai deu la mang dac va
+   rong bang nhau. Xanh la (green-700) chu trang dat 5.02; do (red-700)
+   chu trang dat 6.47.
+   KHONG dung --accent cho nut duyet: mau thuong hieu dang la do, trung
+   voi nut tu choi. */
+.btn.ok{background:var(--ok-ink);border-color:var(--ok-ink);color:var(--surface)}
+.btn.danger{background:var(--danger);border-color:var(--danger);color:var(--surface)}
 .btn.sm{min-height:36px;padding:0 12px;font-size:13px}
 .link{border:0;background:none;padding:0;color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.tbl{overflow-x:auto;border:0;border-radius:18px;background:var(--surface)}
+/* Link di sang mot man KHAC: mui ten cheo noi ro la se roi khoi cho dang
+   dung, chu khong phai mo mot lop phu tai cho. */
+.link.ext{display:inline-flex;align-items:center;gap:4px}
+.link.ext svg{flex:none}
+/* KHONG co vien ngoai. Bang van doc duoc thanh khoi nho hang tieu de co
+   mang mau va cac duong ke giua hang; vien bao quanh la thua. */
+.tbl{overflow-x:auto;border-radius:18px;background:var(--surface)}
 table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
 th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
 td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border-bottom:0}
 th.r,td.r{text-align:right}
-tr.sel td{background:var(--accent-soft)}
+/* Hang dang mo: mang XAM TRUNG TINH, khong dung mau semantic nao.
+   Da thu mang do nhat (red-50) hai lan va ca hai lan deu doc ra nhu BAO
+   LOI chu khong phai "dang chon" — do la mau cua that bai trong chinh man
+   nay. Xam thi khong noi gi ca, dung y nghia cua mot hang dang mo.
+   7% dam hon hover (4%) nen hai trang thai khong lan nhau, va cung ngon
+   ngu voi muc dieu huong dang mo (6%). */
+tr.sel td{background:color-mix(in srgb, var(--ink) 7%, transparent)}
+/* Tren hang dang chon, badge bo mang mau rieng va chuyen sang TRANG: mang
+   nhat cua chung (deu la buoc 50) dat tren mang xanh nhat cua hang thi
+   duc di, trong ban. Chu van giu nguyen mau cua tung loai, va tren trang
+   con dam hon: ok 7.13, warn 5.02, bad 6.47, info 5.02, mute 7.81.
+   Vien thuoc trang tren nen green-50 chi tach 1.05 — nhat, nhung van
+   thay duoc vi no SANG hon hang. */
+tr.sel .badge{background:var(--surface)}
+/* ---- HANG MO DUOC CHI TIET -------------------------------------------
+   Ca hang deu bam duoc chu khong chi rieng o ma, va co MUI TEN o cuoi
+   hang de thay duoc dieu do truoc khi ro chuot vao.
+   Day KHONG phai loi vao thu hai: hang chi uy quyen cho dung nut
+   .rowbtn co san, van la mot hanh dong do. Nut van con trong DOM nen
+   ban phim va trinh doc man hinh khong mat gi. */
+tbody tr:has(.rowbtn){cursor:pointer}
+tbody tr:has(.rowbtn) td:last-child{position:relative;padding-right:30px}
+/* Mui ten la dau hieu PHU — ca hang da bam duoc roi — nen de xam nhat hon
+   chu phu. neutral-500 #737373 dat 4.74 tren the trang va 4.39 tren hang
+   dang chon — qua nguong 3:1 cho hinh mang nghia. Dam len --ink khi ro
+   chuot. */
+tbody tr:has(.rowbtn) td:last-child::after{content:"";position:absolute;right:10px;top:50%;width:16px;height:16px;margin-top:-8px;background-color:#737373;-webkit-mask:var(--chev-r) center/16px 16px no-repeat;mask:var(--chev-r) center/16px 16px no-repeat}
+tbody tr:has(.rowbtn):hover td:last-child::after,tbody tr.sel td:last-child::after{background-color:var(--ink)}
 .rowbtn{border:0;background:none;padding:0;font-weight:600;color:var(--ink);text-align:left;white-space:nowrap}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:var(--r-sm);padding:4px 8px;white-space:nowrap}
+/* Badge trang thai: vien TRON han va thap bot (25.4px -> 21.4px). Bo doc
+   con 2px nen chieu cao gan nhu chi con phan chu. */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:var(--r-pill);padding:2px 10px;white-space:nowrap}
 .b-ok{background:var(--ok-soft);color:var(--ok-ink)}
 .b-warn{background:var(--warn-soft);color:var(--warn-ink)}
+/* Badge loi theo dung thang nhu cac badge khac: nen buoc 50, chu buoc 700.
+   red-700 tren red-50 dat 5.91.
+   ⚠️ .b-info ngay duoi dung --accent-soft/--accent-soft-ink, ma gio hai
+   token do CUNG la red-50/red-700 — nen "Your request" va "Would go
+   negative" trong y het nhau. Da bao voi nguoi dung, chua tu doi. */
 .b-bad{background:var(--bad-soft);color:var(--bad-ink)}
-.b-info{background:var(--accent-soft);color:var(--accent-soft-ink)}
-.b-mute{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.b-info{background:var(--info-soft);color:var(--info-ink)}
+/* Cot "Waiting / status" khong dung vien thuoc nua — chi la CHU CO MAU.
+   Mot cot ma hang nao cung co mot vien thuoc thi doc ra nhu bay nhan,
+   trong khi no chi dang bao mot con so. Tuong phan tren the trang:
+   bad 6.47, warn 5.02, ok 5.02, mute 7.81 — tat ca qua nguong. */
+/* Co nang: icon + chu do, khong nen. red-700 tren the trang dat 6.47. */
+.flag-hot{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--bad-ink);white-space:nowrap}
+.flag-hot svg{flex:none}
+.tcell{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+/* Chuc danh trong ngoac: cung mau chu chinh, chi khac DO DAM (400 so voi
+   600 cua ten). Do dam da du tach hai phan, khong can ha them mau.
+   16.44 tren the trang. */
+.rolex{font-weight:400;color:var(--ink)}
+.tav{width:22px;height:22px;flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-pill);background:var(--red-500);color:#ffffff;font-size:10px;font-weight:700}
+.stt{font-weight:600;white-space:nowrap}
+.stt.s-bad{color:var(--bad-ink)}
+/* Rieng o day dung amber-800 chu khong amber-700: bo nen vien thuoc di thi
+   chu nam thang tren hang, ma tren HANG DANG CHON (xam) amber-700 chi con
+   4.36 — truot nguong. amber-800 dat 5.71 o do va 6.58 tren the trang.
+   Chi doi cho chu tran nay, badge van giu amber-700 vi no co nen rieng. */
+.stt.s-warn{color:var(--amber-800)}
+/* Nhu .s-warn: bo nen di thi chu nam thang tren hang, ma green-700 tren
+   hang dang chon chi con 4.36 — truot nguong. green-800 dat 5.26. */
+.stt.s-ok{color:var(--green-800)}
+.stt.s-mute{color:var(--muted)}
+/* KHONG vien, bo doc 2px 10px nhu cac badge khac — van cao 21.4px.
+   ink 6% cho #f1f1f1: tach khoi the trang 1.13, nam dung giua dai cua bon
+   badge con lai (1.06 - 1.16) nen ca bo nhin cung mot do nang. Da thu 10%
+   (#e8e8e8, 1.23) nhung no dam hon han ba badge mau. Chu --muted tren no
+   dat 5.92. */
+.b-mute{background:color-mix(in srgb, var(--ink) 6%, transparent);color:var(--muted);border:0;padding:2px 10px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{min-height:36px;padding:0 14px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);font-weight:600;font-size:13px}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* Chip loc: thap va gon hon (36 -> 32px, bo ngang 14 -> 10px). Chu MEDIUM
+   (500) khi chua chon, DAM (600) khi da chon — do dam la mot tin hieu nua ben canh
+   mang den.
+   ⚠️ Doi do dam lam chu rong them vai pixel, nen chip XE DICH mot chut
+   luc bam. Khong cho min-width co dinh vi nhan dai ngan khac nhau. */
+.chip{min-height:32px;height:32px;padding:0 10px;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);font-weight:500;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
 .field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}
-.field input,.field select,.field textarea{min-height:40px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);padding:8px 16px;font-weight:500}
+.field input,.field select,.field textarea{min-height:40px;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);padding:8px 16px;font-weight:500}
 .field textarea{border-radius:var(--r-md);padding:10px 14px;resize:vertical}
 /* ---- DROPDOWN TU DUNG ------------------------------------------------------
    <select> cua he dieu hanh mo ra MENU CUA macOS: khi may dang o che do toi,
@@ -238,7 +456,7 @@ tr.sel td{background:var(--accent-soft)}
 .dd{position:relative;display:inline-flex;max-width:100%;vertical-align:middle}
 .dd>select{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
 .field .dd{width:100%}
-.ddb{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:40px;padding:0 12px 0 16px;border:1.5px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;text-align:left}
+.ddb{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:40px;padding:0 12px 0 16px;border:1px solid var(--line-2);border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;text-align:left}
 .dd.sm .ddb{min-height:36px;padding:0 10px 0 12px}
 .ddb:hover:not(:disabled){border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
 .ddb .ddt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -247,6 +465,7 @@ tr.sel td{background:var(--accent-soft)}
 .ddm{position:absolute;top:calc(100% + 6px);left:0;z-index:60;min-width:100%;max-height:276px;overflow:auto;padding:6px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line-2)}
 /* Mo nguoc len khi gan day man hinh. */
 .ddm.up{top:auto;bottom:calc(100% + 6px)}
+.ddm.rt{left:auto;right:0}
 .ddo{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;padding:0 10px;border:0;border-radius:var(--r-sm);background:transparent;color:var(--ink);font-size:13px;font-weight:600;text-align:left;white-space:nowrap}
 .ddo:hover:not(:disabled){background:var(--surface-2)}
 .ddo[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-soft-ink)}
@@ -255,7 +474,7 @@ tr.sel td{background:var(--accent-soft)}
 .ddo[aria-selected="false"] .ddk,.ddo:disabled .ddk{visibility:hidden}
 /* Select nho nam trong bang. Truoc day ba cho nay deu mang style noi tuyen
    bo 8px vien 1px — tuc nam NGOAI he token, trong khac moi control con lai. */
-.sel-sm,.inp-sm{min-height:36px;max-width:100%;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;font-weight:600}
+.sel-sm,.inp-sm{min-height:36px;max-width:100%;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;font-weight:600}
 .inp-sm{width:90px;text-align:right}
 /* Moi <select> bo mui ten cua HE DIEU HANH, thay bang chevron-down cua Lucide
    nhung thang vao CSS. Truoc day mui ten do la do trinh duyet ve: net mong
@@ -268,14 +487,58 @@ tr.sel td{background:var(--accent-soft)}
 .field select,.sel-sm,.wrow select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c5c5c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px 16px;padding-right:34px}
 .frow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .note{font-size:12px;color:var(--muted)}
+/* .down o tren (dong ~326) cung do uu tien voi .note, ma .note dinh nghia
+   SAU nen no thang — khong co dong nay thi class="note down" ra xam, mau
+   do khong bao gio an. Hien khong con cho nao dung to hop do (hai canh
+   bao cu da chuyen sang .alert.bad); giu lai de cai bay khong tai dien. */
+.note.down{color:var(--bad-ink)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
 .kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:600;text-align:right}
 .math{border:0;border-radius:var(--r-md);padding:12px 14px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;font-size:13px}
 .math .r{display:flex;justify-content:space-between;gap:12px}
 .math .t{border-top:1px solid var(--line);padding-top:6px;font-weight:600}
-.lock{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:var(--r-md);background:var(--warn-soft);color:var(--warn-ink);font-size:13px;font-weight:600}
+/* HOP ALERT. Khung va mau tach roi: khung lo mot lan o .alert, moi cap do
+   chi doi NEN (thang 50). Chu luon la --ink den, khong phai mau cua cap do
+   — nen 50 rat nhat nen chu mau lam giam do doc ma chang them tin hieu gi,
+   trong khi ICON da mang tin hieu do roi. Icon cung la ly do hop nay khong
+   phan biet bang mau don thuan (WCAG 1.4.1): hinh tam giac khac hinh tron
+   ke ca khi in den trang. */
+.alert{display:flex;align-items:flex-start;flex-wrap:wrap;gap:10px;padding:10px 14px;border-radius:var(--r-md);background:var(--surface-2);color:var(--ink);font-size:13px;font-weight:600}
+.alert>svg{flex:none;margin-top:1px}
+/* Chi lockNote() co them mot cai nut trong hop. Cho span an het cho con
+   lai de nut bi day xuong dong rieng thay vi bi bop lai. */
+.alert>span{flex:1;min-width:0}
+.alert.bad{background:var(--bad-soft)}.alert.bad>svg{color:var(--bad-ink)}
+.alert.warn{background:var(--warn-soft)}.alert.warn>svg{color:var(--warn-ink)}
+.alert.info{background:var(--info-soft)}.alert.info>svg{color:var(--info-ink)}
+/* Cot TRAI gom bo loc + bang; cot phai la the chi tiet. Dua bo loc vao
+   trong cot trai de the chi tiet BAT DAU NGANG VOI no thay vi bi day
+   xuong duoi — the cao them khoang 90px, do tin nhin thay ngay khong
+   phai cuon. */
 .split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
-.panel{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px}
+.lcol{display:flex;flex-direction:column;gap:12px;min-width:0}
+/* The chi tiet DINH TAI CHO khi cuon va luon cao HET khung trang.
+   Chieu cao = man hinh tru thanh tren (80) tru bo duoi cua cot (16) tru
+   bo tren+duoi cua khung trang (24+24) = 100vh - 144px. Tai 900px cho ra
+   dung 756px, bang chieu cao vung noi dung cua khung.
+   The ben trong moi la cho cuon, nen phan dau the (ma don, badge) va hai
+   nut quyet dinh o cuoi luon nhin thay. */
+.panel{position:sticky;top:0;height:calc(100vh - var(--bar-h) - 64px);display:flex;flex-direction:column;gap:12px}
+.panel > .card{flex:1;min-height:0;overflow:auto}
+/* Hai nut quyet dinh la mot THANH DAY: dinh o day the, co duong ke phia
+   tren, va trai het be ngang the — margin am 20px de bu lai padding cua
+   the, neu khong duong ke se bi thut vao hai ben.
+   `margin-top:auto` day no xuong day khi noi dung ngan; `position:sticky`
+   giu no o day khi noi dung dai va the phai cuon. */
+/* Hai nut nay la diem ra quyet dinh tren MAY TINH BANG, va mot trong hai
+   ghi thang vao kho. Do that: nut cu 165x40, cach nhau 8px. 40px vuot
+   nguong WCAG AA (24px) nhung duoi Material (48dp) va WCAG AAA (44px); 8px
+   dung bang muc toi thieu Material — voi hai nut canh nhau ma mot cai
+   khong hoan tac duoc thi toi thieu la khong du. Nang len 48px / 12px.
+   Chip loc van giu 32px vi do la con so da chot truoc do. */
+.decbar{position:sticky;bottom:-20px;z-index:1;display:flex;gap:12px;margin:auto -20px -20px;padding:14px 20px;background:var(--surface);border-top:1px solid var(--line)}
+.decbar .btn{min-height:48px}
+.dlg-f .btn.danger{min-height:48px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:0;background:var(--surface-2);border-radius:var(--r-lg)}
 /* Hai cho dat .empty BEN TRONG mot <td colspan> (Menu & recipes, Audit log).
    O do no nam LONG trong khung bang, nen mang kem + bo goc 16px tao ra canh
@@ -312,6 +575,54 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .dig .di.ok{color:var(--ok-ink)}
 .dig a{color:var(--accent-fg);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .dig a:hover{text-decoration-thickness:2px}
+/* ---- CUC TRO LY O DAY RAIL -------------------------------------------
+   Khong con muc "AI assistant" trong danh sach dieu huong nua: cuc nay la
+   loi vao duy nhat. Man tro ly van con nguyen, chi doi CACH VAO.
+   CA CUC la mot <button>, khong phai the co nut ben trong — mot viec thi
+   mot nut, nen trinh doc man hinh chi doc mot lan va vung cham la ca cuc.
+   Icon va mau chep tu .fab cua till.html: ruot la mang chuyen sac rat nhat
+   pha tu --ai-1/--ai-2.
+   KHONG co stroke. Till boc cuc nay bang mot vong gradient chay vong quanh;
+   o day bo han theo yeu cau, nen chi con mang mau va bo goc. Da bo luon lop
+   background border-box va keyframes chay vong vien, vi ca hai chi phuc vu
+   vong vien do — de lai thi thanh CSS chet. */
+.railai{position:relative;display:block;width:100%;flex:none;margin-top:12px;padding:12px;text-align:left;border:0;border-radius:var(--r-lg);color:var(--ink);background:linear-gradient(135deg, color-mix(in srgb, var(--ai-1) 12%, var(--surface)), color-mix(in srgb, var(--ai-2) 30%, var(--surface)))}
+.railai-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.railai-q{display:block;margin-top:8px;font-size:13px;font-weight:500;color:var(--muted);text-wrap:balance}
+/* Mui ten nam CUNG HANG voi ten, day sang phai bang margin-left:auto. */
+.railai-go{display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;margin-left:auto;border-radius:var(--r-pill);background:var(--surface);color:var(--ink)}
+.railai:hover .railai-go{background:var(--accent);color:var(--accent-ink)}
+/* Icon tro ly: anh 3D cua till (ban theme do) cong hai lop CSS — mi mat chop
+   va ngoi sao loe. Anh khong an theo currentColor duoc nen phai nhung thang. */
+.aiimg{position:relative;display:block;width:32px;height:32px;flex:none;background-size:contain;background-repeat:no-repeat;background-position:center;animation:aiIdle 6s ease-in-out infinite;transform-origin:50% 60%}
+.aiimg i{position:absolute;display:block;pointer-events:none}
+.ai-lid{left:30.5%;top:37.5%;width:47.7%;height:27.3%;border-radius:999px;background:var(--ai-visor,#6d2821);transform:scaleY(0);transform-origin:50% 0;animation:aiBlink 5.4s ease-in-out infinite}
+.ai-s{inset:0;background-size:contain;background-repeat:no-repeat;background-position:center;transform-origin:72% 14%;animation:aiStar 4.6s ease-in-out infinite}
+.aiimg{background-image:url(data:image/png;base64,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)}
+.ai-s{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAEsElEQVR42u3aa0/TZxjHcd/OkiXLErMHW8zGRMFDsCjIlGIp0HKyBSm0QDkqKDJBmRsuytxkjE0XnQfcHCZLJpo4s02EqaioVErPreBwcZve1+422wvYM2m/n+TO//nvuq77kPyXLQMAAMBLI3R6yBo99sGzh13Nk6SRYh4ODbzy5PTgs/n+Tgm22NRlq7GPVFKI9+vPvlwcGVbRvlYJNFfKz5Z8D6mkkOjp4b8XThyRSE+j+ForZcpmenHRUlBFMilgdviobfHCKTV/dL+Eu1zib7XJtN2kfszPuUM6KSD4zeCvv184IdH4+d/pEH9LpczUmOW6MefF6LYt6SSUxO4Pfpy78O1x9eTkpxLZ3yLBjmoJNJWLx2WRu+UF6krJ1glSSlLTAweWh7465Hs6MiSxT3ok/H6DBNtt4neXibehVB65SvVdoFCNO0qHSSuZzvzDPXb/QM9I+NiB5wvDh+TxwD4J9zRJpMMhodbtEnSXi6+xXOb0N94InnqrmnZv99zqaNhDekvUzNDhVwNf9A9Fh/ufzn9+UM0f65PHR/ZK7ODOxOSH4sVvs0lYPwFDuvD+eBPoncDntoq3qUzmWnRDtNrUbEfdHzO7nd/dbHOYSHWpFP/EkZzYyNCfi2cH1fzwR7rw3RI92K6ffG5963dKuGOHnnybhHTxw00ViQYINpaJv8Eq/ka93KXib9YNoZsgfkEMxHcGl1Vds1uuku4SEBjsnVg43i+xgS6JftgmsV5d+L1OCXXqwu+yS/jf4gf15S+kpz7YWCoBXfxAvUX8rhKZ01+fbgRf/OvUq7ZIfPqVMGHKUifzc3JI+GW/6e+pGYt016hot0MiXdUS6axOFD7Utl3CLRUS+W/ydQME44XXLwC/s0QCevnrisXrLJLZmkKZrTbJwyqjPKjcIncKs+VSxjvq7La8N0j4JXfDXbXcU2964HduU8F6s4QTq1hCeqrD+nyPNFckVlhv7QFXvOhF4o9PuV5evTw7TDJdvlmmCjfIZF6mXM9OV5fWpf11fn1GO+kuIb9Yt1gmrRuv3DOve+Er26SCNUbdBCW6+OWJFdJnfVAXP6Cn3aeLPms3yoye9imTQcYNaXJ55Qr1fdpbofPpaYdOGTJfJ9El6lz+hteuFaxtum01hMINxSrapqe/pUxf7ix629fTrxvAa8+XGWue3MrNkKur3lSjGStunMlanUt6SebRLtvd2G6bRNr1+d8UP/uLEtP/qEKf88Ysubr6bXV+TeZ+kkpSU521KyNddhXt0LuAboBA/OyvKhCPnv7xzRkyasgcJ6Uk5+913o52V0msTV8Ca83itRnlfvEmGTOkq3P5eUYSSnLevkZXrNehYh128dWZ9fb/nvy2db0azV7Dr2GpItTX8Pzx7mqZqyuUB5Yc+SlrpTqTvc5NMilitsd1JrKzVPl2FMp0QZb8kPnuIqmkkHt7apcHXebngYpcublplbpoWLuPVFLMhMNsnzQbZsY2rh4kDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/r9/AJqA2MNuonjvAAAAAElFTkSuQmCC)}
+@keyframes aiIdle{
+  0%,100%{transform:translateY(0) rotate(0deg) scale(1)}
+  22%{transform:translateY(-1px) rotate(-2.2deg) scale(1.03)}
+  48%{transform:translateY(.5px) rotate(0deg) scale(1.05)}
+  74%{transform:translateY(-.5px) rotate(2.2deg) scale(1.02)}
+}
+@keyframes aiBlink{
+  0%,88%{transform:scaleY(0)}
+  91%{transform:scaleY(1)}
+  93.5%{transform:scaleY(1)}
+  96.5%,100%{transform:scaleY(0)}
+}
+@keyframes aiStar{
+  0%,46%{opacity:0;transform:scale(.4) rotate(-25deg)}
+  60%{opacity:1;transform:scale(1.12) rotate(6deg)}
+  70%,82%{opacity:1;transform:scale(1) rotate(0deg)}
+  100%{opacity:0;transform:scale(.4) rotate(18deg)}
+}
+/* Ai tat hieu ung chuyen dong trong he dieu hanh thi khong co gi nhay ca. */
+@media (prefers-reduced-motion:reduce){
+  .aiimg,.ai-lid,.ai-s{animation:none}
+  .ai-s{opacity:1;transform:none}
+}
 .switch{position:relative;width:44px;height:26px;border-radius:var(--r-pill);border:0;background:var(--line-2);flex:none}
 .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:var(--r-pill);background:#ffffff;transition:left .15s}
 .switch[aria-checked="true"]{background:var(--accent)}
@@ -330,9 +641,9 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .bot{align-self:flex-start;max-width:92%;background:var(--surface-2);border:0;border-radius:16px 16px 16px 4px;padding:10px 13px}
 .bot ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
 .bot .chips{margin-top:8px}
-.dcard{align-self:stretch;border:0;border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.dcard{align-self:stretch;border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
 .sugg{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
-.sugg button{flex:none;min-height:36px;padding:0 14px;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:600}
+.sugg button{flex:none;min-height:36px;padding:0 14px;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:600}
 .comp{display:flex;gap:10px;align-items:flex-end}
 .scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
 .dlg{background:var(--surface);color:var(--ink);border-radius:var(--r-lg);border:1px solid var(--line);width:100%;max-width:720px;max-height:100%;overflow:auto;display:flex;flex-direction:column}
@@ -341,8 +652,25 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
 .dlg-h p{margin:4px 0 0;font-size:13px;color:var(--muted)}
 .dlg-b{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
 .dlg-f{padding:14px 20px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-.x{width:36px;height:36px;flex:none;border-radius:var(--r-pill);border:1.5px solid var(--line-2);background:var(--surface);display:flex;align-items:center;justify-content:center}
-.toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom, 0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:var(--r-md);font-size:14px;font-weight:600;max-width:min(560px, calc(100% - 32px))}
+.x{width:36px;height:36px;flex:none;border-radius:var(--r-pill);border:1px solid var(--line-2);background:var(--surface);display:flex;align-items:center;justify-content:center}
+.toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom, 0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:var(--r-md);font-size:14px;font-weight:600;max-width:min(560px, calc(100% - 32px));display:flex;align-items:center;gap:16px}
+/* display:flex o tren de be nut Undo, nhung no cung ghi de len [hidden] —
+   phai tra lai display:none cho trang thai an, neu khong toast nam mai. */
+.toast[hidden]{display:none}
+/* Undo song trong toast chu khong phai mot hop thoai xac nhan truoc khi
+   duyet: hang doi nay duoc xu nhieu lan moi ngay, mot hop thoai lap lai se
+   bi bam theo quan tinh va het tac dung bao ve, trong khi van cong them
+   mot cu bam vao MOI lan duyet dung. Undo bao ve ma khong danh thue len
+   truong hop thuong gap, va no bat dung loai loi o day: bam nham hang,
+   nhin nham so — loai loi ma hop thoai cung khong chan duoc vi nguoi ta se
+   xac nhan luon cai nham do. */
+.toast .ub{flex:none;min-height:40px;padding:0 16px;border-radius:var(--r-pill);border:1px solid color-mix(in srgb, var(--bg) 45%, transparent);background:transparent;color:var(--bg);font-size:14px;font-weight:600}
+.toast .ub:hover{background:color-mix(in srgb, var(--bg) 14%, transparent)}
+.toast .tmsg{min-width:0}
+/* Thong bao loi tai cho. Truoc day loi chi song trong toast 3,6 giay: nhin
+   di cho khac bon giay la no bien mat khong de lai dau vet nao. */
+.errline{display:flex;align-items:center;gap:6px;margin:0;font-size:13px;font-weight:600;color:var(--bad-ink)}
+.field textarea[aria-invalid="true"],.field input[aria-invalid="true"]{border-color:var(--danger)}
 
 /* ---- HOVER ----------------------------------------------------------------
    Truoc day CA FILE chi co dung mot rule :hover (.nav a). Nut, chip, segment,
@@ -353,23 +681,45 @@ svg text{fill:var(--muted);font-size:11px;font-family:var(--font)}
    Vien doi mau chu khong doi be day, nen chu khong nhay mot pixel nao. */
 .btn:hover:not(:disabled){border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
 .btn.primary:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
-.btn.danger:hover:not(:disabled){background:color-mix(in srgb, var(--bad-ink) 16%, var(--surface));border-color:transparent}
+.btn.ok:hover:not(:disabled){background:#166534;border-color:#166534}
+.btn.danger:hover:not(:disabled){background:var(--danger-hover);border-color:var(--danger-hover)}
 .chip:hover:not([aria-pressed="true"]),.sugg button:hover,.x:hover,.sel-sm:hover:not(:disabled),.inp-sm:hover{border-color:color-mix(in srgb, var(--ink) 26%, transparent)}
-.seg button:hover:not([aria-pressed="true"]){background:color-mix(in srgb, var(--ink) 6%, transparent)}
+.seg button:hover:not([aria-pressed="true"]){color:var(--ink);border-bottom-color:var(--line-2)}
 /* Hang bang: rat nhe, va PHAI tru hang dang chon ra — neu khong, ro chuot len
    dung hang dang chon se xoa mat mang mau "dang chon" cua no. */
-tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transparent)}
+tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 4%, transparent)}
 .link:hover{text-decoration-thickness:2px}
 
-@media (max-width: 1100px){ .kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .panel{position:static} .g2,.g3{grid-template-columns:minmax(0,1fr)} }
+@media (max-width: 1100px){ .kpis{grid-template-columns:repeat(3,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .panel{position:static;height:auto} .panel > .card{flex:none;overflow:visible} .decbar{position:static;margin:12px 0 0;padding:12px 0 0} .g2,.g3{grid-template-columns:minmax(0,1fr)} }
 @media (max-width: 860px){
-  /* Man hep khong du cho cho rail doc: no thanh mot dai ngang tren cung, van
-     giu nen den nau. */
-  .app{grid-template-columns:minmax(0,1fr)}
-  /* Thanh dai ngang thi duong ke phai doi sang canh DUOI. */
-  .nav{flex-direction:row;overflow-x:auto;position:static;height:auto;padding:10px 16px}
+  /* Man hep khong du cho cho rail doc: no thanh mot dai ngang tren cung,
+     duong ke doi tu canh phai sang canh DUOI, va KHONG gap duoc nua — an nut
+     di va ep moi muc ve dang day du. */
+  /* Tra lai cho trang cuon nhu binh thuong: khung trang khong con la vung
+     cuon rieng nua, neu khong noi dung bi ep vao mot o qua thap. */
+  body{overflow:auto}
+  .app{grid-template-columns:minmax(0,1fr);height:auto;min-height:100vh}
+  .nav{flex-direction:column;height:auto;overflow:visible;padding:10px 16px}
+  .railhead{min-height:0;padding:4px 0 10px}
+  #nav{flex-direction:row;overflow-x:auto;min-width:0;flex:none}
+  main{overflow:visible}
+  .railbtn{display:none}
+  :root[data-rail="min"] .nav a{justify-content:flex-start;padding:0 14px}
+  :root[data-rail="min"] .nav .nl{position:static;width:auto;height:auto;clip:auto}
+  :root[data-rail="min"] .nav .cnt{position:static;margin-left:auto;min-width:18px;height:18px;padding:0 5px;font-size:11px}
   .nav a{flex:none}
-  .nav .sep{display:none}
+  /* Dai ngang khong co cho cho ten nhom: bo nhan, cac muc chay lien mot hang. */
+  .navgh{display:none}
+  /* `flex:none` la bat buoc: #nav la mot hang flex, khong co no thi ba khoi
+     nhom bi EP NHO lai duoi be ngang that va cac muc de chong len nhau.
+     Da gap that o man 760px. */
+  .navgrp{flex-direction:row;margin-top:0;gap:2px;flex:none}
+  /* Dai ngang: cuc tro ly co lai thanh nut tron. No la em cua #nav chu khong
+     nam trong, nen de nguyen thi no roi xuong mot dong rieng ben duoi dai —
+     tha neo len cho trong ben phai hang logo, doc ra la co chu dich. */
+  .nav{position:relative}
+  .railai{position:absolute;top:6px;right:16px;width:44px;height:44px;padding:0;margin:0;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center}
+  .railai b,.railai-q,.railai-go{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .frow{grid-template-columns:minmax(0,1fr)}
@@ -379,22 +729,28 @@ tbody tr:not(.sel):hover td{background:color-mix(in srgb, var(--ink) 3%, transpa
 </head>
 <body>
 <div class="app">
-<nav class="nav" id="nav" aria-label="Sections"></nav>
+<nav class="nav" aria-label="Sections">
+  <div class="railhead"><div class="brand"><span><b>HQ Console</b></span></div><button type="button" class="railbtn" id="railBtn" data-act="rail" aria-controls="nav" aria-expanded="true"><span class="ic-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg></span><span class="ic-open"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m14 9 3 3-3 3"></path></svg></span></button></div>
+  <div id="nav"></div>
+  <button type="button" class="railai" data-act="hq-ask" data-v="How is today going?" title="Ask the assistant: How is today going?" aria-label="Ask the assistant: How is today going?">
+    <span class="railai-h"><span class="aiimg" aria-hidden="true"><i class="ai-lid"></i><i class="ai-s"></i></span><b>AI assistant</b><span class="railai-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span></span>
+    <span class="railai-q">How is today going?</span>
+  </button>
+</nav>
 <div class="col">
-<header class="bar">
-  <div class="bar-in gut">
-    <div class="brand"><img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJMAAABwCAYAAAAaNUI5AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAADoAEAAwAAAAEAAQAAoAIABAAAAAEAAACToAMABAAAAAEAAABwAAAAAERxltMAAAHLaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6Q29sb3JTcGFjZT4xPC9leGlmOkNvbG9yU3BhY2U+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj4zNjg8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpQaXhlbFlEaW1lbnNpb24+MjgwPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CloSyvMAADoSSURBVHgB7Z0JrKTZVd/vV/Xqvd6ml1nt8XhmGLyPcWy8YJvFNmsAkWCQDREgFiGcgEE2YREowBBFIlEEUYAAZgkSAQRjQiKxBgI2WMJimZgxeIxXbGzP4nFPT89091tq+fL//c89t7563bN0e3oWd9/36rvnnvM/527/ut+tr76qKuViujgCF0fg4ghcHIGLI3BxBC6OwMUReKgR6B4KcCHa+3fdtD5dv+/GyWLxqjLffkGZbx0u81PHFrNT7xzNTrzlo/+0ddtTX/v2zQtxbB6szxfJtGt0+g/e9LwyHn1HGXVfWcrsShFJ2Uk97i9len/pN08cXWxPf3u+tfVTG1/09r/b5X5BF0cXdO8Hne9L6foP/vAXlfHkZ8rkwLeV0QERaa9ItC4SjetjVLpudFnXlW9dlNHP3vs7L/ziQYgLXrxIpqTAe77vxWWtvLGM1z679BvS7itlvEcUm5QyWlMuQpVRWSy6spiXbtQtPnsyGr3x6P983kszxIWeXySTGNC/+zsuK93sq8t0+soym5d+MZNWj36ufAFi8IjSXOrFfP4KUexfHPvl6w8LcMGni2SCAjsnnl/K9st1Lttb5pvilfZI0/vEp5Pik/ZM86mYMys95NKy1C8WykyyvaxQ2+ONz7zgmaQBuODJ1PdltJhtPU2Eur5MT5lAJpLI1M9OlE7kKgse23pMdZqb67FohJpuL24oo9mn9zddHEttBi7w9NZXro8u2byizBeHtPRob6RViD2SuNF5JdrRysTqtCly7WiBEplmszLXyjSfzuU2OzzbXjzpQ9ddr536hwS8cNMFT6Y7Ttw/umrvxmTUz9fKWPukTuRhs62XbFp+xK+pVqdtEWlbJJqKQLNGKO2ZINS4X8zHRz8yu+BX+QueTE9+cpnOTsyOl/X5KZ3v9pZOp7MRr9zEJVYqrU6sRBBptqMVSWSasTJBKpFJm/VT/bS/rzz5di1pF3a64J9N3YtumU53Tn1EZLlzsbNdpttbOqtt6sL3KT02y2xrq0y30EMmrUw7O3ooF6HEKu2jFndtT6cffdHrygVPpgt+ZWItmU3nt4677VtnfXej9uNamTqd5XSa41WbVidevc3rXmlhQrEyiTsiUz+b/32Z7vz9hb0mRe8v+JWJYbjkr//q/adObv+ffrrzgX66HavR5mbZ0Yo0Y1WqOfJMKxOPbi4iLWbv35nOfu8df3nPey6SSdvMi4MQI3Dvr33Gkfl6/11r4+67tBhd6stIMrFviutK7J3mWsVmXEtgv3RsNuv/6+jE5k9e9wPHj10cx4tkWuHA7W96xuWj/eVb10blO3Rmu2bOBnzRx3UlXrnNFqXjvZS+/9hssfjpSbf2C9e8/mNHV4JcwIWLp7nB5F/9uvd+ot/ZeftovvP+Tle9Z9s7y1OcNuBiU1lf78re/ZP37r9k/S8uEmkweBIvbsBXx6OMRv3l2oFfPtLTbF1XCBZjCXpzl0Uc3ZqWrW7UXzndWVy1y/WCL14k0y4KaI90qfZDl/YiD/slbyp90N6Js542U928PyLVxTd3d43dBU+mvn/lWnn/U/aVU+Xg9NTWU7aO3v7Cfr5zSBcHtBjVXYCvhotJ3EHAVfFFf3B9PH7Rztue+87JwT0f0/1O95f77z7ZveqtuvB04SY/5y6U7vfv+9KNcuLaa8t4+jRx5bO01DxdO+pr2WyLNod1tXufLjCtSa9zGaMCgZQEsCwiOXdZO3Pea+kL7wLfI4Z9TD4fVv4+Pf56e7N/78aVH/2n7sZ36f2ZCyN9SpOpf9dr1sv0yuvLpH+x3tn/3DLvXqJrkteLEEfKhFVHZOEaAI8giBcfDmKKeFZXI7jAOY6VCT5x8Mi5EGXCOaR0Uz3mcxGs/KPOiX+j/G3lePeX5fJPfJgr7kT4VEyfcmTq3/JNe8r1h59VNqdfIjp8qU5X/6ys9Yd1X7euWHM/kkihl/eaYD2CDHrxH9xQDmc6TmX6064pMGBTJk/ZemJIGBIPYo5tVC4z9Ypc/by/tev6P1Thj8qVe9/dPf0P9Ebgp076lCBTf/NrxuWzn3p1Odl9qQjyWk3gi/SWSNxSwioBQ/IU5TnmwAMbIoQgLcmUZWMorMSovl7NMA7jINey9cvYZU3D3ak8WxzX4xbJv1W2xr9fjv7pR7vXFjHuiZ2e0GTq3/edG2Wx/jydXr5Rr9u/XEvK9T7/6OJiTD7bmlx1mCjKrDgkMDXPsshhlWzGmBTCoR0QLlYh1i7hhsQBxwpl7DC+4qqou8fDRnBWLpTz8k9auf63Lqv/epmt3apN/BP2nqgnJJn6j7xxbzmx8Vllsvg2zdCX6uLP4TiVaIIqHUymM8qaQKeaD1eXJFiSARwyq5JtNX7TVULYnhjwOCpvsTmtgk3MQPZeS+XZ/D4R8fdFrjeVjflfdi9/4n0u7wlFJq9E5eALynj+b7Tb/cqyNjrozW6bNCaRCVtmUWbyKnmwG7IkCXMcqwaG+uAuy8QlkQSMlY3TIatS4oNAoaOeKHMvVODB1foGRIxVs2Kx64MwejFwn+6w+v1Z1/3U2sm7b+m+7P1PmH3VE4JMfX/TqLyvXL8Y7Xz7aDL6Rt0JebnvJWK+1YPWCU++D5UUypgkUtpydcgJX8kHE2vyDcnD6ZFYenizXQliIiPrUWWf/nJDbvLQgPQVUiSLzX2NQZuSZCPJbNrn/Sd0n8uvlL17frr8wZ9/uLvJAQj0uE1tHh6vLezf8YbD5fDBV2tf9D3aVD+nzJg0JuHBms7kgCGnZ1VmPrKcpKqkCTwTDhwcMmSqK1DiTKawOdgA6xjGVXvun6wj8OB0t3vls4tWMv15HwahOjV20d+22Fn85Ghj8+buc//ucX13woPNCL1/zJLmuisf/KHnamP9PZK+VkTSNSONeF6VXmkZ3TBLIk8RXZIGfBLMpBraFBefSgSfmtJvN1kcEzyb9dyA21kB0GdcESfJVNsR+FjtOAWurE7DlUz4OAUqFnsqPhYz739by/CPlVf91Tt1QZ4KH3fpcUkm741Gh75AG+uf0P3Yz/Tm2sMXze01mn67Q8dlGoxvIw3WShSP/67JFi5WAnx5xSVyNFz6Ka8kCTvlwEOWJaHQk5T7dEc8cKw0IhY+FFmdhn6oTGIZq18QMusFIJk3vhbzd5ed8r1levz/Ph73UuY9zX28pP4fvu+SMjry3f147Te0Cj2z7HBqEGm0IvV8akQ3++vz/rFCDXM+BFA/wu3Vy/jEQToedJdHlYXRvQC1LHpyWwAx0Tm2RCUWSXz0mXDlSzw2+/Penf3QZBIeuFP4I5pP1ledFWlpDlIsfUyuHRGq655d1suvl/G+7+7fcuMBvB5Padj6x7RdWiS68rGbnrLYmf3H0dra1+mtjxj5lYmqA9wmbnfzmRk9PEHkdeVwzzQZPmVRkI2r4Dzj66qTWDDeswDzKpP7GIJmjFW/VX3Grv6OQVvwJQYyTxBE8qrzfgpd1oE/bZTdK5xkqvWVdWP+h0w/UD7/1ts1RAR5zNPu2XhMGsQV7J2XPv3Z6/O1ny7ra68o24yakleH4UogmaLeh42nfTafXOPJhpVh9QQx4CKTHvEqDJsnQQAweoMfrGdIek8Y9UopokFDbHFRMuT20j/jJ1FqDE5rcYkh6l7GJmwlhuuEGMOYIUfdko0d+GTbqJc+UF9cRvgz3e3w+vLl77xNhMLwmKacjcesEf3ffNukXHrFy3T6+m96/+y5ZUcD5vODmubPr/G00+kodV6VZPPTkVOJZOYiDsq5BsSk5sArz72IdLG5rhMy0A8xS9IJlxPJXHkia9xKqJV9lONhF1lsT5nm0S72ZKQgU5SJW3WNLPjxkI/qbW84p452SNZLErVv/s4y7b6zfOjv3t49xh+34nn+mCW/q3/o8s8XM35Nr9ZEJJ69DLeoYPLQNBGm6mJfApFYmdg71X1S3S8FhbDxIIZyEnuhGsOTGTMqfdRljOurBmWeX3wcAgX0xM4j7a6m6arJ9jyET0Bal9J4Joeo8EERuPlJFPuo54ltv1aufdbn9zffCL0es1RH+9Gv30Raf/qrdIHuF8u4uyaItGwHUxYTutRBEI8/REFtsqgL1sfqFdSLCY9jBsrS7jzir9YV9A1LPaYbRRFrWGy41SBWn06gilYA3UGgQkaC/PRZut1xdgVJD0diJV8r12hV/8VyyfxVjyWhHhMyNSKt9b+kEa1EGo5gyCuDxsgNILax3Pv0s2rcPSHhlscMojxFuQ/riv1SaiAuwFxjQqZGUmpdkMsgpFXt8CCGMOW6F/WuwFcKERFVU08ljSFU+aUglF7zPQbpUSdT3+t2kcl1L9DNaj+nGXxK0TeJtGFhT5BDZJkRySFT7r0CKvYkECl1fCASHdjlqzH2R6Tle2irpLG/4wfOYOORqk4x2mk2AYO8rpGBf6AVq+KjORkXZRAnaRsw2aUY6oLMNUjNsBujg+OaUN1TdPfBz5RDz3lBf9Oj/2GRR5VMfo/tH655jmb3Z7Vfub5sD26ZZkQ8OrkhVdmbXwZ/SZRGJMjEN7xVYnXGUF6SLF5Z4Y+OVGUyE9ECBaXEKY9ZD53l2NQPfdoEZyzHyHpUcF9qWNtEytRRtjysf4ClCdWnQV2uh2GdklvcINQNpd/52fLSpz1ThHpU5/dRq4w+l4+dulo3iP3nMhm/oOgbRWLIZPGE1Txlj5smx6uRbD6d8eoGHHpWtJrnSmV96sgr1lMjT+MIXOuyPoqNQK4fBHUu05AHaKM8wDQRQQ+Xq5yxrMO72lsZnZLLHEQ8taOZd1du8O5DRbMpn3Qv0BPxx8tLnnb1btT5LD9qZCr/+IZD5cT2D2rx/ZKypXvskzQiAC9/Y4Azr6exJINI4LcmhPVbEyaFMD61gU0ZAiHXHDlJKGzMCasMPtRFAovMQxPif05tCExQ1Wee7W52MPmQGAEQJKG3ELmPxCPt8gll1UeB9noI4lARu2Oq7DYN6uM63UTjXBY/eO/vXnukOp737FEhU3/rN+wvW/Ov70eL1y1PbTkINdeAeI+TA+cJZtLDHqexSgLZuEbTSNRIVU97nnjsFaM8yCF/ES32UIyt7HltyEOtuqQLrMQ6SRJsJQ+C1LLtyHpY1ehjXYtjY8URyVgEpeoXheUxIJCaVTAdMscNeVnGsy1gqDnldeXbLukm39D/ylX7sZ/v1Oo/XxX5ouRk8nllT/8bumhzud8h8El+7JfC7b0tTu/WZ66m5XUi65dlxmr44jzK0YMcZL/qtkpWTzrEQgFCqxQyZLMSG7habvgsk+vR9nDIccoNkkcdyzd9BaejxlNFfVIQwwRX5jbgV7Gun7KwJOcRN3zUbmGivmpv7aRPnBozfsVqKBfz7uhi1n/N2sc/+Ofn+6LmeV2ZNBRdOVKeXCbzf68Nt25oY6DqAHkFYNTqACj3asMktEHibQ3s+CivG+4YNHDhuxxESJIrj2z2pc4ag7xNImSoGLcJmVTrIrbl2l5lLjtWYNvK4/aqs2AS5xyf2mfEMDpfkj3rwV7bUOOhib5b0mBW+yCOISrHqtAqtYNIpK/n7C/rxov/sHXl9U+R9bwuHueVTPe+45sO6SOKb9RHjV7u01uSIifEp6cYDogxJEU8m1M3OH2ZQEkkchHOz/zAhCw9sfWI0yGb/cBSjzFqQ9SnIfapThNF7JSZMFYWdMIG0ZHR0ebQ10KUGwlks1yxDY+fkmOSY7Ax8hStU8FlDsguhG7oJ9kMQWdorEpZnOui5njcvXSt67792M1HDirYeUvnjam+MFku+QK9Kftb6u0+f/mDTler77NRfT2t5SmNoVmRwcSuwbeetKEAp0IdQ8RIHlGPfegokwBCAMTAtHKS29BKEkOWhIFMboVPXegFaPstlaX3qaYSL1YpEdj1EkyYnOF2CqvxybINiM0uP9psv4pFJXvs+6ot+1axnA7jgbvI5oHoTmxvL752X/nwH+tjVeflU8bn8bsG9j5Jdwf+kD5Nu6/dIemLegws96SSV5LACgaMXkMkD2ZQwRg+rU0RTCYUKg40g4jyMnZgbb44efYUKScKXOhMmuZbcUyIK0uccpOqliu+XdeS2vsn+1QZDPA87WUd1mU7sFNnxSaRUIezhiBIbeJmDOPxIZgDRgiVKcH59VF/QG9h/rsyvvqdpdz+ESI+0um8nOa0Kh3QSvR1+ijSy3rf3EZH6yC54zxjoxwTgKwHGE5N9D7xHrw8ReFXfSEcD+HzcgG5T0f2JUatN7HOpc82uJ4ar9bvU5/bBk4Prz41VrYx47tMHUwZuTId6NPwFaOfFrbR5iWuOoSvnQEZOMChqm2WGKQmjxTo6gNU4koVwKTj+vD6qLx0p1/7+v7mK87LjXWPOJn86drp+On6ZMXr+Qx/TnT0kMGsk0TOviYnmDKyyNIuA+RPTDQyaESSAFUX2Oornesjbotd63R8cLG3au1IgjQCCzPUJXnR6dEuXxgTM7fyIsH15IziU+XEW8PmX3qbaZ9kJ3L05OmbOaoqg6kPk7atkugJx2kuEZStjM9izPrXn9re94ybb/bpwfhH6vCIk6k8a3JQ/fzXehpcHa/ecgDqoNVJbStIksjkUK8rWWIjLd9GgpSJk4/QrWBXSJQ45Z4cyjUOJEmZ3PZqGxJLclspJceJGZxcPEvIzBwxyFNvodrQUyaruEYYq6u9xnUc6FZjOLf3afGkIGrVR+aItb7GSUH0HZy693B0dbd38c1fdPLwJbXmRyzL1fIRCdi/5ZVr5ciTX6pn/+9qX6TP+iusNzuqJnNtuP2BAJexJ59pyhCXZalbHMltgUcUhnGsYisAs9ZCHDyJVZ8Tq5GmliAVAhONJysqUk4uOYqwxwpR7VZxCJuJZz+d7qoPKwUkjFw49LTH9ipnXUk2Y3gSuCEKD/lrG5pfxqFuxXdItR61MA6BToooqx0MWV/u05eWvfo993/sbY/k95c/shvwjQ299Jx+c1kTkbbVeRNGZGFmuFnHZQaZHtUyJg1Fu5MyCmgCTxk5c4mRUierbVXNIC4Rkmqp6tnPoGGiY5UBwmSQGPnMiQNGqU3wQAa4209l7wEdhECeXZz0TxlCUPQh9Im1itNobYtjCUJipczUfKUwFscIGS2mYNUyl8LhdYBoG+PuoN5xed0z9jzl1lIeuS94bVNTqz/nzKvSJUdeqgC/p9WGU12QwdOhanIFglAmVVZdVybdNWmXbEFinKNMPGOEzJFYFgEMUgyeR1NB7WlCA5FiOCGNQEM9LQG6JFdbVayvNrcYvyWuxc7TtvHEA1Ox2Qa3A6Kgzzhqu4mEjx55OqxY2oG+M8EiZq46DkEYCW6SofpC/KwavXQ8ibTQnZrOF//ysq3b/+yRujL+yK1MrEr94lv0raIHh7ffxn2vMQAmER8GYJBMBKaZpVy5etnI4XLFVWilhLEmhyRMHLJswcrQmVIxeo6fYngKCJZRd6o5IAxkEMCp7pVSZzMzhJFT4hJnuIlkqcYfxG7xcUav3GYdbMMPmx4upx4iMEboq5/K/gPXXNzrcJXeXCRkJuEg155Jt09vZf2r4wcO3VLKI/M95m0esq5zyf0K7tM2X6jLAX+ot02OuGO+GEk0VVFXGdMlVxybYlXyGc9MoDkaLlxcTv+aK6uUQ/EwEiPMnOCViYlQYgKYCmW+fVaC5eWsVHvgYhJxDP94AVEnFx+ceVgWBtFPFPSoc8+DTIyKbSsMKnTV5njEoV3UM9TzBCRutHkBY/Tvn+bAAlQ6lw0LHHqvWtJp5ypS9Ufns9GXX3bgo3/zSHw/1COzMl17Yr8+5/ZqnYyPLPdKarGGwFe86ankIAg6ScwuAyYh9jx1JYJIsImUxMPdKSJU0QNI3EhRR8iMZk3NtwkySKZut0RHw9OHEce0tHuCXUYf9tXJxSU27XmKctn1yIfNs4NW/6hAeuqkLcp8iPLyI1Migf5aXWCiscorQWhXhiBMhiRmfVSIXMIHPV9htbE+umx7vvjKe3YufXcp9+inPz+59EmTSe3rytsXV2pPpN+4zWcMExwPqGPy1DLNTVIZ04hDz5Vq2Z9OkZxUQWBQ2kebhgaPGs4oaxwkGidVkDX1tAfdstxkq5gNkvIGyRmqerJKqpg9agZPT3EKYsXEU9bDsXJ8qr/12Gp8l7Ou8ItTqJ0VNm1s1KmuEkp+LrsJkpWzKrXwri4wAAmD71SXCvQV5181X1v7RaHvZ4gFPecU55lzdpfj21+2Zz6af652hLpQqcHykkunaXE84g1VZNmloyORUw5dYp17MpiQwRVt+cWECU9sj8gyZvgPYvml9BAHlgd1D+K2OLINrz1JH6cy9OHLauMY6TMso/NcKLcIlgmsfV055QEIe/ZXSOPxCUKmX+h9j3vFOKRjNxfc/DDE7aBMVBncnmhePSMawXNfT6RnrG2uveKjP1H0U+mfXPqkVyZ9dd6B8aR/dVlTi/0BSvFT7W8bb5aGVkbPakPPQ2qnMkxOiWdJqRj0dhmsVAE+/ei6Qh2Tkr5M0i69g6YDFXjo7RCXDhBjQogVK5xIJnU8QYjHTJGUW9SBmY0Gq06UdaVCxmY7EJGauBIjXtqWMVIfYyY07fEjQ1GWTDUSWJGS126F9MtVqmLxd/W6o0Dfs6lXdV+5tvak3ynlTn0N9bmnT4pMalNX/mL9+n6++ByfKtxCHbzXoaBh8ke5aaB6xaj5NFanVbi+ncpi6vMUSHcrKuIQwil9VWAAHTPC2kK1Tk1wKSejGgNBUx2EIng97LaUWY1chTsLZEAM3PA3vPpkvJhdIxCTVC1+tZugXp1dsfDKVVfLkV0mSzIMZKo3PIgUsnT82Ya//rUkJc6Nqs32qW7Rfc5stLhB9k8wJbafw+GTIlN5840T/fbRK7qxvld7R0POqHslkkCTfG0p2wZxePe/lisOFydI5YKDOFTun6JA+EA7dIZtObYsENEoZcpl8kBKFxGwSh9KY5kobDGW2PwfKwZ6Y6XEQPJMIWhWnOrsVJK0AConkQkBqZKg3hKYjIOYjq+y42dsiECLyTEhVYgVagV2bDz4ozlVRz3ovULZr2KF4Zer1vS+xdqk+7zbfrS8Q+Zzvj3lkyPTFfqw33z2JfFVNuxDmO76qkxSDHROHzaGgCSdV6wso5LOYyeUxCCOBUanJURp2xEpzUvbUBuAIAN68BBH6Ph3PK8cLi9tUc9yQsOZWeI/ViwXULAZIY9OSAQHEJ1SkkqYWMUr3hgIVus1lr0fvhTYu4XYQka4CC0bVUcYolRZCsiEwvYItqtZYcekNn3RbP9VP1PKXY8+mdTOrrz14DU6Qb/QN6/TIE+LhDo9QDwhZkdMTTAFmcGuulzNpHUU+iiTX7nVuXRUdOkT0Orh7PSDnQiWphSWulw1EhGEr3ZmjybajQNtDqT3MohgnDDoYVKhk2wVh1oG1xiBnhS2aEf6QQSZhIUerQrFdjTDJCk3QmKsXBk+/WUXxjES47zi8aesDx/MFv2Lr9gzf6rqfY+mQ9qzT+e+Mt3ywjV9evTl+p6AI4W7OkwcRj4fNIZWQSgukSGFzplLoQmfakOlrpiG7lJiQm9sqmqXyVJFFAfIrGKsJrCSsZ4tSugqyJlHH4PSQDY+yoZphqPOxGQua4stXcZHZ1aQR2wI0OYN4mS5Ym2tIZanqBpSev+4oqsLkhHepCK+YnAx06EoplzxkCi7zRXxtVF3uMwnL7vl58sHZDmnn+Q4dzLtrK/pnqVX6gZjNzw+ZUJLc1qhQ8hxSkCutlh2VK5JZfoW15CqbFPGap6g6qCfyVbjtYyow0T7sowQZaSotRndp7Qvc2aWxKyR458+1RYzirHawKQNLL7h4zobHhxO9bTmKtBp9MjsZsBpxEDLHp4AJk8jDjXor5b9Ki9gEc823OLS8nZZvPKqk0WfInqUyXTizo9fsv/w4c/q/Hskao821j4FtTd0GYGY8CAVchJgmEvGF1sbZOQBvPlJ19QZI3TLYx3wisswDGru/SM4HoG1r+tWuamSAEOcZ1itidx+yIakLnMpTaJh2TOOodaDTQ+SWUArRSezR3kdj0YkGVc22rKHW/i5KVLgjsFZrQJ5qFMhqq4xdJoj9stn86t0n9Nd53SJ4JxWpp679A7uf6Z6fZ1bDBVMHCaY1itnH+T5zg05vUFhZcuhETFMphBDBu4RqHjiPexUyakASaB4/40YDqpj2sCGzpkhlPWwusoqMHEol5t5+hq6KihDJ2WAa5xljNCHPU5rEcMI1GZCJU2Gr7nJJbmRjOjCuyodcI2q6d3SRj0omp0mE7P62ixZXX/qaGPxzJtfU46+9s2+ygryYadzIlMpN471rW76JpPFhr61TJWppWQckkjk9KjOpl/pDS8VyG4obnZ2gAhTj84co8ZK2YHTzwFWD4xOhPPgWkTXkgcu2qdY/FV4jDjxh/B4yteuYEsjOWVUuYdyodbEqzLEwDCDbV8kLZt4zG6BJtcwxbaOybYgksgEE7LsovFLXRAlynabI6c9upX+5GFb2gXXXZj9hj60+Zk33lj+sjxqZLrm+LicOPxi/2Ybz0RPRU4HLUVFOR9IksG2FYbVbIiT7LJy+1GuMdGT8K3VNWhY4jhUMvgDG6UabYk1YhXlRqCyuglWMAmnneKkY7pbbPrIJOrPuphB64INVF/3RZ7VasKDWOFeY0ACKdHpj3+ThoNShObdfwr+r/41lp/QuWI5gnyU1zrCnzjVJv1i3r/k4MHy867gLA/ntjLNj+zRp2uf7Z7RESaZ/iWBGMW8juR+o/DQtpyhtqYtT3aSHycd2WoxBLl5tKRE7x9g1gBQBF/VjC4DBCSOSSA3wlofGkj6xBvCwYKPPv2BrbaIy0xkKDqvAply/uyj0vJako2esIgHPHyYRNrJqzKeWK6q1geGSc8+pS1yV2eiNT2qtgmPcXA1La7sPMFc3m2nTDvUtr486777y16FO+t901mTSY3pyh/u6C6B/tP9cQfVGrOpoVZj4j05K2s5Z5qpqBirKJNW9ZRtIRYCxLECrBLMUWJiGADLrtdig8oqGXsYjWQkM51RXtrzOhKaqIs8iOEQfnoTvRLIrhz0cGxykLEKVakShJInzhMMLvgYpzTvmxyG6AojI1KQCz8Htq/tK9i0RXzX4+UsmoVrNK+uWMSu/rrCw+b/hvHhy6/QOyvHNGYRjCAPI501mXQuHc0PqMLS6wMDdXDZC9UOUj9iu6dbjYj9Ukw8bVqW62Rnk8m9JIGqOAtEZTI5RJygSq0fvVPEa9jhWNQ6mJQlyaS0PrUUUkdA5NC51trHOK1J0/oc7UgCpk+avSLUcGSQAVsMX9S3eyUyjonmL5qAqvpWHWWqzngOCmbZtFiNan3Yja+ZcUsbZs3bobLV3VBuLu8vZ/mDimdPJn3sZNwvbtAndfV2M90bDGo9zcX1IrUspr9OXsWiBVdXFbSRpNP/Us+UE0OpmixbVVcvKZa12GoNYYijYXLIJSrKqz4qaRTtYz9G2w2hJCnsLliuOmZFpmgjEQkTOssc6mnFZdUByhDDddC/57atHDbEKkUofELlVQgYTugizjKmLbX69Hug0xoxfGXcgWgmAYnQ6a5rvil6/ozbbit/IkVey8D4kOnsyXTF9aPFicXT9ZatO0grTA7Gn5FJotQVhAaGLtrbaACZ8HGqQhJsqEdGrw7T3yBieDVXD8RAJ9FYq8IPMcJW4thn1REkex372kSHMklhHQcLkYPPIppGIPRBaCKA8UpU41OLy9XHGMvDyZXsJoDFI2IMN8zS+N98zNguSI0JnR0jrnW1jRGP4zLxbdbTcXfDvuV+ZWl8COmsyXTXRzbHVx7Z9zTeQuHiWsx1JZQqi2cqk08B61KmFFOKJEDrR1hsrlPe5IYJTxOruoPJ60iBz2MlTC0GfBDI4qBcG5LXj6I1TF6NM8R7cqQYtIEJI4Q9wEbRE2nZukWsONgSY0HjSDt1aBNPCNej0XSOg1KSwDE4WOUcRK56hI1HYIhBHUHmanMZr2FiH6WO9eWGjUeDTFeNpmN9HeW1EzWPZw1jymrBFXAS/DGhJHhyTCgZMAPmYKgL4WAzZSaPAazrV4XgFakqdo9Bmk/Ls9IkBdNdm9GwqZMl4zITbksDqRg4NJ5gM6DaNcmtKMHe9RCR5FsB+AKwHnI4IDEjVtsDuZ5wCpIIW/0glf5rnHCMz2gSL3BRAWRDIyh1pY9ytyOqXDmCUazrTsbvSK3YHqpwViuTKuq237zvSjXkKr5Iysu45tfkUSNMB0hErSJX5tVi0nElmj4ZZQeDwxcxLJYC6CjVJ9RxTOdhnvaogQFLLqelncasAEdTI3dBB1roqNLTxzprbgMYw7FRIElAZ02SqeltCJtE06MRq8YSNvctjuMKZCMW9cjP4arsco0FSVr9iUVle4AcQwEaoSLcGY+0Q2N2VbdxxZV9ufus7gs/KzLxSk6r36fpKtllU89STJaarCR6MO7qWV7odjFMtnlyazmnYjnZgWYaMw4xGSgnlIzQ0qEaBpnMzH2siOQDG2ItU1OIOFSMxVqoarexytRdrWYEssu0Kf6VSahksg5bxcVERs1VLb9YYVzWwWhiITsnNEIEMW9qkaVpiDPSdVdfXMC09oSe9jxY8tmmK5cu9iyuL68p/3g2V8LPjkzHyqg/srh2fTwab+oeGDZrfuKaANFYDxed16Qjc2Dl8oC5aEXYVA5/gEFMS/gPypQyAAP4oEnm6h6whFdlFm1UoaqzWENj4HSL3YgKrFmdNMC2MmnpieDC4FRU25xt9xu5wIRLHT6QBWWFh63pzVMduIhA23AOf+ONq+2gfTWOYQbUBj5EpjB6Rdetzbb662/5Qi0eZ/G2ytmRabuM9HVL14y5rKSe+0I0jQt+rOT0lL0UhGqEcZnmCoqBVHPjXGaEsJuChviQ+HBvfkvAg0jpI0gT6wAPx3lpA8ikRXJeCzn56ec8Y4UbRxMiMURBXiEASqVVPZ5KlZz2l8ItEUEAk5EnWXDIfZFXRWwBMSYC4nQWibEeja45pPk+C6+z/EmESzT18/5wP66bb08wpyV1oLIBkuTdkL4txXoDA6fWDVQu4RNDkE2PmFlquXD2RaERg6oMnAvOlwfjwrhUNqQMttVotdjgCLUQoo5ZDoUBFluZaparkUuyBSEAIddeVn2WG8aroTDY/SenJJF1DlJjLuMZT2wzLeo0can0nNPi0No9Hu6HHeGsVqYPKexlarO/CIFnTzBnuTfxZHOopywNjqfbmxdkJWMQlPCP51otGmGfGH4wNp35QNwGPDOkaSuUcM2FCViWDGViUhW2ekqpgTxJdam1d53AcI5VokK9ei/rqpOMkXrdHh9cn6ttegVl2VeZUx82jiaLCt6soxEs/RBMzgDb45wPxNCycbb+Z0Wm6/eXxbHN/o4RffUgqlb12ZyiZgkMMOXoUyWVFLaszGT42a0e8tkEzAmBelYUilkVrgsZuyqkHCkQWcrWYHazKyrhS5yQMcuJUF6jGpQrz9Ij9z92kBo0IVoZHSRBYXvkgCAKKfHS6Jqzn37Nh+1EgAKX8e1DPGLXPICnH7EzJw83gdX/nad2DddD+Z8VmRRsvrW1dWvpN3RjXrfmeaQjMvjKtFegaLjbrlY1ggw6kx3Dz0TIDIyDNXVapDBaZRJyBTpPXVaS2MwDPiiFO25KnpisW/FcRq+H1dXxTJO2W9fKzYfpVxQbWlbrwKYkDoUfBXT6S9YLkHui0MmGkx6tLtxqQpfjm7rd5dSfKQerz9JNp/381ne96+xWp7Mj06Ev3nPwcP/xzTve85Fxv/NpMy3FJpFa5ecTHZHswZPQPiOHBoOstlumnHqPDQqcXIjnZ6jymPEYywjBsKeMG6VIricLVi+RDVc3essJgPyK08IEspWxKWY+QRy+4sOFQsTAZm+Rop2WDKq1QxYFRpXxKeWpzHIEjdNZBZHFoxqpaJDOhjgDtyaOGbi1yQee9LRn3fHs5x/YU978R7p++fBSzMkZsGpqV9796kvLif2fqW+Ce0UZrz+/H02e3o3Wr9w69vH9x297yyQmN0IkWbxfYqr5r9HJ6LqLVZk2qg490jBBVPygphFDo2W0u4fUPruV4OgQ8cjtF6Bl2SHbxEYJvHABjSyL6Em1TDsNQK2HFxZhKJIMr7HCBgyfSr6KNQ4LJpydI1RShujyuR/ONHIZrStXP+fZO/svP3JSd0Hcra+UfJ9umPvbUVm8tWz37+i+8E+OJnJ3TtSV5N8o+4qvfm4pe7+lTPZ8RZnsu6Hs1e+4jPRz1QuuCehrgI8fLR9522+XvZMZH5EJf2We9IzoskyawVhlMMiZcmIw16l1kIGhQaqbYUbHBDV7RG1RHELVPNiYx4S5xjhUcE4u3qFiUtVCOVAe+rXVqfomQQiYtiEZDNMhc9dhp4hLDQ3vIBEn8NWG/nwl2qZBna+tlxue/xllzwG91cvWYoRBDd2eKpt/ULeK/C819L+XP33bP3Q3rW5Bh3NS9KM5+8p6//1lfe93Kpq+tEsfY6p37ykivWP2y9Z995QP/tnviBSzskdffKAPPfkCpoPp4O0NsxrCKnkMWo5IniabZmBPYgSRGmJAqdThpLY5VTmLVZvFITJdwqZj/C9D4WtdIJodNSofeKqEo4t2qWXJ6d/2QHazR7VJobkK3/DzvU34VrIhns8Ur8pHZa4fxu70zfPXPfcZZc+eva1fbqhGnU+1lbHauDP9xKKf/szo+Af+U/cVt2ufHsl7JnVEp7TvfZq+rOvH5PHV7sRUXeqndR4VgETGZSy9E9h19LQrW7PO3zo4FoMnso1FoJFWq7hXOqYuFxyXskAwybvfF6NCcBzrkLuUjExtbVHFUgJNvUvZjsxSVFwxES79DUclReiaxROcBLGXTbuIYIB06V/dXU5n2wKA2RAIVOtFyhdtBEo313m+Dhr7nl9V13tfvvisPMeOr0bq51qJ3D4f3YoZ9/XqX/uqy0eTyQ/PDz79uVt/+Izv3/iSt36AcLEBf/cbntRPul/t1tdeUja3ay9jOqMvNSCZej1ZXy+Hrn5qOXn3Hfoc5o47P9dL2nndkHPmGym6iSVydVLwmV6mOoIrkOzIHJ0kpNU6H2q9BiADCh0d95uwxGffYSsvrtMncweSNmfPwVYPggY6hPRsoYQeTjB0crkB077U2wQxak2JjziBs9V7pkStNuucS4SLbtdcBSaFN00Zd2wQqY44ZzJGYDReK3sP7NUPkasEmTjvuQcCOGbkMzqhW5AmG+OvWqzNrj755he/upS/vnNN+q7cOr1UEW4smxrwuAcinKkjg1mO4ngyKVd/xsvK9OTxcuKej5ftez9Rtk7cW+bbW1q0pnzCwWznnmI60OlUCbnoByslgskFEVyWSg0PSmTVarCNAJYifUrEEl+12feKiGLYwqcGVKdTuxQyajjbvjwErDqlOvdGbhHKFtdUd0DGvTlLNtlXCORohHjgBGTZ9BSbLp6YYBhjASEOKF6aUW4eEYjegxuLUOO1cVnf2FM29m2Uvfv2iiD64XH6MffsWVYAJelaU0OYbfqmtufpZwQuk+2utfKjqulV/2/UbV02Kpdcp6XPl4/ky2ksk5zdjppbrRVq34FyZL8+AHrN9WUxnZbZzmaZbZ4oO6dOlqkes20eW7F6zWbi6RxCKzRxII+SO1ufOJKto7OYsCtViMo04oET+EQguwceAZX0H5NfEQncFS4HbEmUiJp64Jblz6RkyuGyRoClf0xC8w+APYncOoneihqxdtq1ixwmiQo8KQ2sCwu/dMUCwsg5hM0cIvlJLNKMRKzxeKIX5SKPNtnkk8l66EUoPGhzP+NebDcyconup/L6FInAtuojXovNMjm1TWv03tyPCPtHJ/uydWpRNu8u3b4n6Xt9L5NFn3aJGuzmEXQdWZHU/JhgxbBqru/V/n3fvrLvMitlVzO8Uu2IaPq5+Bn5lh+LnR19G8/URFvoWdBPIdtMp2vFpAOanfi2/5BpbFKN6JFoS9XmbFXjci9WFdlsRt6DNcjTt1rc1yZLqGkAcwR3vsaNsCoorFWadPBMNjXxGBxCltIkcB72+M4GZHsYly9S/BNpqGUzqSR7f6rvUGeV4fyk35ZTpu8UmYz9SptTF9uMjlUoTgu1gTmuGmf2x/5TbDfeBwBSkJTHv1H+4MSCb95hi9PrLu5Zzy/76DftVP6drWOS7izTrU8vR+9Ro3TTJl/rvXFp6fYcirIa6J5570HkWlHmsg52kSqEnTEZ80zQs6DoZ+daYu8DxJ8gVGd4auux0HcXQKoFm8C6miGLedJBOGHlM4fIYFQ/S7IvDErPoNA2107uWzZUj3XYqCdaIZUSZTWSSUIRShetCmiYd8mmMaBMDsMhlM6qbAIQhXL8S6xlKYIUimidVhJxY8QeR4IzbQw6EQU7xAgyuQVum18YSVLE2j+vyx4PzgR8Pyg3NLrvtY8uMAY5F+6Hxkw6r0LYqk6DrKFivPXERxYIcmoNuHs8WdyrZtUNeDlxrF/s+dturft0n4IWerW3c7++f/V2jbM81kSCDZ3OJgdKt75PXnvVIV13opdufjS8NS5aHA3PxuzO3QkpB5PHQI/1jOIv4rbe2DviS2c1edgrdaKz5go2CKqcU6qH1Ab7mmDeuDNwEYNYlgZki0rDHjAmJaJ50gA0gWpkZLLBwBObiYsUx8Az6cQNUOKHRAffUm1jZIw1FdD2wbh7Qc8+VN/qRxxb8MmgA5vb3SzE1YMnIfEhUFtAVFb/HE+B1nVZSM/uv7r3WK8ViNMc6cDtO4v7bvh1Gb5KnvUMAVGUYOFUXxG9eTwCEUxvy3Ea7LTi6LymZ4xOiZM94paWVJ2X/bSKUYsYCpodd1PcKbXGY7G746vlNtk0jOZgbgNRsdQSBqE8RSpbGXxn6vITxqh52rckYIsnZfVDaGJIS9wQbxv9W/V1eAdQe+qkuy/SBZFqODmynqaOcLVmhJoqabJe68OYxzZOYDxQtCflQEWbaCvlbHOQxlsK6cNWn4g4AM14lMV8q3TY2kbub37yHbf72+Y8t2CO/uqlBw8cOPibYts/39a35qa/8xYQoaZskIpeXFmleE3ZQaaJsnVNpB4Qzudt6bTR81cWarVzxSJmNiyixqDF2Gdd5NKT6RFdoc4qWV+NDmJQgF2WT21rmiMYEPxqygmnaHXadsVLn5qDclvSJ3OH4ZnZAp4Wd4UAwKJiS27bwDdEH5d2S+hC73guZjlIYX093Zu6XC/CR33wKAY84tZoOf8ohzJlur53oyvbO4s/7jdOvebS1x7TSpMrk4RL33/Pielz9v3I1nzyorVRf7n2yxHEg6ZwjkitCKRhTpM04XztvV+v6TTpBmYr8YdIuLEH0Mom4nWscGwWWSkgnDcHwrHCsQKycWQzIJlifCUVdSN7GNwzwkZw6tOD/zrZWSbnLybXDiotSRrLJJFW47Y4NV4gql+E8eDWZdYa99r4ZawKdfwBiIbWJuJlz5pFe8NeMcL6L0/d9pXGpySiSgZTH9Y45CBuDBYmwVXIMrFqWkqhiD4vjWvau21vLe6e9YsfuPy2Y9oPLXEpl/4tZe2+O576Gv1Iyy9quPb5l+ObtQqqKV65UKbabE21Z0aHsMo8aGdYqyK8A7cSRwZegYhNEYAgqifIhirOzkE4SOq1UXnijeZgvzhGjJXmSoWWdkQj7ZAatFVvBIX4p30uUa425yHHpQ/6tbQh8a6A5r3FDFehUAKQwhmejTDSo41/y0b5sjVopXimSahlK4eHYUdTH3XRqmVfQkpE5kS1RcJERFJ2Sj+E+K1XPe32N3ev8uphKJiV9DdvKpNnXXLt1/Sj/qcm+p5DPjhAJ6lySaKhC1WRFCpGJ4rg9We/M3USt2x7zQeRqkdqhN0luuHW5aDUap0NA6PYXR6o0qyc5jtuwtFhf4DECmB8tS+vGK86xLDsjqR2a0BbfXKp3QnnlcCr8Vp3BuoWvQkD40ovMvBg3JoPtiyEnFMKX9lw6wX0cW3JX3/74o7f3P3Dhxl5WLO2VGV8fOsprxDj/8v6pHvetgjFK/gzgqtnNqEFQuGXKU1zmmAf4xS5tVqwxlobm5+7j42GpMlBGmQghMHHITZ9K5JqvfBVTDYDM1BSNifDRN2QAUygmk3FdmoMdx2z0oq1X3ShQSy0KCpF/GbPEA+sCEuGUI54Vsmdj0Vg2WbvNsqG3njdmS3+frrVv+HaJ9/11jP9ClT07sw1dh//5SuuGncb/1bbm2/RtuZS3X7n7xJaDvOq40rjW6EJDYzGY5MCltNhS37VVhpyGm4YpFVhISY7Q5/muAoelOznBvpwpqYN0BE/nzfhsWKuhVq/M6Hk8EArWfMeNBkxST9Q18plTOUZGpCmFteCtH6WUFhFUCIM1764I2Rn1t/X9+Nf0IXmH7/ujZ+4U7ZVB0Io4fOgifub7rrmqudon/IdGoCvFkGvwI0v1Jz7VcEDhKjVsZqwt1k+W8Fnc1fblM90fB4ytfjRiQfyiJhYB+30zEd56ZdSxa0y8QFaXFuZ4TPErsafpk5FDsWuMBQTshKKNrkfaV0GSM2qo7QwsBkzGgpWoNOjAdelPj+RtWe+U1uz39NF4TfdcO/RW3bfv5TRMqc1DyupH92dP/ek63Tbwheqpi9TW16oq87XaEM2YndP0/jSA0jjF3VqKY2l7DFAHg7EsCfLMXFbMJ2WUpktrv4RO4Oll8p5OqQVeZ5Ks/LwoNXYpdjVhgFU5mWlp8HwfYi0AjljYRk/JrmCEntapasVJszalULgIEjWgExBU+Yn+YgVUiq92cC8IX5Eqlu68eL3t8azP3726+/9J0HPEDViD4+EPuukyN1733T1ZQcXixv0/ag36h65py66/mq92L9UW6urVDXfLHewX3R7dKfe3lHfbUy4AnCGVpkMCkhr6RYvYhr5eJFDCzHWZJHDLn3aV3OILGBinaczyJQjj2EViAakj4XELpuC2UnQYRTg6Y4FWwSzsAxQLWld4kJa+mR0kPEpatft9ulJrBew+je8tYlyTbxQnOoLl9SmHT2xN/UqeVNheDl/t26Ku3s0X9y1WCt3jRfdh0eTxW3TnY0PPuN7bj9KNzLGw83PVP/D9X1A3Ltu1nXxjx3e10/2HtLl+MNrpT+4tRgdWh/1h/pRd5k2Xpfq2X6p2ntEo3BIrT4gFu1X53R/sMina2Iag/1i0h7dZ84VTt+xwrOJxACGrMGUziRVEKYO8qyQQnhGxRPMCBlXlcoygQHYfNOwkoOiEUZXmkWjwl+9ypmtSNwDoTwFdFVuKglMfFwR8BWwehnBtfENrLqCoJt5un5L0BNqwqYu6p/S2xWb6vNJVXtiPurv1Zgd07f6HVOc43oH7+Oj8eLerXl3fO9ad99mN713z55yfOuOY5s33nTuP7hDn86UWl/OZHw0ddqbrb3zhqs2rj26PTnWrW+cnM/WD03W1k9tl/26iH5gsTPfp5v39uvmz33jbrFX27X9c706WOsX+uHibkMDukdM2SP9hsjFVU9dfu83dGF7XS8exnpWrmugtRsoG5pI3Sfa64XuaKIB4EZUEudo+XRrEIptVWNBkxmuVpCodz27jrcSzEF9gpkPMavcccbgjvltBZprz7jDFlPxdlTxjviOz1R2fQmpbKXf1hu3W7rHekvbiFN6B2tTa9BmN5mfWJ+NNufd7P5RNzmpN2pP6dSzs3cx2R6vbe8c3bdvp9xy+/RFP39uvyigNjyi6XFDpke0Vw8STFRg6SJ1P/qjZfSKin2l8ltuL93eqxuFquWBs029D/7Cq0v/1gHklT/CZXXYSEW1poH9U1n8/3k9h3iuGZyZAAAAAElFTkSuQmCC" alt="" aria-hidden="true" width="147" height="112"><span><b>HQ Console</b><small id="today"></small></span></div>
-    <div class="spacer"></div>
-    <div class="who-wrap">
-      <button type="button" class="who" id="whoBtn" data-act="who-menu" aria-haspopup="menu" aria-expanded="false"><span class="av" id="whoAv" aria-hidden="true">N</span><span class="wt"><span class="sr">Signed in as</span><b id="whoName">Nadia</b><small id="whoRole">HQ approver</small></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
-      <div class="wmenu" id="whoMenu" role="menu" aria-label="Account" hidden>
-        <p class="wlbl">Demo</p>
-        <div class="wmi wrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>Role</span><select id="roleSel" class="sel-sm" aria-label="Demo: role to sign in as"></select></div>
-        <div class="wmi wrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M12 6h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path><path d="M8 6h.01"></path><path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg><span>Outlet</span><select id="outletSel" class="sel-sm" aria-label="Outlet"><option>[Pilot outlet]</option><option disabled>More outlets — out of scope for this delivery</option></select></div>
+  <header class="bar">
+    <div class="bar-in gut">
+      <div class="spacer"></div>
+      <div class="who-wrap">
+        <button type="button" class="who" id="whoBtn" data-act="who-menu" aria-haspopup="menu" aria-expanded="false"><span class="av" id="whoAv" aria-hidden="true">N</span><span class="wt"><span class="sr">Signed in as</span><b id="whoName">Nadia</b><small id="whoRole">HQ approver</small></span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+        <div class="wmenu" id="whoMenu" role="menu" aria-label="Account" hidden>
+          <p class="wlbl">Demo</p>
+          <div class="wmi wrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>Role</span><select id="roleSel" class="sel-sm" aria-label="Demo: role to sign in as"></select></div>
+          <div class="wmi wrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M12 6h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path><path d="M8 6h.01"></path><path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg><span>Outlet</span><select id="outletSel" class="sel-sm" aria-label="Outlet"><option>[Pilot outlet]</option><option disabled>More outlets — out of scope for this delivery</option></select></div>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
   <main id="view" class="gut" tabindex="-1"></main>
 </div>
 </div>
@@ -419,8 +775,48 @@ const ago = m => new Date(NOW.getTime() - m * 60000);
 const tm = d => d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
 const dt = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + ', ' + tm(d);
 const age = d => { const m = Math.max(0, Math.round((Date.now() - d.getTime()) / 60000)); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; };
-let toastT;
-function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 3600); }
+let toastT, undoFn = null;
+/* Toast co hai doi: bao thuong 3,6 giay; bao kem Undo thi 12 giay. Va neu
+   focus dang nam trong toast thi KHONG tu tat — tat mot khoi dang giu focus
+   se lam focus roi ve <body>, dung cai loi ma no sinh ra de sua. */
+function toast(msg, undo){
+  const t = $('#toast');
+  undoFn = undo || null;
+  t.innerHTML = `<span class="tmsg">${esc(msg)}</span>` + (undo ? '<button type="button" class="ub" data-act="undo">Undo</button>' : '');
+  t.hidden = false;
+  clearTimeout(toastT);
+  toastT = setTimeout(function tick(){
+    if (undoFn && t.contains(document.activeElement)) { toastT = setTimeout(tick, 4000); return; }
+    t.hidden = true; undoFn = null;
+  }, undo ? 12000 : 3600);
+}
+function runUndo(){ if (!undoFn) return false; const f = undoFn; undoFn = null; clearTimeout(toastT); $('#toast').hidden = true; f(); return true; }
+
+/* Sau moi quyet dinh, render() dung lai DOM nen nut vua bam bien mat va
+   focus roi ve <body>. Do that: nut Approve la diem dung tab thu 30 tren
+   tong 30 cua trang, nen nguoi dung ban phim phai Tab 30 lan moi toi duoc
+   phieu ke tiep — hang doi 7 phieu la 210 lan nhan.
+   Tra focus ve HANG DANG CHON: do la phieu ke tiep trong hang doi, va tab
+   tiep tu do di thang vao the chi tiet. Khong tra thang ve nut Approve
+   moi — mot phim Enter lac tay se duyet luon phieu sau. */
+function focusQueue(){
+  const row = document.querySelector('#view tr.sel .rowbtn');
+  if (row) { row.focus(); return; }
+  const t = document.querySelector('#view .seg button[aria-pressed="true"]') || document.querySelector('#view .seg button');
+  if (t) t.focus();
+}
+/* Xong mot phieu thi nhay sang phieu cho lau nhat con lai — tru khi nguoi
+   dung dang xem tab khac tab Waiting, luc do giu nguyen phieu vua xu de ho
+   doc duoc ket qua. */
+function advanceQueue(kind, id){
+  if (kind === 'po') {
+    const next = PO.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
+    S.poSel = S.poTab === 'pending' ? (next ? next.id : null) : id;
+  } else {
+    const next = REQ.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
+    S.reqSel = S.reqTab === 'pending' ? (next ? next.id : null) : id;
+  }
+}
 
 /* ---------------- sample data (illustrative) ---------------- */
 const ROLES = {cashier:'Cashier', supervisor:'Supervisor', outlet_manager:'Outlet manager', branch_operator:'Branch operator', hq_admin:'HQ admin', hq_approver:'HQ approver', auditor:'Auditor', coo:'COO'};
@@ -448,7 +844,7 @@ const PERMS = [
   ['View HQ dashboard', ['hq_admin','hq_approver','coo','auditor']],
   ['Copy audit log', ['auditor','hq_admin']]
 ];
-const S = {user:'nadia', period:'7', reqTab:'pending', reqFlags:[], reqSel:null, poTab:'pending', poSel:null, poRoute:null, suppFilter:'all', menuQ:'', auditType:'all', auditQ:'', closeOnly:false, seq:2000, chat:[], cprops:{}, cdraft:null};
+const S = {ingSel:null, user:'nadia', period:'7', reqTab:'pending', reqFlags:[], reqSel:null, poTab:'pending', poSel:null, poRoute:null, suppFilter:'all', menuQ:'', auditType:'all', auditQ:'', closeOnly:false, seq:2000, chat:[], cprops:{}, cdraft:null, rejDraft:null};
 const me = () => USERS.find(u => u.id === S.user);
 const can = p => PERMS.find(x => x[0] === p)[1].includes(me().role);
 const whoCan = p => PERMS.find(x => x[0] === p)[1];
@@ -456,7 +852,7 @@ function lockNote(p){
   if (can(p)) return '';
   const role = whoCan(p).find(r => USERS.some(u => u.role === r && ['hq_admin','hq_approver','auditor','coo'].includes(u.role)));
   const u = USERS.find(x => x.role === role);
-  return `<div class="lock"><span>${esc(p)} needs the ${esc(ROLES[role] || role)} role. You’re signed in as ${esc(me().name)} (${esc(ROLES[me().role])}).</span>${u ? `<button type="button" class="btn sm" data-act="switch" data-v="${u.id}">Switch to ${esc(u.name)}</button>` : ''}</div>`;
+  return `<div class="alert warn">${A_ICON.warn}<span>${esc(p)} needs the ${esc(ROLES[role] || role)} role. You’re signed in as ${esc(me().name)} (${esc(ROLES[me().role])}).</span>${u ? `<button type="button" class="btn sm" data-act="switch" data-v="${u.id}">Switch to ${esc(u.name)}</button>` : ''}</div>`;
 }
 
 const ING = [
@@ -557,7 +953,21 @@ function reqFlags(r){
   if (r.by === S.user) f.push('self');
   return f;
 }
-const FLAG = {stale:['b-bad','Older than 4 h'], negative:['b-bad','Would go negative'], repeat:['b-warn','Repeated corrections'], large:['b-warn','Large change'], self:['b-info','Your request']};
+const FLAG = {stale:['b-bad','Overdue'], negative:['b-bad','Would go negative'], repeat:['b-warn','Repeated corrections'], large:['b-warn','Large change'], self:['b-mute','Your request']};
+/* Co o MUC NANG NHAT (b-bad) khong ve thanh vien thuoc nua: mot icon canh
+   bao cong chu do, khong nen. Khac han HINH DANG cua cac vien thuoc khac
+   nen mat bat duoc ngay rang no khong cung mot loai thong tin — viec nay
+   mau sac don thuan khong lam duoc, nhat la voi nguoi mu mau. */
+const AL_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>';
+/* Nhan cua co 'stale': "Overdue · 5 h 12 min" chu khong phai "Older than
+   4 h". Nguoi duyet khong quan tam nguong cua he thong la 4 gio hay 6 gio —
+   ho can biet CAI NAY PHAI XU LY NGAY va tre bao nhieu. "Older than 4 h"
+   mo ta mot luat; "Overdue" mo ta mot trang thai can hanh dong.
+   Con so chi xuat hien o DUNG nhung hang qua han — dung cho no co nghia,
+   chu khong rai deu moi hang nhu cot Status cu. */
+const flagTag = (f, r) => FLAG[f][0] === 'b-bad'
+  ? `<span class="flag-hot">${AL_ICON}${f === 'stale' && r ? FLAG[f][1] + ' · ' + age(r.at) : FLAG[f][1]}</span>`
+  : `<span class="badge ${FLAG[f][0]}">${FLAG[f][1]}</span>`;
 const fq = (id, v) => { const u = IB(id).unit; return u === 'kg' ? (Math.round(v * 100) / 100).toLocaleString('en-MY', {maximumFractionDigits:2}) + ' kg' : Math.round(v) + ' ' + u; };
 const fd = (id, v) => (v > 0 ? '+' : v < 0 ? '−' : '') + fq(id, Math.abs(v));
 
@@ -643,9 +1053,21 @@ function periodDays(n){ return DAYS.slice(DAYS.length - n); }
 function prevDays(n){ return DAYS.slice(DAYS.length - 2 * n, DAYS.length - n); }
 
 /* ---------------- views ---------------- */
+/* Dieu huong gom thanh BA NHOM. Dashboard dung rieng tren cung vi no khong
+   thuoc nhom nao — no la cho nhin tong, khong phai mot loai ho so.
+   'grp' la ten nhom: chi la NHAN, khong bam duoc va khong co icon.
+   'assistant' KHONG con trong danh sach nay: loi vao cua no la cuc AI o day
+   rail. Route van con trong ROUTES nen man do khong mat, chi doi CACH VAO.
+   Register closes da chuyen len "Needs action": no co so cho xu ly giong hai
+   muc kia, truoc day nam lac duoi cung canh Users & roles. */
 const NAV = [
-  ['dashboard','Dashboard'],['approvals','Stock approvals'],['purchases','Supplier orders'],['menu','Menu & recipes'],['ingredients','Ingredients'],['suppliers','Suppliers & costs'],['promotions','Promotions'],'-',
-  ['closes','Register closes'],['users','Users & roles'],['assistant','AI assistant'],['audit','Audit log']
+  ['dashboard','Dashboard'],
+  ['grp','Needs action'],
+  ['approvals','Stock approvals'],['purchases','Supplier orders'],['closes','Register closes'],
+  ['grp','Catalogue'],
+  ['ingredients','Ingredients'],['menu','Menu & recipes'],['suppliers','Suppliers & costs'],['promotions','Promotions'],
+  ['grp','Admin'],
+  ['users','Users & roles'],['audit','Audit log']
 ];
 /* Icon lay PATH GOC cua Lucide (raw.githubusercontent.com/lucide-icons/lucide/main/icons/),
    khong viet lai theo tri nho. Cung bo voi till.html: truck, wallet va
@@ -688,10 +1110,32 @@ const route = () => { const h = location.hash.replace('#',''); return ROUTES.inc
    bon vai HQ, khong phai ca tam nguoi. Doi vai van di qua action 'switch'
    da co san, nen day chi la doi CACH CHAM, khong them duong nghiep vu nao. */
 const HQ_USERS = USERS.filter(u => ['hq_approver','hq_admin','auditor','coo'].includes(u.role));
+/* Mau avatar: nen buoc 500 cua thang, chu TRANG (nguoi dung chot).
+   ⚠️ CHU Y VE TUONG PHAN — day la mot danh doi co y thuc:
+   trang tren buoc 500 chi dat do 3.76 / xanh duong 3.68 / xanh la 2.28 /
+   amber 2.15 — CA BON duoi nguong 4.5 cua WCAG 1.4.3.
+   Khong co cach nao vua giu duoc chu trang vua dat nguong ma amber van ra
+   mau vang: amber du dam de doi chu trang (buoc 700 = 5.02) thi no da
+   thanh mau nau. Day la gioi han cua chinh sac amber, khong phai thieu
+   mot buoc nao trong thang.
+   Chap nhan duoc vi chu cai dau la TRANG TRI: no `aria-hidden`, va ngay
+   canh no luon co TEN DAY DU (trong bang la cot By, o chip la dong ten).
+   Khong mot thong tin nao chi nam o chu cai do.
+   Mot nguoi LUON mot mau, giong nhau o bang va o chip tai khoan. */
+/* Gan THANG mau cho tung nguoi chu khong bam tu id nua: bam thi mau ra
+   ngau nhien, muon doi rieng mot nguoi sang mau khac lai phai sap xep lai
+   ca mang cho "trung" — kho doc va de vo. Bang nay doc ra la biet ngay ai
+   mau gi. */
+const AV_C = {nadia:'--blue-500', hafiz:'--red-500', mei:'--amber-500', daniel:'--green-500',
+              farid:'--amber-500', siti:'--green-500', aina:'--blue-500', ravi:'--red-500'};
+const avHue = id => AV_C[id] || '--red-500';
+const uAv = id => `<span class="tcell"><span class="tav" aria-hidden="true" style="background:var(${avHue(id)})">${initials(uName(id))}</span>${esc(uName(id))}</span>`;
 function initials(n){ const p = String(n || '?').trim().split(/\s+/); return ((p[0] || '?')[0] + (p[1] ? p[1][0] : '')).toUpperCase(); }
 function syncWho(){
   const u = me();
-  $('#whoAv').textContent = initials(u.name);
+  const av = $('#whoAv');
+  av.textContent = initials(u.name);
+  av.style.background = `var(${avHue(S.user)})`;
   $('#whoName').textContent = u.name;
   $('#whoRole').textContent = ROLES[u.role] || u.role;
   const sel = $('#roleSel');
@@ -704,17 +1148,64 @@ function toggleWho(force){
   m.hidden = !open; b.setAttribute('aria-expanded', String(open));
   if (open) { const f = m.querySelector('select'); if (f) f.focus(); }
 }
+/* Gap / mo rail. Nho lua chon bang localStorage nhu till.html nho theme, va
+   bao ve trong try/catch vi che do rieng tu co the chan localStorage. */
+function setRail(min){
+  document.documentElement.setAttribute('data-rail', min ? 'min' : 'full');
+  const b = $('#railBtn');
+  b.setAttribute('aria-expanded', String(!min));
+  const lbl = min ? 'Expand sidebar' : 'Collapse sidebar';
+  b.setAttribute('aria-label', lbl); b.title = lbl;
+  try { localStorage.setItem('prb-hq-rail', min ? 'min' : 'full'); } catch (e) {}
+}
+/* Icon cho hai nut quyet dinh: check va x cua Lucide. */
+/* Khong gan role="alert" cho hop nay. The chi tiet ve lai moi lan bam
+   sang mot phieu khac, nen role="alert" se doc chen ngang o MOI lan bam
+   — tieng on, khong phai thong tin. Noi dung nam dung thu tu doc, ngay
+   tren thanh nut, nen trinh doc man hinh van gap no dung luc. */
+const A_ICON = {bad:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>', warn:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>', info:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>'};
+const A_ICON_NOTE = A_ICON.info;
+/* Cap 'note' la hop xam: dung cho ghi chu ve PHAM VI DU AN, thu nguoi
+   duyet doc mot lan roi thoi. Truoc day hai cho nay deu muon .lock
+   (hop vang) nen chung noi hon ca canh bao chan nut — dao nguoc dung
+   thu tu. Icon tron chu khong tam giac: khong co gi de canh bao. */
+const alertBox = (kind, html) => `<div class="alert ${kind}">${kind === 'note' ? A_ICON_NOTE : A_ICON[kind]}<span>${html}</span></div>`;
+const I_OK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>';
+const I_NO = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>';
 function renderNav(){
   const r = route(), pend = REQ.filter(x => x.status === 'pending').length, closes = CLOSES.filter(c => !c.reviewed && c.cnt !== c.exp).length, poPend = PO.filter(o => o.status === 'pending').length;
-  $('#nav').innerHTML = NAV.map(n => n === '-' ? '<div class="sep" role="separator"></div>' :
-    `<a href="#${n[0]}" ${r === n[0] ? 'aria-current="page"' : ''}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n[0]]}</svg>${n[1]}${n[0] === 'approvals' && pend ? `<span class="cnt" aria-label="${pend} pending">${pend}</span>` : ''}${n[0] === 'purchases' && poPend ? `<span class="cnt" aria-label="${poPend} waiting">${poPend}</span>` : ''}${n[0] === 'closes' && closes ? `<span class="cnt" aria-label="${closes} to review">${closes}</span>` : ''}</a>`).join('');
+  const CNT = {approvals:[pend, 'pending'], purchases:[poPend, 'waiting'], closes:[closes, 'to review']};
+  const link = n => {
+    const c = CNT[n[0]];
+    return `<a href="#${n[0]}" title="${esc(n[1])}" ${r === n[0] ? 'aria-current="page"' : ''}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n[0]]}</svg><span class="nl">${n[1]}</span>${c && c[0] ? `<span class="cnt" aria-label="${c[0]} ${c[1]}">${c[0]}</span>` : ''}</a>`;
+  };
+  /* Moi nhom la mot <div role="group"> co nhan that, chu khong phai mot dong
+     chu tha noi giua danh sach: trinh doc man hinh nho do doc duoc "Needs
+     action, 3 muc" thay vi doc lien tu mot mach 12 lien ket. */
+  let out = '', open = false, gi = 0;
+  NAV.forEach(n => {
+    if (n[0] === 'grp') {
+      if (open) out += '</div>';
+      gi++;
+      out += `<div class="navgrp" role="group" aria-labelledby="ng${gi}"><p class="navgh" id="ng${gi}">${esc(n[1])}</p>`;
+      open = true;
+    } else out += link(n);
+  });
+  if (open) out += '</div>';
+  $('#nav').innerHTML = out;
 }
+/* Gio khung trang moi la vung cuon, khong phai ca trang: doi route khong tu
+   dong ve dau nua nhu khi trinh duyet nhay theo hash. Chi dua ve dau khi DOI
+   MUC — render() con chay lai sau moi thao tac (duyet, tu choi...), dua ve
+   dau o do se hat nguoi dung ra khoi hang ho vua bam. */
+let lastView = null;
 function render(){
   renderNav();
   syncWho();
   const v = route();
   const html = ({dashboard:vDash, approvals:vApprovals, purchases:vPurchases, menu:vMenu, ingredients:vIng, suppliers:vSupp, promotions:vPromos, closes:vCloses, users:vUsers, assistant:vAI, audit:vAudit})[v]();
   $('#view').innerHTML = html;
+  if (v !== lastView) { lastView = v; $('#view').scrollTop = 0; }
   enhanceSelects();
   const th = $('#hqThread'); if (th) th.scrollTop = th.scrollHeight;
 }
@@ -760,7 +1251,7 @@ function vDash(){
   const di = (path, ok) => `<span class="di${ok ? ' ok' : ''}" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg></span>`;
   /* Khu vuc con viec -> icon cua chinh muc do tren rail; het viec -> dau tick. */
   const dgRow = (n, area, html) => `<li>${n ? di(ICON[area]) : di(TICK, true)}<span>${html}</span></li>`;
-  const kpi = (i, k, v, pill, sub, cls) => `<div class="kpi${cls ? ' ' + cls : ''}"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
+  const kpi = (i, k, v, pill, sub) => `<div class="kpi"><div class="kh">${ico(i)}<span class="k">${k}</span></div><div class="v num">${v}</div><p class="d">${pill}<span>${sub}</span></p></div>`;
   let chart, chartTitle;
   if (S.period === 'today') {
     const d = cur[0]; const vals = d.hourly.map((v, i) => HOURS[i] <= hourNow ? v : 0);
@@ -787,12 +1278,12 @@ function vDash(){
   const aiDeclined = AI.act.filter(a => /^Declined/i.test(a.out)).length;
   return `<div class="ph"><div><h1>Dashboard</h1><p>[Pilot outlet] · computed from sales, recipes and stock. Sample data for the prototype.</p></div>
   <div class="seg" role="group" aria-label="Period">${[['today','Today'],['7','7 days'],['30','30 days']].map(([v,l]) => `<button type="button" data-act="period" data-v="${v}" aria-pressed="${S.period === v}">${l}</button>`).join('')}</div></div>
-  <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt, 'lead')}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
+  <div class="kpis">${kpi('revenue', 'Revenue', rm0(rev), dpill(rev, prev_rev), vsTxt)}${kpi('profit', 'Gross profit', rm0(gp), dpill(gp, prev_gp), vsTxt)}${kpi('margin', 'Gross margin', pct(gp / rev), '', `Food cost ${pct(1 - gp / rev)}`)}${kpi('orders', 'Orders', ord.toLocaleString('en-MY'), dpill(ord, prev_ord), vsTxt)}${kpi('avg', 'Avg order', rm(rev / Math.max(1, ord)), '', 'incl. SST &amp; service')}</div>
   <div class="grid g2">
     <section class="card"><div class="ch-h"><h2>${ico('chart')}${chartTitle}</h2></div>
       <p class="ch-sub">${dpill(rev, prev_rev)}<span>${rm0(Math.abs(rev - prev_rev))} ${rev >= prev_rev ? 'more' : 'less'} than the previous ${S.period === 'today' ? 'day' : n + ' days'}</span></p>${chart}</section>
     <section class="card dig"><div class="ch-h"><h2>${ico('digest')}Today’s digest</h2></div><ul>
-      ${dgRow(pend.length, 'approvals', `<b>${pend.length} stock requests pending</b>${stale ? `, ${stale} older than 4 h` : ''}. <a href="#approvals">Review</a>`)}
+      ${dgRow(pend.length, 'approvals', `<b>${pend.length} stock requests pending</b>${stale ? `, ${stale} overdue` : ''}. <a href="#approvals">Review</a>`)}
       ${dgRow(poP.length, 'purchases', `<b>${poP.length} supplier order${poP.length === 1 ? '' : 's'} waiting</b>, ${rm(poSum)} in total. <a href="#purchases">Review</a>`)}
       <li>${di(ALERT)}<span><b>Chicken leg drawdown 18% above recorded sales</b> on Sunday. Check portioning or unrecorded waste.</span></li>
       <li>${di(wo.length ? ALERT : TICK, !wo.length)}<span><b>Write-offs today:</b> ${wo.length ? wo.map(r => `${esc(IB(r.ing).name.toLowerCase())} ${r.qty} ${esc(IB(r.ing).unit)}`).join(', ') + (wo.length === 1 ? ` — ${esc(String(wo[0].reason).replace(/\s*—\s*/, ', ').toLowerCase())}` : '') : 'none'}.</span></li>
@@ -826,17 +1317,37 @@ function vApprovals(){
   if (!S.reqSel && list.length) S.reqSel = list[0].id;
   const rows = list.map(r => {
     const i = IB(r.ing), d = reqDelta(r), fl = reqFlags(r);
-    const st = r.status === 'pending' ? `<span class="badge ${fl.includes('stale') ? 'b-bad' : (Date.now() - r.at) > 120 * 60000 ? 'b-warn' : 'b-mute'}">${age(r.at)}</span>` : r.status === 'approved' ? '<span class="badge b-ok">Approved</span>' : '<span class="badge b-bad">Rejected</span>';
-    return `<tr class="${S.reqSel === r.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="req" data-v="${r.id}">${r.id}</button></td><td>${TYPE[r.type]}</td><td>${esc(i.name)}</td><td class="r ${d < 0 ? 'down' : 'up'}"><b>${fd(r.ing, d)}</b></td><td class="r">${fq(r.ing, r3(i.onHand + d))}</td><td>${esc(uName(r.by))}</td><td>${st}</td><td><div class="chips" style="gap:4px">${fl.filter(f => f !== 'stale').map(f => `<span class="badge ${FLAG[f][0]}">${FLAG[f][1]}</span>`).join('')}</div></td></tr>`;
+    /* MOT cot duy nhat thay cho hai cot "Status" + "Flags" cu. TIEU DE
+       CUA NO CHAY THEO TAB: o tab Pending no la "Flags", cac tab khac la
+       "Status". Vi o tab Pending moi hang deu cung mot trang thai — dang
+       cho — ma dieu do chinh cai tab da noi; cot khong con gi de noi ve
+       trang thai nen no hien CO. De tieu de la "Status" la hua moi hang
+       co mot gia tri, roi nhung hang khong co co nao lai bo trong.
+       Hang dang cho: chi hien CO — va chi khi co that. Hang nao khong co
+       gi dang luu y thi o trong, nen mat chi dung lai o nhung hang can
+       dung lai. Truoc day bay hang deu ghi mot con so, sau hang trong do
+       khong doi hoi hanh dong gi.
+       Hang da quyet dinh: hien ket qua.
+       Khong con bac "qua 2 gio" mau vang: nguong do la do hien thi tu dat
+       ra, khong co luat nghiep vu nao dung sau. Luat that chi co MOT moc —
+       240 phut, trong reqFlags() — va no la co 'stale'. */
+    const st = r.status === 'approved' ? '<span class="stt s-ok">Approved</span>' : r.status === 'rejected' ? '<span class="stt s-bad">Rejected</span>' : '';
+    return `<tr class="${S.reqSel === r.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="req" data-v="${r.id}">${r.id}</button></td><td>${TYPE[r.type]}</td><td>${esc(i.name)}</td><td class="r ${d < 0 ? 'down' : 'up'}"><b>${fd(r.ing, d)}</b></td><td class="r">${fq(r.ing, r3(i.onHand + d))}</td><td>${uAv(r.by)}</td><td><div class="chips" style="gap:6px;align-items:center">${r.status === 'pending' ? fl.map(f => flagTag(f, r)).join('') : st}</div></td></tr>`;
   }).join('');
-  return `<div class="ph"><div><h1>Stock approvals</h1><p>Branch receipts, counts, adjustments and write-offs post to the stock ledger only when HQ approves. Sales deduct automatically and never come here.</p></div></div>
-  ${lockNote('Approve stock requests')}
-  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-    <div class="seg" role="group" aria-label="Status">${[['pending','Pending'],['approved','Approved'],['rejected','Rejected'],['all','All']].map(([v,l]) => `<button type="button" data-act="reqtab" data-v="${v}" aria-pressed="${S.reqTab === v}">${l}${v !== 'all' ? ` · ${counts[v]}` : ''}</button>`).join('')}</div>
-    <div class="chips" role="group" aria-label="Exception filters">${['stale','negative','repeat','large'].map(f => `<button type="button" class="chip" data-act="reqflag" data-v="${f}" aria-pressed="${S.reqFlags.includes(f)}">${FLAG[f][1]}</button>`).join('')}</div>
-  </div>
-  <div class="split">
-    <div class="tbl">${list.length ? `<table><thead><tr><th>Request</th><th>Type</th><th>Ingredient</th><th class="r">Change</th><th class="r">Result</th><th>By</th><th>Waiting / status</th><th>Flags</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No requests match these filters.</div>'}</div>
+  return `<div class="split">
+    <div class="lcol">
+      <div class="ph"><div><h1>Stock approvals</h1><p>Branch receipts, counts, adjustments and write-offs post to the stock ledger only when HQ approves. Sales deduct automatically and never come here.</p></div></div>
+      ${lockNote('Approve stock requests')}
+    <!-- Nhom nut trang thai o TREN, day chip loc ngoai le o DUOI. Truoc day
+         hai cai nam cung mot hang va bi day ve hai dau man, doc ra nhu hai
+         thu khong lien quan; xep doc thi thay ro day duoi la loc THEM vao
+         tren tab dang chon. -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="seg" role="group" aria-label="Status">${[['pending','Pending'],['approved','Approved'],['rejected','Rejected']].map(([v,l]) => `<button type="button" data-act="reqtab" data-v="${v}" aria-pressed="${S.reqTab === v}">${l} (${counts[v]})</button>`).join('')}</div>
+      <div class="chips" role="group" aria-label="Exception filters">${['stale','negative','repeat','large'].map(f => `<button type="button" class="chip" data-act="reqflag" data-v="${f}" aria-pressed="${S.reqFlags.includes(f)}">${FLAG[f][1]}</button>`).join('')}</div>
+    </div>
+      <div class="tbl">${list.length ? `<table><thead><tr><th>Request</th><th>Type</th><th>Ingredient</th><th class="r">Change</th><th class="r">Result</th><th>By</th><th>${S.reqTab === 'pending' ? 'Flags' : 'Status'}</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No requests match these filters.</div>'}</div>
+    </div>
     <div class="panel">${reqDetail()}</div>
   </div>`;
 }
@@ -851,23 +1362,77 @@ function reqDetail(){
   } else {
     math = `<div class="math"><div class="r"><span>On hand now</span><b>${fq(r.ing, i.onHand)}</b></div><div class="r"><span>${TYPE[r.type]}</span><b class="${d < 0 ? 'down' : 'up'}">${fd(r.ing, d)}</b></div><div class="r t"><span>After approval</span><span class="${res < 0 ? 'down' : ''}">${fq(r.ing, res)}</span></div></div>`;
   }
-  const hist = REQ.filter(x => x.ing === r.ing && x.id !== r.id && x.status !== 'pending').slice(0, 3);
+  /* Khoi nay KHONG trung voi cho nao khac trong san pham: man Ingredients
+     chi co danh muc (don vi, gia von, ton, nguong thap) chu khong co lich
+     su quyet dinh nao, nen day la cho DUY NHAT nguoi duyet thay duoc
+     "nguyen lieu nay vua bi sua gi" ma khong phai roi hang doi di tra
+     Audit log.
+     Nhung dong cu thi thua va thieu cung luc. Cu: "R-1047 · Count -2.6 kg
+     · approved by Nadia". Hai manh khong giup quyet dinh gi — ma phieu thi
+     tu day khong bam duoc va khong lam gi duoc voi no, con ten nguoi duyet
+     thi gan nhu luc nao cung la chinh nguoi dang doc. Trong khi do lai
+     thieu dung manh can nhat: NGAY. Cau hoi duy nhat khoi nay ton tai de
+     tra loi la "co dang lap lai khong" — mot cau hoi ve TAN SUAT THEO THOI
+     GIAN. Hai lan sua gao trong mot tuan la tin hieu; hai lan trong mot nam
+     thi khong. Khong co ngay thi no khong tra loi duoc chinh cau hoi cua no.
+     Ten nguyen lieu cung bo khoi tieu de vi no da nam ngay tren, o dong dau
+     bang thuoc tinh. Va sap moi nhat len truoc — "recent" ma ke tu cu nhat
+     thi doc nguoc. */
+  const flagsOnly = fl.filter(f => f !== 'stale');
+  const hist = REQ.filter(x => x.ing === r.ing && x.id !== r.id && x.status !== 'pending').sort((a, b) => b.dAt - a.dAt).slice(0, 3);
+  const histHtml = hist.length ? `<div><b style="font-size:13px">Recent decisions</b>${hist.map(h => `<div class="note" style="margin-top:4px">${dshort(h.dAt)} · ${TYPE[h.type]} ${fd(h.ing, reqDelta(h))} · ${h.status === 'approved' ? 'Approved' : 'Rejected'}</div>`).join('')}</div>` : '';
   let act = '';
   if (r.status === 'pending') {
     if (!can('Approve stock requests')) act = '<p class="note">Only an HQ approver can decide this request.</p>';
-    else if (r.by === S.user) act = '<div class="lock">You submitted this request, so another HQ approver has to decide it.</div>';
-    else act = `<label class="field">Reason (required to reject)<textarea id="decNote" rows="2" placeholder="e.g. Attach the delivery order and resubmit"></textarea></label>
-      <div style="display:flex;gap:8px"><button type="button" class="btn primary" style="flex:1" data-act="approve" data-v="${r.id}" ${res < 0 ? 'disabled title="Would make stock negative"' : ''}>Approve & post</button><button type="button" class="btn danger" data-act="reject" data-v="${r.id}">Reject</button></div>
-      ${res < 0 ? '<p class="note down" style="margin:0">Can’t approve: stock would go below zero. Reject, or approve a count first.</p>' : ''}`;
+    else if (r.by === S.user) act = alertBox('warn', 'You submitted this request, so another HQ approver has to decide it.');
+    /* Bam Reject mo HOP THOAI, khong con bay o nhap ra ngay trong the chi
+       tiet. Day van la MOT loi vao tu choi nhu cu — chi doi cho o ly do.
+       Ly do doi: o nhap inline khong chan duoc viec bam sang phieu khac, va
+       khi do trang chu da go bien mat khong mot loi hoi. Hop thoai modal
+       dong duong do lai bang cau truc: khong con hang nao de bam nham.
+       Luat nghiep vu khong doi — tu choi van bat buoc co ly do, van do
+       decideReq() kiem. */
+    /* Dong giai thich vi sao nut Approve bi khoa phai nam TREN thanh nut.
+       Thanh nut la footer dinh (sticky) nen moi thu dat sau no trong DOM se
+       roi xuong duoi va bi chinh no che mat. Va ve noi dung thi ly do khoa
+       cung phai doc duoc TRUOC khi voi tay toi nut. */
+    else act = `${res < 0 ? alertBox('bad', 'Can’t approve: stock would go below zero. Reject, or approve a count first.') : ''}
+      <div class="decbar"><button type="button" class="btn danger" style="flex:1" data-act="reject" data-v="${r.id}">${I_NO}Reject</button><button type="button" class="btn ok" style="flex:1" data-act="approve" data-v="${r.id}" ${res < 0 ? 'disabled title="Would make stock negative"' : ''}>${I_OK}Approve & post</button></div>`;
   } else {
     act = `<div class="math"><div class="r"><span>${r.status === 'approved' ? 'Approved' : 'Rejected'} by</span><b>${esc(uName(r.dBy))}</b></div><div class="r"><span>When</span><b>${dt(r.dAt)}</b></div>${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}</div>`;
   }
   return `<section class="card" style="display:flex;flex-direction:column;gap:12px" aria-label="Request ${r.id}">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 style="margin:0">${r.id} · ${TYPE[r.type]}</h2>${r.status === 'pending' ? '<span class="badge b-warn">Pending</span>' : r.status === 'approved' ? '<span class="badge b-ok">Approved</span>' : '<span class="badge b-bad">Rejected</span>'}</div>
-    ${fl.length ? `<div class="chips" style="gap:4px">${fl.map(f => `<span class="badge ${FLAG[f][0]}">${FLAG[f][1]}</span>`).join('')}</div>` : ''}
-    <dl class="kv"><dt>Ingredient</dt><dd>${esc(i.name)}</dd><dt>Outlet</dt><dd>[Pilot outlet]</dd><dt>Requested by</dt><dd>${esc(uName(r.by))} · ${esc(ROLES[(USERS.find(u => u.id === r.by) || {}).role] || '')}</dd><dt>Submitted</dt><dd>${dt(r.at)}</dd><dt>Reason</dt><dd style="font-weight:600">${esc(r.reason)}</dd><dt>Evidence</dt><dd>${r.ev ? `<span class="badge b-info">${esc(r.ev)}</span>` : '<span class="note">None</span>'}</dd></dl>
-    ${math}${act}
-    ${hist.length ? `<div><b style="font-size:13px">Recent decisions on ${esc(i.name)}</b>${hist.map(h => `<div class="note" style="margin-top:4px">${h.id} · ${TYPE[h.type]} ${fd(h.ing, reqDelta(h))} · ${h.status} by ${esc(uName(h.dBy))}</div>`).join('')}</div>` : ''}
+    <!-- Dau the: cot TRAI la MA DON + loai phieu (badge xam), roi THOI GIAN
+         CHO xuong dong ngay duoi ma don. Ben phai chi con cac CO.
+         Thoi gian thuoc ve ma don — no la "don nay da cho bao lau" — nen
+         doc duoi ma don thi dung chu ngu hon la dung canh cac co, vi co la
+         thuoc tinh cua NOI DUNG phieu chu khong phai cua hang doi.
+         Ma don lam tieu de chu khong phai ten nguyen lieu: ten nguyen lieu
+         co the rat dai, lam tieu de se xuong dong va day ca hang co.
+         Loai phieu tach ra thanh badge XAM thay vi dinh duoi "R-1047 · ":
+         no la mot PHAN LOAI, khong phai mot phan cua ma don — dau cham giua
+         lam hai thu khac loai trong nhu mot chuoi. Xam vi no khong bao
+         trang thai gi, chi noi day la phieu kieu gi.
+         Thoi gian dung dung bo mau cua cot Status ben bang (do / vang /
+         xam theo nguong), nen nhin bang va nhin the chi tiet thay cung mot
+         tin hieu. Co "Older than 4 h" KHONG ve ra o day: mau do cua chinh
+         con so da noi dieu do roi, ve them mot cai the nua la noi hai lan.
+         Loc giong het cot Flags ben bang. Co 'stale' van con trong
+         reqFlags()
+         de to mau va de chip loc chay — chi la khong ve thanh the.
+         Bo badge "Pending" vi no thua — the nay chi mo ra khi don dang cho,
+         va hai nut o thanh day da noi ro. Don da quyet dinh thi cho do la
+         ket qua. -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap"><div><div style="display:flex;align-items:center;gap:8px"><h2 style="margin:0">${r.id}</h2><span class="badge b-mute">${TYPE[r.type]}</span></div>${r.status === 'pending' ? `<div class="stt ${fl.includes('stale') ? 's-bad' : (Date.now() - r.at) > 120 * 60000 ? 's-warn' : 's-mute'}" style="margin-top:4px">${age(r.at)}</div>` : ''}</div>${r.status === 'pending' ? (flagsOnly.length ? `<div class="chips" style="gap:8px;align-items:center">${flagsOnly.map(f => flagTag(f, r)).join('')}</div>` : '') : r.status === 'approved' ? '<span class="badge b-ok">Approved</span>' : '<span class="badge b-bad">Rejected</span>'}</div>
+    <dl class="kv"><dt>Ingredient</dt><dd><a class="link ext" href="#ingredients" data-act="going" data-v="${r.ing}">${esc(i.name)}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></dd><dt>Outlet</dt><dd>[Pilot outlet]</dd><dt>Requested by</dt><dd><span class="tcell" style="justify-content:flex-end"><span class="tav" aria-hidden="true" style="background:var(${avHue(r.by)})">${initials(uName(r.by))}</span><span>${esc(uName(r.by))} <span class="rolex">(${esc(ROLES[(USERS.find(u => u.id === r.by) || {}).role] || '')})</span></span></span></dd><dt>Submitted</dt><dd>${dt(r.at)}</dd><dt>Reason</dt><dd style="font-weight:600">${esc(r.reason)}</dd><dt>Evidence</dt><dd>${r.ev ? `<span class="badge b-info">${esc(r.ev)}</span>` : '<span class="note">None</span>'}</dd></dl>
+    <!-- Thanh hai nut la FOOTER DINH cua the: no phai la khoi CUOI CUNG.
+         Truoc day khoi lich su nam sau no, nen phan lich su do cuon xuong
+         BEN DUOI thanh nut va bi chinh thanh nut che mat nua dong chu.
+         Voi phieu dang cho: lich su len tren nut — do dung la boi canh
+         nguoi duyet can doc TRUOC khi bam. Voi phieu da quyet dinh thi
+         khong co thanh dinh nao, nen ket qua van dung ngay sau phan tinh
+         toan nhu cu. -->
+    ${math}${r.status === 'pending' ? histHtml + act : act + histHtml}
   </section>`;
 }
 
@@ -965,12 +1530,8 @@ function vPurchases(){
   const list = PO.filter(o => S.poTab === 'all' || o.status === S.poTab).sort((a, b) => a.status === 'pending' && b.status === 'pending' ? a.at - b.at : b.at - a.at);
   if (S.poSel && !list.find(o => o.id === S.poSel)) S.poSel = null;
   if (!S.poSel && list.length) S.poSel = list[0].id;
-  const rows = list.map(o => `<tr class="${S.poSel === o.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="po" data-v="${o.id}">${o.id}</button></td><td>${esc(supName(o.sup))}${o.rerouted ? ' <span class="badge b-info">rerouted</span>' : ''}${o.splitFrom ? ' <span class="badge b-mute">split</span>' : ''}</td><td>${o.lines.map(l => esc(IB(l.ing).name)).join(', ')}</td><td class="r"><b>${rm(o.total)}</b></td><td>${dshort(o.needed)}</td><td>${esc(uName(o.by))}</td><td>${o.status === 'pending' ? `<span class="badge ${(Date.now() - o.at) > 120 * 60000 ? 'b-warn' : 'b-mute'}">${age(o.at)}</span>` : `<span class="badge ${PO_ST[o.status][0]}">${PO_ST[o.status][1]}</span>`}</td></tr>`).join('');
-  return `<div class="ph"><div><h1>Supplier orders</h1><p>Orders outlets raise through the assistant. Nothing goes to a supplier until HQ approves it; stock goes up only when the delivery is received.</p></div></div>
-  <div class="lock" style="background:var(--warn-soft);color:var(--warn-ink)">New scope: purchase orders are outside Delivery Brief v12, which excludes procurement and POs. This screen supports a change request.</div>
-  ${lockNote('Approve supplier orders')}
-  <div><div class="seg" role="group" aria-label="Status">${[['pending','Waiting'],['ordered','Sent to supplier'],['rejected','Rejected'],['all','All']].map(([v, l]) => `<button type="button" data-act="potab" data-v="${v}" aria-pressed="${S.poTab === v}">${l}${v !== 'all' ? ' · ' + counts[v] : ''}</button>`).join('')}</div></div>
-  <div class="split"><div class="tbl">${list.length ? `<table><thead><tr><th>Order</th><th>Supplier</th><th>Items</th><th class="r">Total</th><th>Needed by</th><th>By</th><th>Waiting / status</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No supplier orders here.</div>'}</div><div class="panel">${poDetail()}</div></div>`;
+  const rows = list.map(o => `<tr class="${S.poSel === o.id ? 'sel' : ''}"><td><button type="button" class="rowbtn" data-act="po" data-v="${o.id}">${o.id}</button></td><td>${esc(supName(o.sup))}${o.rerouted ? ' <span class="badge b-info">rerouted</span>' : ''}${o.splitFrom ? ' <span class="badge b-mute">split</span>' : ''}</td><td>${o.lines.map(l => esc(IB(l.ing).name)).join(', ')}</td><td class="r"><b>${rm(o.total)}</b></td><td>${dshort(o.needed)}</td><td>${uAv(o.by)}</td><td>${o.status === 'pending' ? `<span class="stt ${(Date.now() - o.at) > 120 * 60000 ? 's-warn' : 's-mute'}">${age(o.at)}</span>` : `<span class="stt ${{'b-ok':'s-ok','b-bad':'s-bad','b-warn':'s-warn','b-mute':'s-mute'}[PO_ST[o.status][0]]}">${PO_ST[o.status][1]}</span>`}</td></tr>`).join('');
+  return `<div class="split"><div class="lcol"><div class="ph"><div><h1>Supplier orders</h1><p>Orders outlets raise through the assistant. Nothing goes to a supplier until HQ approves it; stock goes up only when the delivery is received.</p></div></div>${alertBox('note', 'New scope: purchase orders are outside Delivery Brief v12, which excludes procurement and POs. This screen supports a change request.')}${lockNote('Approve supplier orders')}    <div class="seg" role="group" aria-label="Status">${[['pending','Waiting'],['ordered','Sent to supplier'],['rejected','Rejected']].map(([v, l]) => `<button type="button" data-act="potab" data-v="${v}" aria-pressed="${S.poTab === v}">${l} (${counts[v]})</button>`).join('')}</div><div class="tbl">${list.length ? `<table><thead><tr><th>Order</th><th>Supplier</th><th>Items</th><th class="r">Total</th><th>Needed by</th><th>By</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">No supplier orders here.</div>'}</div></div><div class="panel">${poDetail()}</div></div>`;
 }
 function poDetail(){
   const o = PO.find(x => x.id === S.poSel);
@@ -992,8 +1553,8 @@ function poDetail(){
   const routeCtl = edit ? `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label class="field" style="flex:1;min-width:180px">Route whole order to<select data-chg="poall"><option value="">Choose a supplier…</option>${allSup.map(k => `<option value="${k}">${esc(supName(k))}</option>`).join('')}</select></label><button type="button" class="btn sm" data-act="pocheap">Cheapest on time</button><button type="button" class="btn sm" data-act="poreset" ${changed ? '' : 'disabled'}>Reset route</button></div>` : '';
   let act;
   if (pending) {
-    act = err ? `<div class="lock">${esc(err)}</div>` : `${groups.some(g => !g.onTime) ? '<p class="note down" style="margin:0">One delivery arrives after the needed date. Pick a faster supplier or confirm the outlet can wait.</p>' : ''}<label class="field">Note (required to reject)<textarea id="poNote" rows="2" placeholder="e.g. Prawns on hand cover two more days"></textarea></label>
-      <div style="display:flex;gap:8px"><button type="button" class="btn primary" style="flex:1" data-act="po-ok" data-v="${o.id}">Approve & send to ${groups.length > 1 ? groups.length + ' suppliers' : esc(supName(groups[0].sup))}</button><button type="button" class="btn danger" data-act="po-no" data-v="${o.id}">Reject</button></div>`;
+    act = err ? alertBox('warn', esc(err)) : `${groups.some(g => !g.onTime) ? alertBox('bad', 'One delivery arrives after the needed date. Pick a faster supplier or confirm the outlet can wait.') : ''}
+      <div class="decbar"><button type="button" class="btn danger" style="flex:1" data-act="po-no" data-v="${o.id}">${I_NO}Reject</button><button type="button" class="btn ok" style="flex:1" data-act="po-ok" data-v="${o.id}">${I_OK}Approve & send to ${groups.length > 1 ? groups.length + ' suppliers' : esc(supName(groups[0].sup))}</button></div>`;
   } else {
     act = `<div class="math"><div class="r"><span>${o.status === 'rejected' ? 'Rejected' : 'Approved'} by</span><b>${esc(uName(o.dBy))}</b></div><div class="r"><span>When</span><b>${dt(o.dAt)}</b></div>${o.status !== 'rejected' ? `<div class="r"><span>Sent by</span><b>${esc(o.method || 'Email')}</b></div>` : ''}${o.rerouted ? `<div class="r"><span>Rerouted from</span><b>${esc(supName(o.rerouted))}</b></div>` : ''}${o.splitFrom ? `<div class="r"><span>Split from</span><b>${esc(o.splitFrom)}</b></div>` : ''}${o.note ? `<div class="note">${esc(o.note)}</div>` : ''}</div>`;
   }
@@ -1055,7 +1616,7 @@ function vIng(){
   ${lockNote('Edit ingredient catalogue')}
   ${FLAGS_ING.length ? `<section class="card"><h2>Flagged by outlets</h2>${FLAGS_ING.map(f => `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><b>${esc(f.name)}</b> <span class="note">· requested by ${esc(uName(f.by))}, ${age(f.at)} ago · “${esc(f.note)}”</span></div><div style="display:flex;gap:8px"><button type="button" class="btn sm primary" data-act="flagadd" data-v="${f.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Add to catalogue</button><button type="button" class="btn sm" data-act="flagno" data-v="${f.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Decline</button></div></div>`).join('')}</section>` : ''}
   <div class="tbl"><table><thead><tr><th>Ingredient</th><th>Unit</th><th class="r">Cost basis</th><th>Source</th><th class="r">On hand</th><th class="r">Low at</th><th>Status</th><th class="r">Used in</th><th></th></tr></thead><tbody>
-  ${ING.map(i => `<tr><td><b>${esc(i.name)}</b></td><td>${i.unit}</td><td class="r">${rm(unitCost(i.id))} / ${i.unit === 'kg' ? 'kg' : i.unit === 'pcs' ? 'pc' : 'portion'}</td><td><span class="note">${esc(costSource(i.id))}</span></td><td class="r">${fq(i.id, i.onHand)}</td><td class="r">${fq(i.id, i.low)}</td><td>${i.onHand <= 0 ? '<span class="badge b-bad">Out</span>' : i.onHand <= i.low ? '<span class="badge b-warn">Low</span>' : '<span class="badge b-ok">OK</span>'}</td><td class="r">${used(i.id)} dishes</td><td class="r"><button type="button" class="btn sm" data-act="editing" data-v="${i.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Edit</button></td></tr>`).join('')}
+  ${ING.map(i => `<tr class="${S.ingSel === i.id ? 'sel' : ''}"><td><b>${esc(i.name)}</b></td><td>${i.unit}</td><td class="r">${rm(unitCost(i.id))} / ${i.unit === 'kg' ? 'kg' : i.unit === 'pcs' ? 'pc' : 'portion'}</td><td><span class="note">${esc(costSource(i.id))}</span></td><td class="r">${fq(i.id, i.onHand)}</td><td class="r">${fq(i.id, i.low)}</td><td>${i.onHand <= 0 ? '<span class="badge b-bad">Out</span>' : i.onHand <= i.low ? '<span class="badge b-warn">Low</span>' : '<span class="badge b-ok">OK</span>'}</td><td class="r">${used(i.id)} dishes</td><td class="r"><button type="button" class="btn sm" data-act="editing" data-v="${i.id}" ${can('Edit ingredient catalogue') ? '' : 'disabled'}>Edit</button></td></tr>`).join('')}
   </tbody></table></div>`;
 }
 function ingForm(i, prefill){
@@ -1084,7 +1645,7 @@ function vSupp(){
   <section class="card"><h2>Suppliers</h2><div class="tbl" style="border:0"><table><thead><tr><th>Supplier</th><th class="r">Lead time</th><th>Delivers</th><th>Next delivery</th><th class="r">Min order</th><th>Sends by</th><th class="r">Ingredients</th><th>Active</th><th></th></tr></thead><tbody>
   ${Object.keys(SUPP).map(k => { const s = SUPINFO[k], n = new Set(QUOTES.filter(q => q.sup === k).map(q => q.ing)).size, routes = QUOTES.filter(q => q.sup === k && q.route).length, parts = SUPP[k].split(' · '); return `<tr${s.active ? '' : ' style="opacity:.6"'}><td><b>${esc(parts[0])}</b><br><span class="note">${esc(parts[1] || '')}</span></td><td class="r">${s.lead} day${s.lead === 1 ? '' : 's'}</td><td>${s.days.length === 7 ? 'Daily' : s.days.map(d => DAYS3[d - 1]).join(', ')}</td><td>${s.active ? dshort(nextDelivery(k)) : '—'}</td><td class="r">${s.min ? rm(s.min) : 'None'}</td><td>${esc(s.via)}</td><td class="r">${n}${routes ? ` <span class="badge b-info">route for ${routes}</span>` : ''}</td><td><button type="button" class="switch" role="switch" aria-checked="${s.active}" aria-label="${esc(parts[0])} active" data-act="togsup" data-v="${k}" ${edit ? '' : 'disabled'}></button></td><td class="r"><button type="button" class="btn sm" data-act="editsup" data-v="${k}" ${edit ? '' : 'disabled'}>Edit</button></td></tr>`; }).join('')}
   </tbody></table></div></section>
-  <div class="ph"><h2 style="margin:0;font-size:17px">Routing & cost by ingredient</h2><div class="seg" role="group" aria-label="Filter ingredients">${[['all','All ingredients'],['single','Single source · ' + single.length]].map(([v, l]) => `<button type="button" data-act="suppf" data-v="${v}" aria-pressed="${(S.suppFilter || 'all') === v}">${l}</button>`).join('')}</div></div>
+  <div class="ph"><h2 style="margin:0;font-size:17px">Routing & cost by ingredient</h2><div class="seg" role="group" aria-label="Filter ingredients">${[['all','All ingredients'],['single','Single source (' + single.length + ')']].map(([v, l]) => `<button type="button" data-act="suppf" data-v="${v}" aria-pressed="${(S.suppFilter || 'all') === v}">${l}</button>`).join('')}</div></div>
   <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr))">
   ${list.map(i => ingRouteCard(i, edit)).join('') || '<div class="empty">Every ingredient has at least two active suppliers.</div>'}
   </div>`;
@@ -1189,7 +1750,7 @@ function vAI(){
       <div class="note">${AI.callsToday} model calls today. At the cap the assistant stops and tells users to try later; the till keeps working.</div>
       <label class="field">Monthly cap (RM)<input id="capIn" type="number" step="10" min="0" value="${AI.cap}" ${can('Manage users & roles') ? '' : 'disabled'}></label>
       <button type="button" class="btn" data-act="savecap" ${can('Manage users & roles') ? '' : 'disabled'}>Save cap</button>
-      <div class="lock" style="background:var(--surface-2);color:var(--muted)">100-command acceptance test: runs before Gate B (Phase B).</div>
+      ${alertBox('note', '100-command acceptance test: runs before Gate B (Phase B).')}
     </section>
   <section class="card"><h2>Words the assistant understands</h2><p class="note" style="margin:-6px 0 12px">English and Malay names, short names and item codes mapped to ingredients and dishes.</p>
     <div class="chips" style="margin-bottom:12px">${AI.syn.map(([w, t], k) => `<span class="chip" style="display:inline-flex;align-items:center;gap:8px">“${esc(w)}” → ${esc(t)}<button type="button" class="link" data-act="delsyn" data-v="${k}" aria-label="Remove ${esc(w)}" ${can('Edit menu, recipes & prices') ? '' : 'disabled'}>×</button></span>`).join('')}</div>
@@ -1266,7 +1827,7 @@ function todaySummary(){
   const L = [];
   if (rev > 0) { const ch = lwRev ? (rev - lwRev) / lwRev : 0; L.push(`Revenue <b>${rm0(rev)}</b> from about ${Math.round(d.orders * rev / d.rev)} orders, ${ch >= 0 ? 'up' : 'down'} ${pct(Math.abs(ch))} on last ${lw.day.toLocaleDateString('en-GB', {weekday:'long'})} at the same time. Gross margin ${pct(d.gp / d.rev)}.`); }
   else L.push('No sales yet today.');
-  L.push(`<b>${pend.length}</b> stock request${pend.length === 1 ? '' : 's'} waiting${stale.length ? `, ${stale.length} older than 4 h (${stale.map(r => r.id).join(', ')})` : ''}. <a href="#approvals">Open approvals</a>`);
+  L.push(`<b>${pend.length}</b> stock request${pend.length === 1 ? '' : 's'} waiting${stale.length ? `, ${stale.length} overdue (${stale.map(r => r.id).join(', ')})` : ''}. <a href="#approvals">Open approvals</a>`);
   L.push(`<b>${pos.length}</b> supplier order${pos.length === 1 ? '' : 's'} waiting, ${rm(posSum)} in total. <a href="#purchases">Open supplier orders</a>`);
   L.push(low.length ? `Low stock: ${low.map(i => `${esc(i.name)} (${fq(i.id, i.onHand)})`).join(', ')}.` : 'No ingredient is below its low-stock level.');
   if (cl.length) L.push(`${cl.length} register close${cl.length === 1 ? '' : 's'} with over/short to review. <a href="#closes">Open closes</a>`);
@@ -1327,6 +1888,70 @@ function vAudit(){
   <textarea id="csvOut" class="sr" aria-hidden="true" tabindex="-1"></textarea>`;
 }
 function auditBody(){ const rows = auditRows(); return rows.map(a => `<tr><td>${dt(a.at)}</td><td>${esc(a.user)}</td><td><span class="badge b-mute">${esc(a.type)}</span></td><td>${esc(a.text)}</td></tr>`).join('') || '<tr><td colspan="4"><div class="empty">No entries match.</div></td></tr>'; }
+
+/* ---------------- tu choi: hop thoai + hoan tac ---------------- */
+
+/* Hop thoai tu choi dung chung cho ca phieu kho lan don mua. Esc, nut X va
+   bam ra ngoai deu dong duoc vi no di qua openDlg/closeDlg san co.
+   Ban nhap duoc giu theo tung phieu (S.rejDraft), nen dong nham khong mat
+   chu da go. */
+function rejDlg(kind, id){
+  const isPO = kind === 'po';
+  const o = isPO ? PO.find(x => x.id === id) : REQ.find(x => x.id === id);
+  if (!o) return;
+  const err = isPO ? checkPO(id) : checkReq(id, false);
+  if (err) { toast(err); return; }
+  const what = isPO ? `${supName(o.sup)} · ${rm(o.total)}` : `${TYPE[o.type]} · ${IB(o.ing).name} ${fd(o.ing, reqDelta(o))}`;
+  const keep = S.rejDraft && S.rejDraft.id === id ? S.rejDraft.text : '';
+  openDlg(`<div class="dlg-h"><div><h2 id="dlgTitle">Reject ${esc(id)}?</h2><p>${esc(what)}</p></div>${xBtn()}</div>
+  <div class="dlg-b">
+    <p class="note" style="margin:0">${isPO ? 'Nothing is ordered and no supplier is contacted.' : 'Stock is not changed.'} ${esc(uName(o.by))} sees your reason and can resubmit.</p>
+    <label class="field">Reason<textarea id="rejNote" rows="3" aria-describedby="rejErr" placeholder="${isPO ? 'e.g. Prawns on hand cover two more days' : 'e.g. Attach the delivery order and resubmit'}">${esc(keep)}</textarea></label>
+    <p class="errline" id="rejErr" role="alert" hidden>${AL_ICON}<span></span></p>
+  </div>
+  <div class="dlg-f"><button type="button" class="btn" data-act="dlg-close">Cancel</button><button type="button" class="btn danger" data-act="rejgo" data-v="${esc(kind)}:${esc(id)}">${I_NO}Reject ${isPO ? 'order' : 'request'}</button></div>`);
+  const ta = $('#rejNote');
+  if (ta) {
+    ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+    ta.addEventListener('input', () => { S.rejDraft = {id, text:ta.value}; ta.removeAttribute('aria-invalid'); $('#rejErr').hidden = true; });
+  }
+}
+function rejErr(msg){
+  const ta = $('#rejNote'), box = $('#rejErr');
+  if (box) { box.querySelector('span').textContent = msg; box.hidden = false; }
+  if (ta) { ta.setAttribute('aria-invalid', 'true'); ta.focus(); }
+}
+
+/* Anh chup truoc khi quyet dinh, de dung lai neu nguoi dung bam Undo.
+   Undo KHONG xoa dong audit cu: mot nhat ky ma nguoi dung xoa duoc thi
+   khong con la nhat ky. No ghi them mot dong dao nguoc, con so kho va
+   trang thai phieu thi quay ve dung nhu truoc. */
+function snapReq(id){
+  const r = REQ.find(x => x.id === id); if (!r) return null;
+  const i = IB(r.ing);
+  const was = {status:r.status, dBy:r.dBy, dAt:r.dAt, note:r.note, onHand:i.onHand};
+  return () => {
+    const did = r.status;
+    Object.assign(r, was); i.onHand = was.onHand;
+    audit('Stock', `Undid ${did === 'approved' ? 'approval' : 'rejection'} of ${r.id} · back to pending${did === 'approved' ? ' · ' + i.name + ' back to ' + fq(r.ing, i.onHand) : ''}`);
+    S.reqTab = 'pending'; S.reqSel = r.id;
+    render(); toast(`${r.id} is back in the queue`); focusQueue();
+  };
+}
+/* Don mua kho hon: duyet mot don co the TACH no thanh nhieu don moi va day
+   vao mang PO. Nen anh chup phai giu ca do dai mang lan ban sao nong cua
+   tung don, va khi dung lai thi xoa ca nhung khoa ma decidePO moi them vao
+   (eta, method, rerouted, splitFrom) — Object.assign khong tu xoa chung. */
+function snapPO(id){
+  const keep = PO.map(o => ({o, c:Object.assign({}, o)})), n = PO.length;
+  return () => {
+    PO.length = n;
+    keep.forEach(k => { Object.keys(k.o).forEach(key => { if (!(key in k.c)) delete k.o[key]; }); Object.assign(k.o, k.c); });
+    audit('Supplier order', `Undid decision on ${id} · back to pending`);
+    S.poTab = 'pending'; S.poSel = id; S.poRoute = null;
+    render(); toast(`${id} is back in the queue`); focusQueue();
+  };
+}
 
 /* ---------------- dialogs ---------------- */
 let opener = null;
@@ -1391,6 +2016,12 @@ function openDD(wrap){
      mot bang dai thi no se tran khoi man hinh. */
   const r = m.getBoundingClientRect();
   if (r.bottom > window.innerHeight - 8 && wrap.getBoundingClientRect().top > r.height) m.classList.add('up');
+  /* Menu rong hon nut bam, nen mot nut nam sat mep phai man hinh (vi du o
+     trong menu tai khoan) se day menu TRAN RA NGOAI va lam ca trang cuon
+     ngang. Do that: 336px menu tai x=1199 cham 1535 tren man 1440.
+     Neo lai ve mep phai cua wrapper thi no khong the vuot ra nua. */
+  m.classList.remove('rt');
+  if (m.getBoundingClientRect().right > window.innerWidth - 8) m.classList.add('rt');
   const on = m.querySelector('[aria-selected="true"]') || m.querySelector('.ddo:not(:disabled)');
   if (on) on.focus();
 }
@@ -1436,22 +2067,51 @@ document.addEventListener('click', e => {
      trong se thoat som va menu khong bao gio dong. */
   if (!e.target.closest('.who-wrap') && !$('#whoMenu').hidden) toggleWho(false);
   if (e.target.id === 'dlg') { closeDlg(); return; }
+  /* Bam bat ky dau trong hang cung mo chi tiet. Chi UY QUYEN cho nut
+     .rowbtn co san — khong them hanh dong nao moi — va bo qua khi cham
+     dung vao mot thu tu no da bam duoc. */
+  const row = e.target.closest('tbody tr');
+  if (row && !e.target.closest('button, a, input, select, textarea, label')) {
+    const rb = row.querySelector('.rowbtn');
+    if (rb) { rb.click(); return; }
+  }
   const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
   const a = el.dataset.act, v = el.dataset.v;
   switch (a) {
     case 'who-menu': toggleWho(); break;
+    case 'rail': setRail(document.documentElement.getAttribute('data-rail') !== 'min'); break;
     case 'switch': S.user = v; toggleWho(false); render(); toast('Signed in as ' + me().name + ' (' + ROLES[me().role] + ')'); break;
     case 'period': S.period = v; render(); break;
     case 'reqtab': S.reqTab = v; S.reqSel = null; render(); break;
     case 'reqflag': S.reqFlags = S.reqFlags.includes(v) ? S.reqFlags.filter(x => x !== v) : S.reqFlags.concat(v); S.reqSel = null; render(); break;
+    /* Bam ten nguyen lieu trong the chi tiet: sang man Ingredients VA lam
+       noi dung hang do len, roi cuon toi. Khong lam noi thi nguoi dung roi
+       vao mot bang muoi dong khong biet nhin dau. */
+    case 'going': { S.ingSel = v; location.hash = '#ingredients'; render(); const row = $('#view tr.sel'); if (row) row.scrollIntoView({block:'center'}); break; }
     case 'req': S.reqSel = v; render(); break;
-    case 'approve': case 'reject': {
-      const note = (($('#decNote') || {}).value || '').trim();
-      const res = decideReq(v, a === 'approve', note);
-      if (!res.ok) { toast(res.msg); if (a === 'reject' && !note && $('#decNote')) $('#decNote').focus(); break; }
-      const next = REQ.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
-      S.reqSel = S.reqTab === 'pending' ? (next ? next.id : null) : v;
-      render(); toast(res.msg); break; }
+    /* Reject chi MO hop thoai, chua quyet dinh gi. Quyet dinh that nam o
+       'rejgo' ben duoi — dung chung cho ca phieu kho lan don mua. */
+    case 'reject': rejDlg('req', v); break;
+    case 'po-no': rejDlg('po', v); break;
+    case 'rejgo': {
+      const [kind, id] = v.split(':');
+      const note = (($('#rejNote') || {}).value || '').trim();
+      /* Loi hien NGAY TRONG hop thoai va o nhap duoc danh dau aria-invalid.
+         Truoc day loi chi song trong mot toast 3,6 giay roi bien mat. */
+      if (!note) { rejErr(kind === 'po' ? 'Add a reason so the outlet knows why.' : 'Add a reason so the outlet knows what to fix.'); break; }
+      const undo = kind === 'po' ? snapPO(id) : snapReq(id);
+      const res = kind === 'po' ? decidePO(id, false, note) : decideReq(id, false, note);
+      if (!res.ok) { rejErr(res.msg); break; }
+      S.rejDraft = null; closeDlg();
+      advanceQueue(kind, id); render(); toast(res.msg, undo); focusQueue(); break; }
+    /* Duyet van la MOT cu bam — hang doi nay duoc xu nhieu lan moi ngay nen
+       them mot hop thoai xac nhan chi doi lay phan xa bam. Luoi an toan la
+       Undo trong toast, dat sau hanh dong chu khong truoc. */
+    case 'approve': {
+      const undo = snapReq(v);
+      const res = decideReq(v, true, '');
+      if (!res.ok) { toast(res.msg); break; }
+      advanceQueue('req', v); render(); toast(res.msg, undo); focusQueue(); break; }
     case 'potab': S.poTab = v; S.poSel = null; render(); break;
     case 'pocheap': { const o = PO.find(x => x.id === S.poSel); if (!o) break; getRoute(o); S.poRoute.q = cheapestOnTime(o); render(); toast('Routed each line to the cheapest supplier that delivers on time'); break; }
     case 'poreset': S.poRoute = null; render(); break;
@@ -1477,16 +2137,17 @@ document.addEventListener('click', e => {
       audit('Supplier', `${supName(v)} ${s.active ? 'reactivated' : 'deactivated'}${moved.length ? ' · routes moved: ' + moved.join(', ') : ''}`);
       render(); toast(`${supName(v)} ${s.active ? 'is active again' : 'deactivated'}${moved.length ? ' · routes moved: ' + moved.join(', ') : ''}${stuck.length ? ' · no other supplier for ' + stuck.join(', ') : ''}`); break; }
     case 'po': S.poSel = v; render(); break;
-    case 'po-ok': case 'po-no': {
-      const note = (($('#poNote') || {}).value || '').trim();
-      const res = decidePO(v, a === 'po-ok', note, S.poRoute && S.poRoute.id === v ? S.poRoute.q : null);
-      if (res.ok) S.poRoute = null;
-      if (!res.ok) { toast(res.msg); if (a === 'po-no' && !note && $('#poNote')) $('#poNote').focus(); break; }
-      const next = PO.filter(x => x.status === 'pending').sort((p, q) => p.at - q.at)[0];
-      S.poSel = S.poTab === 'pending' ? (next ? next.id : null) : v;
-      render(); toast(res.msg); break; }
+    case 'po-ok': {
+      const undo = snapPO(v);
+      const res = decidePO(v, true, '', S.poRoute && S.poRoute.id === v ? S.poRoute.q : null);
+      if (!res.ok) { toast(res.msg); break; }
+      S.poRoute = null;
+      advanceQueue('po', v); render(); toast(res.msg, undo); focusQueue(); break; }
     case 'hq-send': { const ta = $('#hqIn'); hqSend(ta ? ta.value : ''); break; }
-    case 'hq-ask': hqSend(v); break;
+    /* Chip goi y ben man tro ly va nut mui ten tren dashboard dung CHUNG
+       hanh dong nay. Bam tu dashboard thi phai sang man tro ly truoc, neu
+       khong cau tra loi se nam o mot man khong ai nhin thay. */
+    case 'hq-ask': if (route() !== 'assistant') location.hash = '#assistant'; hqSend(v); break;
     case 'hq-ok': {
       const p = S.cprops[v]; if (!p || p.status !== 'pending') break;
       p.results = p.items.map(it => (it.id.startsWith('R-') ? decideReq(it.id, it.approve, it.note || '') : decidePO(it.id, it.approve, it.note || '', it.routes || null)).msg);
@@ -1551,6 +2212,7 @@ document.addEventListener('click', e => {
       try { navigator.clipboard.writeText(csv).then(done, fallback); } catch (err) { fallback(); }
       break; }
     case 'dlg-close': closeDlg(); break;
+    case 'undo': runUndo(); break;
   }
 });
 document.addEventListener('change', e => {
@@ -1577,16 +2239,25 @@ document.addEventListener('input', e => {
   if (t.dataset.inp === 'auditQ') { S.auditQ = t.value; $('#auditBody').innerHTML = auditBody(); }
 });
 document.addEventListener('keydown', e => {
+  /* Undo bang ban phim theo quy uoc chung. Nut trong toast van la duong
+     chinh (man hinh dich la may tinh bang), day chi la loi tat cho ban phim
+     — va no khong duoc cuop phim undo cua chinh o nhap dang go. */
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && (e.key === 'z' || e.key === 'Z')
+      && !/^(INPUT|TEXTAREA)$/.test((document.activeElement || {}).tagName || '')) {
+    if (runUndo()) { e.preventDefault(); return; }
+  }
   if (e.key === 'Escape' && !$('#whoMenu').hidden) { toggleWho(false); $('#whoBtn').focus(); return; }
   if (e.key === 'Escape' && !$('#dlg').hidden) closeDlg();
   if (e.key === 'Enter' && !e.shiftKey && e.target.id === 'hqIn') { e.preventDefault(); hqSend(e.target.value); }
 });
 document.addEventListener('submit', e => { e.preventDefault(); const b = $('#dlgBox [data-act="saveing"]'); if (b) b.click(); });
-window.addEventListener('hashchange', () => { render(); $('#view').focus({preventScroll:true}); });
+window.addEventListener('hashchange', () => { if (route() !== 'ingredients') S.ingSel = null; render(); $('#view').focus({preventScroll:true}); });
 
 /* ---------------- start ---------------- */
 S.chat.push({role:'bot', html:'Ask how today is going, see what’s waiting, or decide requests by ID — for example “approve R-1048” or “reject PO-0313 because prawns on hand cover two more days”. I show every decision first; nothing changes until you confirm.'});
-$('#today').textContent = NOW.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+let rail0 = 'full';
+try { rail0 = localStorage.getItem('prb-hq-rail') || 'full'; } catch (e) {}
+setRail(rail0 === 'min');
 render();
 })();
 </script>
