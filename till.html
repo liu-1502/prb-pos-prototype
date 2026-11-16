@@ -2627,8 +2627,11 @@ table.tbl tr.his-d .ord-l{font-size:14px}
 :root[data-theme="yellow"] .signin{background:#fff6e6}
 /* Ban LA: cung vai tro, doi sac theo brand. Chu #171717 tren #eef4f0 dat
    16.08, ban vang tren #fff6e6 dat 16.71 — cung hang. */
-:root[data-theme="leaf"] .cart-t #standNo,
 :root[data-theme="leaf"] .signin{background:#eef4f0}
+/* O Stand no. lay nen TRANG, khop voi nut Note ngay canh no — hai dieu khien
+   cung mot hang thi phai cung mot nen. Man dang nhap giu #eef4f0 vi do la
+   nen CA MAN, khong phai nen dieu khien. */
+:root[data-theme="leaf"] .cart-t #standNo{background:var(--surface)}
 /* Nut Note tach khoi nhom tren: no lay nen TRANG chu khong phai mau kem cua
    gio. Can ca dong .has vi rule modern cua .has co (0,5,0), cao hon
    (0,4,0) cua dong nay nen khong bi dong nay de len. */:root[data-theme="yellow"] .cart-t .notebtn,:root[data-theme="yellow"] .cart-t .notebtn.has,:root[data-theme="leaf"] .cart-t .notebtn,:root[data-theme="leaf"] .cart-t .notebtn.has{background:var(--surface)}:root[data-theme="yellow"] #noteIn,:root[data-theme="leaf"] #noteIn{background:var(--surface);border:1.5px solid var(--line-2);box-shadow:none}
